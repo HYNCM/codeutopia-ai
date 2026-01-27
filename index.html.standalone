@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeUtopia.ai - AI驅動軟件外包平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        purple: { 50: '#faf5ff', 100: '#f3e8ff', 500: '#a855f7', 600: '#9333ea', 700: '#7e22ce' },
+                        blue: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text { background: linear-gradient(135deg, #9333ea, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, createContext, useContext } = React;
+        const {
+            Sparkles, Globe, Shield, Zap, Users, DollarSign, Code2, Brain, ChevronRight,
+            ArrowRight, CheckCircle, Star, TrendingUp, Menu, X, Bell, Search, MessageSquare,
+            Clock, MapPin, Briefcase, Award, Heart, MoreVertical, Phone, Video, FileText,
+            BarChart3, CreditCard, Settings, User, LogOut, ChevronDown
+        } = lucide;
+
+        const mockUser = {
+            id: '1', name: '張偉明', email: 'weiming@example.com',
+            avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Zhang',
+            role: 'client', company: '創新科技有限公司', rating: 4.8,
+            completedProjects: 12, balance: 45000, verified: true
+        };
+
+        const mockProjects = [
+            {
+                id: 'prj1', title: '電商平台前端重構與效能優化', category: 'web_dev',
+                description: '採用React 18 + TypeScript重構整個前端架構，優化頁面載入效能',
+                clientName: '創新科技有限公司', clientAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Company1',
+                status: 'open', budget: { min: 80000, max: 150000 }, duration: '2-3個月',
+                skills: ['React', 'TypeScript', '性能優化'], bids: 5,
+                milestones: [
+                    { id: 'm1', title: '需求分析與架構設計', amount: 15000, status: 'pending' },
+                    { id: 'm2', title: '核心頁面重構', amount: 45000, status: 'pending' },
+                    { id: 'm3', title: '購物車與結帳流程', amount: 35000, status: 'pending' }
+                ],
+                aiAnalysis: { taskCount: 12, estimatedDays: 45, complexity: 'high', marketRate: 2500 }
+            },
+            {
+                id: 'prj2', title: '智能客服對話系統開發', category: 'ai_ml',
+                description: '基於LLM的智能客服對話系統，多渠道整合',
+                clientName: '數位金融集團', clientAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Company2',
+                status: 'in_progress', budget: { min: 200000, max: 350000 }, duration: '3-4個月',
+                skills: ['Python', 'TensorFlow', 'NLP', 'Docker'], bids: 3,
+                milestones: [
+                    { id: 'm5', title: '系統設計與環境搭建', amount: 30000, status: 'approved' },
+                    { id: 'm6', title: '對話引擎開發', amount: 120000, status: 'in_progress' }
+                ]
+            }
+        ];
+
+        const Icon = ({ name, className = "w-5 h-5" }) => {
+            const icons = {
+                Sparkles, Globe, Shield, Zap, Users, DollarSign, Code2, Brain, ChevronRight,
+                ArrowRight, CheckCircle, Star, TrendingUp, Menu, X, Bell, Search, MessageSquare,
+                Clock, MapPin, Briefcase, Award, Heart, MoreVertical, Phone, Video, FileText,
+                BarChart3, CreditCard, Settings, User, LogOut, ChevronDown
+            };
+            const IconComponent = icons[name] || Sparkles;
+            return <IconComponent className={className} />;
+        };
+
+        const LandingPage = ({ onNavigate }) => {
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+            return (
+                <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+                    <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-50">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex items-center justify-between h-16">
+                                <div className="flex items-center space-x-2">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
+                                        <Icon name="Sparkles" className="w-6 h-6 text-white" />
+                                    </div>
+                                    <span className="text-xl font-bold gradient-text">CodeUtopia.ai</span>
+                                </div>
+                                <div className="hidden md:flex items-center space-x-8">
+                                    <a href="#features" className="text-gray-600 hover:text-gray-900">功能特色</a>
+                                    <a href="#how-it-works" className="text-gray-600 hover:text-gray-900">如何運作</a>
+                                    <a href="#pricing" className="text-gray-600 hover:text-gray-900">價格方案</a>
+                                    <button onClick={() => onNavigate('dashboard')} className="text-gray-600 hover:text-gray-900">登入</button>
+                                    <button onClick={() => onNavigate('dashboard')} className="px-5 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700">
+                                        免費開始
+                                    </button>
+                                </div>
+                                <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                                    <Icon name={mobileMenuOpen ? 'X' : 'Menu'} />
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <section className="pt-32 pb-20 px-4">
+                        <div className="max-w-7xl mx-auto text-center">
+                            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-6">
+                                <Icon name="Sparkles" className="w-4 h-4" />
+                                <span>AI 驅動的新一代軟件外包平台</span>
+                            </div>
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                                讓軟件外包<br/>
+                                <span className="gradient-text">更快、更好、更智能</span>
+                            </h1>
+                            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+                                結合 AI 智能任務分解、多模型代碼生成、自動化測試驗證，為企業提供可預測、高質量的軟件交付服務。
+                            </p>
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                                <button onClick={() => onNavigate('dashboard')} className="flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 shadow-lg">
+                                    <span>立即體驗</span>
+                                    <Icon name="ArrowRight" className="w-5 h-5" />
+                                </button>
+                                <button className="flex items-center space-x-2 px-8 py-4 border border-gray-200 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50">
+                                    <span>了解更多</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                            {[
+                                { value: '1000+', label: '註冊開發者' },
+                                { value: '500+', label: '完成項目' },
+                                { value: '98%', label: '客戶滿意度' },
+                                { value: 'NT$10M+', label: '總交易額' }
+                            ].map((stat, idx) => (
+                                <div key={idx} className="text-center">
+                                    <p className="text-3xl font-bold gradient-text">{stat.value}</p>
+                                    <p className="text-gray-500 mt-1">{stat.label}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section id="features" className="py-20 bg-gray-50">
+                        <div className="max-w-7xl mx-auto px-4">
+                            <div className="text-center mb-12">
+                                <h2 className="text-3xl font-bold text-gray-900 mb-4">AI 重新定義軟件外包</h2>
+                                <p className="text-xl text-gray-600">從需求分析到代碼交付，全流程 AI 賦能</p>
+                            </div>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {[
+                                    { icon: 'Brain', title: 'AI 任務分解', desc: '智能分析需求文檔，自動拆分任務，識別風險點', color: 'bg-purple-100 text-purple-600' },
+                                    { icon: 'Code2', title: '智能代碼生成', desc: '集成多個 AI 模型，為高頻模塊自動生成高質量代碼', color: 'bg-blue-100 text-blue-600' },
+                                    { icon: 'Shield', title: '自動化質量保障', desc: 'AI 驅動代碼審查、測試用例生成、性能和安全掃描', color: 'bg-green-100 text-green-600' },
+                                    { icon: 'Users', title: '智能人才匹配', desc: '基於技能、評價、可用性多維度 AI 精準匹配', color: 'bg-yellow-100 text-yellow-600' },
+                                    { icon: 'TrendingUp', title: '里程碑管理', desc: 'AI 追蹤項目進度，預測交付風險，智能提醒', color: 'bg-orange-100 text-orange-600' },
+                                    { icon: 'CreditCard', title: 'Stripe 支付保障', desc: '資金托管，按里程碑自動結算，保障交易安全', color: 'bg-pink-100 text-pink-600' }
+                                ].map((feature, idx) => (
+                                    <div key={idx} className="bg-white rounded-2xl p-6 shadow-sm card-hover">
+                                        <div className={`w-12 h-12 ${feature.color} rounded-xl flex items-center justify-center mb-4`}>
+                                            <Icon name={feature.icon} className="w-6 h-6" />
+                                        </div>
+                                        <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                                        <p className="text-gray-600">{feature.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="pricing" className="py-20 bg-gray-50">
+                        <div className="max-w-7xl mx-auto px-4">
+                            <div className="text-center mb-12">
+                                <h2 className="text-3xl font-bold text-gray-900 mb-4">簡單透明的定價</h2>
+                                <p className="text-xl text-gray-600">只有交易服務費，無其他隱藏費用</p>
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                                {[
+                                    { name: '個人版', price: '15%', desc: '適合小型項目', features: ['項目發布與管理', 'AI 任務分解', '開發者匹配', '里程碑支付'] },
+                                    { name: '企業版', price: '10%', desc: '適合中大型團隊', highlight: true, features: ['個人版全部功能', '優先匹配合優質開發者', '專屬客戶經理', '高級 AI 功能'] },
+                                    { name: '旗艦版', price: '8%', desc: '適合大型企業', features: ['企業版全部功能', '最低費率', '專屬技術支持', '批量項目管理'] }
+                                ].map((plan, idx) => (
+                                    <div key={idx} className={`rounded-2xl p-8 ${plan.highlight ? 'bg-gradient-to-br from-purple-600 to-blue-600 text-white shadow-lg transform scale-105' : 'bg-white border border-gray-200'}`}>
+                                        <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
+                                        <p className={plan.highlight ? 'text-purple-200' : 'text-gray-500'}>{plan.desc}</p>
+                                        <p className={`text-4xl font-bold my-4 ${plan.highlight ? 'text-white' : 'text-gray-900'}`}>{plan.price}<span className="text-lg font-normal">/交易額</span></p>
+                                        <ul className="space-y-3 mb-6">
+                                            {plan.features.map((f, i) => (
+                                                <li key={i} className="flex items-center space-x-2">
+                                                    <Icon name="CheckCircle" className={`w-5 h-5 ${plan.highlight ? 'text-yellow-300' : 'text-green-500'}`} />
+                                                    <span>{f}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <button onClick={() => onNavigate('dashboard')} className={`w-full py-3 rounded-lg font-medium ${plan.highlight ? 'bg-white text-purple-600 hover:bg-gray-100' : 'border border-gray-200 text-gray-700 hover:bg-gray-50'}`}>
+                                            免費開始
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <footer className="bg-gray-900 text-gray-400 py-12">
+                        <div className="max-w-7xl mx-auto px-4 text-center">
+                            <div className="flex items-center justify-center space-x-2 mb-4">
+                                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
+                                    <Icon name="Sparkles" className="w-6 h-6 text-white" />
+                                </div>
+                                <span className="text-xl font-bold text-white">CodeUtopia.ai</span>
+                            </div>
+                            <p className="text-sm">© 2024 CodeUtopia.ai. AI 驅動的新一代軟件外包平台</p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const Dashboard = () => {
+            const [activeTab, setActiveTab] = useState('projects');
+            const navItems = [
+                { id: 'dashboard', icon: 'BarChart3', label: '工作台' },
+                { id: 'projects', icon: 'Briefcase', label: '項目' },
+                { id: 'talent', icon: 'Users', label: '人才庫' },
+                { id: 'messages', icon: 'MessageSquare', label: '消息' },
+                { id: 'transactions', icon: 'CreditCard', label: '財務' }
+            ];
+
+            const stats = { totalProjects: 4, activeProjects: 2, totalSpent: 320000, completionRate: 92 };
+
+            return (
+                <div className="min-h-screen bg-gray-50">
+                    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+                        <div className="max-w-7xl mx-auto px-4">
+                            <div className="flex justify-between items-center h-16">
+                                <div className="flex items-center space-x-2">
+                                    <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
+                                        <Icon name="Sparkles" className="w-6 h-6 text-white" />
+                                    </div>
+                                    <span className="text-xl font-bold gradient-text">CodeUtopia.ai</span>
+                                </div>
+                                <div className="hidden md:flex items-center space-x-4">
+                                    {navItems.map(item => (
+                                        <button key={item.id} onClick={() => setActiveTab(item.id)}
+                                            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                                activeTab === item.id ? 'bg-purple-50 text-purple-600' : 'text-gray-600 hover:bg-gray-50'
+                                            }`}>
+                                            <Icon name={item.icon} className="w-4 h-4" />
+                                            <span>{item.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="flex items-center space-x-4">
+                                    <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg relative">
+                                        <Icon name="Bell" className="w-5 h-5" />
+                                        <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                                    </button>
+                                    <img src={mockUser.avatar} alt={mockUser.name} className="w-8 h-8 rounded-full" />
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="max-w-7xl mx-auto px-4 py-6">
+                        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-6 text-white mb-6">
+                            <h1 className="text-2xl font-bold mb-2">歡迎回來，{mockUser.name}！</h1>
+                            <p className="text-purple-100">您的{stats.activeProjects}個項目正在進行中，總預算已托管 NT$320,000</p>
+                            <div className="grid grid-cols-4 gap-4 mt-6">
+                                <div className="bg-white/10 rounded-xl p-4">
+                                    <div className="flex items-center space-x-2 text-purple-200 text-sm">
+                                        <Icon name="Briefcase" className="w-4 h-4" />
+                                        <span>項目總數</span>
+                                    </div>
+                                    <p className="text-2xl font-bold mt-1">{stats.totalProjects}</p>
+                                </div>
+                                <div className="bg-white/10 rounded-xl p-4">
+                                    <div className="flex items-center space-x-2 text-yellow-200 text-sm">
+                                        <Icon name="Clock" className="w-4 h-4" />
+                                        <span>進行中</span>
+                                    </div>
+                                    <p className="text-2xl font-bold mt-1">{stats.activeProjects}</p>
+                                </div>
+                                <div className="bg-white/10 rounded-xl p-4">
+                                    <div className="flex items-center space-x-2 text-green-200 text-sm">
+                                        <Icon name="DollarSign" className="w-4 h-4" />
+                                        <span>總投入</span>
+                                    </div>
+                                    <p className="text-2xl font-bold mt-1">NT$320K</p>
+                                </div>
+                                <div className="bg-white/10 rounded-xl p-4">
+                                    <div className="flex items-center space-x-2 text-blue-200 text-sm">
+                                        <Icon name="TrendingUp" className="w-4 h-4" />
+                                        <span>完成率</span>
+                                    </div>
+                                    <p className="text-2xl font-bold mt-1">{stats.completionRate}%</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-4">
+                            <div className="flex items-center justify-between mb-2">
+                                <h2 className="text-lg font-semibold text-gray-900">最近的項目</h2>
+                                <button className="text-sm text-purple-600 hover:text-purple-700 flex items-center space-x-1">
+                                    <span>查看全部</span>
+                                    <Icon name="ArrowRight" className="w-4 h-4" />
+                                </button>
+                            </div>
+                            {mockProjects.map((project) => (
+                                <div key={project.id} className="bg-white rounded-xl border border-gray-200 p-6 card-hover cursor-pointer">
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div>
+                                            <div className="flex items-center space-x-2 mb-1">
+                                                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+                                                    project.status === 'open' ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'
+                                                }`}>
+                                                    {project.status === 'open' ? '招募中' : '進行中'}
+                                                </span>
+                                            </div>
+                                            <h3 className="font-medium text-gray-900">{project.title}</h3>
+                                            <p className="text-sm text-gray-500 mt-1">{project.skills.join(' • ')}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-xl font-bold text-gray-900">
+                                                NT$ {(project.budget.min/1000).toFixed(0)}K - NT$ {(project.budget.max/1000).toFixed(0)}K
+                                            </p>
+                                            <p className="text-sm text-gray-500">{project.duration}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                                        <div className="flex items-center space-x-4">
+                                            <div className="flex items-center space-x-1 text-sm text-gray-500">
+                                                <Icon name="Users" className="w-4 h-4" />
+                                                <span>{project.bids} 個投標</span>
+                                            </div>
+                                            <div className="flex items-center space-x-1 text-sm text-gray-500">
+                                                <Icon name="Clock" className="w-4 h-4" />
+                                                <span>{project.duration}</span>
+                                            </div>
+                                        </div>
+                                        <span className="flex items-center space-x-1 text-sm text-purple-600 font-medium">
+                                            <Icon name="Sparkles" className="w-4 h-4" />
+                                            <span>AI 分析可用</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-8 bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-100">
+                            <div className="flex items-center space-x-2 mb-4">
+                                <Icon name="Sparkles" className="w-5 h-5 text-purple-600" />
+                                <h3 className="font-semibold text-gray-900">AI 洞察</h3>
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-4">
+                                <div className="flex items-start space-x-3">
+                                    <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <Icon name="TrendingUp" className="w-4 h-4 text-purple-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">項目效率提升</p>
+                                        <p className="text-xs text-gray-500">AI分析顯示您的項目平均提前2天完成</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start space-x-3">
+                                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <Icon name="Users" className="w-4 h-4 text-blue-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">推薦人才</p>
+                                        <p className="text-xs text-gray-500">有3位符合您項目需求的優質開發者</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start space-x-3">
+                                    <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <Icon name="DollarSign" className="w-4 h-4 text-green-600" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-900">成本優化建議</p>
+                                        <p className="text-xs text-gray-500">使用AI代碼審查可節省約15%測試成本</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [currentPage, setCurrentPage] = useState('landing');
+            const navigate = (page) => {
+                setCurrentPage(page);
+                window.scrollTo(0, 0);
+            };
+            return currentPage === 'landing' ? <LandingPage onNavigate={navigate} /> : <Dashboard />;
+        };
+
+        lucide.createIcons();
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
