@@ -44,7 +44,7 @@ import { useProjects } from '../contexts/ProjectContext'
 import { useAuth } from '../contexts/AuthContext'
 import { useWallet } from '../contexts/WalletContext'
 import { useAI } from '../contexts/AIContext'
-import { Project as GlobalProject, Milestone as GlobalMilestone, Bid } from '../types'
+import { Project as GlobalProject, Milestone as GlobalMilestone, Bid, MilestoneSubmission } from '../types'
 
 // UI-Specific Types (Extended from Global Types for View)
 interface ViewMilestone {
@@ -61,7 +61,7 @@ interface ViewMilestone {
   deliverables: ViewDeliverable[]
   aiTasks: ViewAITask[]
   comments: ViewComment[]
-  submission?: any // Simplify for view
+  submission?: MilestoneSubmission
 }
 
 interface ViewDeliverable {
@@ -129,7 +129,7 @@ const ProjectManagementPage: React.FC = () => {
     id: string
     title: string
     amount: number
-    submission: any
+    submission: MilestoneSubmission | null
   } | null>(null)
 
   const [activeTab, setActiveTab] = useState<'projects' | 'bids' | 'milestones' | 'details' | 'payments'>(
@@ -494,8 +494,9 @@ const ProjectManagementPage: React.FC = () => {
                   await escrowLock(viewProject.id, bid.proposedPrice, viewProject.title)
                   acceptBid(viewProject.id, bid.id, bid.proposedPrice)
                   alert('资金托管成功，项目正式启动！')
-                } catch (error: any) {
-                  alert(`操作失败: ${error.message || '资金不足，请充值'}`)
+                } catch (error) {
+                  const errorMessage = error instanceof Error ? error.message : '资金不足，请充值'
+                  alert(`操作失败: ${errorMessage}`)
                 }
               }
             }}

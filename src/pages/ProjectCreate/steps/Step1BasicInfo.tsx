@@ -6,7 +6,7 @@ import { Info, HelpCircle } from 'lucide-react'
 export const Step1BasicInfo: React.FC<StepProps> = ({ formData, updateFormData, onNext }) => {
   const { basicInfo } = formData
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = <K extends keyof typeof basicInfo>(field: K, value: typeof basicInfo[K]) => {
     updateFormData({
       basicInfo: {
         ...basicInfo,

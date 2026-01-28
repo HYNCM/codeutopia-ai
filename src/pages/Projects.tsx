@@ -3,7 +3,7 @@ import { categoryLabels, PROJECT_CATEGORIES, SKILLS } from '../data/mockData'
 import { Link } from 'react-router-dom'
 import { useProjects } from '../contexts/ProjectContext'
 import { useAuth } from '../contexts/AuthContext'
-import { Project } from '../types'
+import { Project, User, Bid } from '../types'
 import { BidModal } from '../components/BidModal'
 import {
   Search,
@@ -210,10 +210,10 @@ export function ProjectsPage() {
   )
 }
 
-function ProjectCard({ project, onBid, currentUser }: { project: Project; onBid: () => void; currentUser: any }) {
+function ProjectCard({ project, onBid, currentUser }: { project: Project; onBid: () => void; currentUser: User | null }) {
   const aiMatch = Math.floor(Math.random() * 20) + 80 // Demo AI match score
 
-  const hasBidded = project.bids && currentUser && project.bids.some((b: any) => b.developerId === currentUser.id)
+  const hasBidded = project.bids && currentUser && project.bids.some((b: Bid) => b.developerId === currentUser.id)
   const isOwner = currentUser && project.clientId === currentUser.id
   const canBid =
     currentUser && (currentUser.role === 'contractor' || currentUser.role === 'developer') && !hasBidded && !isOwner

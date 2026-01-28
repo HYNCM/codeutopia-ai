@@ -7,7 +7,7 @@ export const Step2TalentReq: React.FC<StepProps> = ({ formData, updateFormData, 
   const { talentRequirement } = formData
   const [skillInput, setSkillInput] = React.useState('')
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = <K extends keyof typeof talentRequirement>(field: K, value: typeof talentRequirement[K]) => {
     updateFormData({
       talentRequirement: {
         ...talentRequirement,

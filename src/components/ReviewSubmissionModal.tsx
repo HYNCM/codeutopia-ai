@@ -59,9 +59,10 @@ export function ReviewSubmissionModal({
       onClose()
       setDecision(null)
       setRejectionReason('')
-    } catch (error: any) {
+    } catch (error) {
       console.error('Failed to review milestone:', error)
-      alert(`操作失败: ${error.message}`)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      alert(`操作失败: ${errorMessage}`)
     } finally {
       setIsSubmitting(false)
     }

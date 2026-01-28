@@ -42,7 +42,7 @@ export const Step7CrossRegion: React.FC<StepProps> = ({ formData, updateFormData
     }
   }
 
-  const updateConfig = (updates: any) => {
+  const updateConfig = (updates: Partial<NonNullable<typeof crossRegion>>) => {
     if (!crossRegion) return
     updateFormData({
       crossRegion: {

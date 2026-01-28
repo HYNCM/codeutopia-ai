@@ -1,7 +1,7 @@
 import React from 'react'
 import { StepProps } from '../types'
 import { DevelopmentTestType, ProjectVisibility } from '../../../types'
-import { GitBranch, Smartphone, Cloud, Monitor, Settings, Globe, Lock, Users } from 'lucide-react'
+import { GitBranch, Smartphone, Cloud, Monitor, Settings, Globe, Lock, Users, LucideIcon } from 'lucide-react'
 
 export const Step4Flow: React.FC<StepProps> = ({ formData, updateFormData, onNext, onPrev }) => {
   const { projectFlow } = formData
@@ -21,7 +21,7 @@ export const Step4Flow: React.FC<StepProps> = ({ formData, updateFormData, onNex
     updateFlow({ collaborationTools: newTools })
   }
 
-  const devOptions: { type: DevelopmentTestType; icon: any; title: string; desc: string }[] = [
+  const devOptions: { type: DevelopmentTestType; icon: LucideIcon; title: string; desc: string }[] = [
     {
       type: 'cloud',
       icon: Cloud,
@@ -42,7 +42,7 @@ export const Step4Flow: React.FC<StepProps> = ({ formData, updateFormData, onNex
     },
   ]
 
-  const visibilityOptions: { type: ProjectVisibility; icon: any; title: string; desc: string }[] = [
+  const visibilityOptions: { type: ProjectVisibility; icon: LucideIcon; title: string; desc: string }[] = [
     {
       type: 'public',
       icon: Globe,

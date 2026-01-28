@@ -47,7 +47,7 @@ export const Step3AIConfig: React.FC<StepProps> = ({ formData, updateFormData, o
     })
   }
 
-  const updateRoleConfig = (roleId: AIRoleType, field: keyof AIRoleConfig, value: any) => {
+  const updateRoleConfig = <K extends keyof AIRoleConfig>(roleId: AIRoleType, field: K, value: AIRoleConfig[K]) => {
     const currentRoles = [...aiConfig.roles]
     const roleIndex = currentRoles.findIndex((r) => r.roleId === roleId)
 

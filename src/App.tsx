@@ -5,6 +5,7 @@ import { ProjectProvider } from './contexts/ProjectContext'
 import { WalletProvider } from './contexts/WalletContext'
 import { AIProvider } from './contexts/AIContext'
 import { MessageProvider } from './contexts/MessageContext'
+import { NotificationProvider } from './contexts/NotificationContext'
 import { Header } from './components/Layout/Header'
 import { ClientDashboard } from './pages/ClientDashboard'
 import { DeveloperDashboard } from './pages/DeveloperDashboard'
@@ -35,6 +36,7 @@ export default function App() {
         <ProjectProvider>
           <WalletProvider>
             <MessageProvider>
+            <NotificationProvider>
             <AIProvider>
             <Routes>
             <Route path='/' element={<LandingPage />} />
@@ -179,6 +181,7 @@ export default function App() {
           <AIFloatingButton />
           
             </AIProvider>
+            </NotificationProvider>
             </MessageProvider>
           </WalletProvider>
         </ProjectProvider>

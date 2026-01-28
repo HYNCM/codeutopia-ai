@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { NotificationDropdown } from './NotificationDropdown';
 import {
   Menu,
   X,
-  Bell,
   Search,
   User,
   LogOut,
@@ -45,7 +45,6 @@ export function Header() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [notificationOpen, setNotificationOpen] = useState(false);
 
   const navItems = user?.role === 'developer' ? developerNavItems : clientNavItems;
   const isActive = (path: string) => location.pathname === path;
@@ -102,47 +101,7 @@ export function Header() {
             </div>
 
             {/* Notifications */}
-            <div className="relative">
-              <button
-                onClick={() => setNotificationOpen(!notificationOpen)}
-                className="relative p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
-              >
-                <Bell className="w-5 h-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
-              {notificationOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
-                  <div className="px-4 py-2 border-b border-gray-100">
-                    <h3 className="font-semibold text-gray-900">通知</h3>
-                  </div>
-                  <div className="max-h-96 overflow-y-auto">
-                    <NotificationItem
-                      title="新投標通知"
-                      message="有3位開發者對您的項目提交了投標"
-                      time="2小時前"
-                      unread
-                    />
-                    <NotificationItem
-                      title="里程碑已通過"
-                      message="您的項目第一階段已通過審核"
-                      time="1天前"
-                      unread
-                    />
-                    <NotificationItem
-                      title="款項已發放"
-                      message="第二筆款項 NT$30,000 已發放"
-                      time="3天前"
-                    />
-                  </div>
-                  <Link
-                    to="/notifications"
-                    className="block px-4 py-2 text-center text-sm text-purple-600 hover:bg-gray-50"
-                  >
-                    查看全部通知
-                  </Link>
-                </div>
-              )}
-            </div>
+            <NotificationDropdown />
 
             {/* User Menu */}
             <div className="relative">
@@ -231,32 +190,5 @@ export function Header() {
         </div>
       )}
     </header>
-  );
-}
-
-function NotificationItem({
-  title,
-  message,
-  time,
-  unread = false,
-}: {
-  title: string;
-  message: string;
-  time: string;
-  unread?: boolean;
-}) {
-  return (
-    <div className={`px-4 py-3 hover:bg-gray-50 cursor-pointer ${unread ? 'bg-purple-50/50' : ''}`}>
-      <div className="flex items-start space-x-3">
-        {unread && (
-          <span className="w-2 h-2 mt-2 bg-purple-600 rounded-full flex-shrink-0"></span>
-        )}
-        <div className={unread ? '' : 'ml-5'}>
-          <p className="text-sm font-medium text-gray-900">{title}</p>
-          <p className="text-sm text-gray-500 mt-0.5">{message}</p>
-          <p className="text-xs text-gray-400 mt-1">{time}</p>
-        </div>
-      </div>
-    </div>
   );
 }
