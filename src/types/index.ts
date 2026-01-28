@@ -84,6 +84,10 @@ export interface Project {
   aiAnalysis?: AIAnalysis;
   attachments?: string[];
   visibility: 'public' | 'private' | 'invite_only';
+  
+  // Financials
+  escrowBalance: number; // Amount locked in project escrow
+  totalPaid: number; // Total amount released to contractor
 }
 
 export interface MilestoneSubmission {
@@ -183,11 +187,15 @@ export interface Payment {
 
 export interface Transaction {
   id: string;
-  type: 'income' | 'expense' | 'withdrawal' | 'refund';
+  userId: string; // Owner of this transaction record
+  relatedProjectId?: string;
+  relatedMilestoneId?: string;
+  type: 'deposit' | 'withdrawal' | 'escrow_lock' | 'escrow_release' | 'service_fee';
   amount: number;
   currency: string;
   description: string;
   projectTitle?: string;
+  status: 'pending' | 'completed' | 'failed';
   createdAt: string;
 }
 
