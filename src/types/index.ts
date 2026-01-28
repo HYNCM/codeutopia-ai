@@ -15,6 +15,7 @@ export type MilestoneStatus =
   | 'submitted'
   | 'approved'
   | 'rejected'
+  | 'completed'
   | 'paid';
 
 export type BidStatus = 'pending' | 'accepted' | 'rejected' | 'withdrawn';
@@ -85,6 +86,17 @@ export interface Project {
   visibility: 'public' | 'private' | 'invite_only';
 }
 
+export interface MilestoneSubmission {
+  id: string;
+  milestoneId: string;
+  workerId?: string; // Optional for now
+  submittedAt: string;
+  note: string;
+  attachments: string[]; // Links or file paths
+  status: 'pending' | 'approved' | 'rejected';
+  rejectionReason?: string;
+}
+
 export interface Milestone {
   id: string;
   title: string;
@@ -100,6 +112,9 @@ export interface Milestone {
   humanDeliverables: DeliverableConfig[];
   aiDeliverables: DeliverableConfig[];
   acceptanceCriteria: string[];
+
+  // Execution Phase Data
+  submission?: MilestoneSubmission;
 
   order: number;
   approvedAt?: string;

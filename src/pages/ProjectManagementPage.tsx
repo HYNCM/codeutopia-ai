@@ -36,7 +36,10 @@ import {
   ThumbsDown,
 } from 'lucide-react'
 import { AIAssistantPanel } from '../components/AIAssistantPanel'
+import { SubmitDeliverableModal } from '../components/SubmitDeliverableModal'
+import { ReviewSubmissionModal } from '../components/ReviewSubmissionModal'
 import { useProjects } from '../contexts/ProjectContext'
+import { useAuth } from '../contexts/AuthContext'
 import { Project as GlobalProject, Milestone as GlobalMilestone, Bid } from '../types'
 
 // UI-Specific Types (Extended from Global Types for View)
@@ -44,7 +47,7 @@ interface ViewMilestone {
   id: string
   title: string
   description: string
-  status: 'pending' | 'in_progress' | 'review' | 'completed' | 'disputed'
+  status: 'pending' | 'in_progress' | 'review' | 'completed' | 'submitted' | 'approved' | 'rejected' | 'disputed'
   progress: number
   startDate: string
   dueDate: string
@@ -54,6 +57,7 @@ interface ViewMilestone {
   deliverables: ViewDeliverable[]
   aiTasks: ViewAITask[]
   comments: ViewComment[]
+  submission?: any // Simplify for view
 }
 
 interface ViewDeliverable {
@@ -97,6 +101,7 @@ interface ViewProject {
   spentBudget: number
   progress: number
   initiator: string
+  initiatorId: string // Added for permission check
   contractor: string
   milestones: ViewMilestone[]
   aiCollaboration: boolean
@@ -108,7 +113,17 @@ interface ViewProject {
 const ProjectManagementPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { user } = useAuth()
   const { projects, acceptBid } = useProjects()
+
+  const [submitModalOpen, setSubmitModalOpen] = useState(false)
+  const [reviewModalOpen, setReviewModalOpen] = useState(false)
+  const [activeMilestoneForSubmit, setActiveMilestoneForSubmit] = useState<{ id: string; title: string } | null>(null)
+  const [activeMilestoneForReview, setActiveMilestoneForReview] = useState<{
+    id: string
+    title: string
+    submission: any
+  } | null>(null)
 
   const [activeTab, setActiveTab] = useState<'projects' | 'bids' | 'milestones' | 'details' | 'payments'>(
     (window.location.hash.replace('#', '') as any) || 'details',
@@ -134,14 +149,14 @@ const ProjectManagementPage: React.FC = () => {
 
     // Calculate progress based on milestones
     const completedMilestones = globalProject.milestones.filter(
-      (m) => m.status === 'completed' || m.status === 'paid',
+      (m) => m.status === 'approved' || m.status === 'paid',
     ).length
     const totalMilestones = globalProject.milestones.length
     const calcProgress = totalMilestones > 0 ? Math.round((completedMilestones / totalMilestones) * 100) : 0
 
     // Calculate spent budget
     const spent = globalProject.milestones
-      .filter((m) => ['paid', 'completed'].includes(m.status))
+      .filter((m) => ['paid', 'approved'].includes(m.status))
       .reduce((acc, m) => acc + m.amount, 0)
 
     return {
@@ -165,7 +180,8 @@ const ProjectManagementPage: React.FC = () => {
       spentBudget: spent,
       progress: calcProgress,
       initiator: globalProject.clientName,
-      contractor: 'Pending Assignment', // Mock
+      initiatorId: globalProject.clientId,
+      contractor: globalProject.bids?.find((b) => b.status === 'accepted')?.developerName || 'Pending Assignment',
       aiCollaboration: !!globalProject.aiAnalysis,
       tags: globalProject.skills,
       bidsCount: globalProject.bids?.length || 0,
@@ -175,12 +191,13 @@ const ProjectManagementPage: React.FC = () => {
         title: m.title,
         description: m.description,
         status: m.status === 'paid' ? 'completed' : (m.status as any),
-        progress: m.status === 'paid' || m.status === 'completed' ? 100 : 0,
+        progress: m.status === 'paid' || m.status === 'approved' ? 100 : 0,
         startDate: 'TBD',
         dueDate: m.dueDate,
         budget: m.amount,
         currency: globalProject.budget.currency,
         assignedTo: ['Dev Team'], // Mock
+        submission: m.submission,
         // Convert string[] deliverables to objects
         deliverables: m.humanDeliverables?.length
           ? m.humanDeliverables.map((d) => ({
@@ -253,6 +270,17 @@ const ProjectManagementPage: React.FC = () => {
       </div>
     )
   }
+
+  const isContractor = useMemo(() => {
+    if (!viewProject || !viewProject.bids || !user) return false
+    const acceptedBid = viewProject.bids.find((b) => b.status === 'accepted')
+    return acceptedBid?.developerId === user.id
+  }, [viewProject, user])
+
+  const isOwner = useMemo(() => {
+    if (!viewProject || !user) return false
+    return viewProject.initiatorId === user.id
+  }, [viewProject, user])
 
   const selectedMilestoneData = selectedMilestone
     ? viewProject.milestones.find((m) => m.id === selectedMilestone)
@@ -575,6 +603,62 @@ const ProjectManagementPage: React.FC = () => {
                               </li>
                             ))}
                           </ul>
+
+                          {isContractor && ['pending', 'in_progress', 'rejected'].includes(milestone.status) && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setActiveMilestoneForSubmit({ id: milestone.id, title: milestone.title })
+                                setSubmitModalOpen(true)
+                              }}
+                              className='mt-4 w-full py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium text-sm hover:opacity-90 transition-opacity flex items-center justify-center'>
+                              <Upload className='w-4 h-4 mr-2' />
+                              提交交付物
+                            </button>
+                          )}
+
+                          {milestone.status === 'submitted' && (
+                            <div className='mt-4 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg'>
+                              <div className='flex justify-between items-start'>
+                                <p className='text-sm text-blue-300 font-medium flex items-center'>
+                                  <Clock className='w-4 h-4 mr-2' />
+                                  已提交，等待審核
+                                </p>
+                                {isOwner && (
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      if (milestone.submission) {
+                                        setActiveMilestoneForReview({
+                                          id: milestone.id,
+                                          title: milestone.title,
+                                          submission: milestone.submission,
+                                        })
+                                        setReviewModalOpen(true)
+                                      }
+                                    }}
+                                    className='px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors'>
+                                    審核交付
+                                  </button>
+                                )}
+                              </div>
+                              {milestone.submission && (
+                                <p className='text-xs text-gray-400 mt-1 pl-6'>
+                                  提交於 {new Date(milestone.submission.submittedAt).toLocaleDateString()}
+                                </p>
+                              )}
+                            </div>
+                          )}
+
+                          {milestone.status === 'in_progress' && milestone.submission?.status === 'rejected' && (
+                            <div className='mt-4 p-3 bg-red-900/20 border border-red-500/30 rounded-lg'>
+                              <p className='text-sm text-red-300 font-medium flex items-center mb-1'>
+                                <AlertTriangle className='w-4 h-4 mr-2' />
+                                上次提交已駁回
+                              </p>
+                              <p className='text-xs text-red-200/70 pl-6'>{milestone.submission.rejectionReason}</p>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -602,6 +686,27 @@ const ProjectManagementPage: React.FC = () => {
             console.log('AI task completed:', role, result)
           }}
           codeBoxCompatible={false}
+        />
+      )}
+
+      {activeMilestoneForSubmit && (
+        <SubmitDeliverableModal
+          isOpen={submitModalOpen}
+          onClose={() => setSubmitModalOpen(false)}
+          projectId={viewProject.id}
+          milestoneId={activeMilestoneForSubmit.id}
+          milestoneTitle={activeMilestoneForSubmit.title}
+        />
+      )}
+
+      {activeMilestoneForReview && (
+        <ReviewSubmissionModal
+          isOpen={reviewModalOpen}
+          onClose={() => setReviewModalOpen(false)}
+          projectId={viewProject.id}
+          milestoneId={activeMilestoneForReview.id}
+          milestoneTitle={activeMilestoneForReview.title}
+          submission={activeMilestoneForReview.submission}
         />
       )}
     </div>

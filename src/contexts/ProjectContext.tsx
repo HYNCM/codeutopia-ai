@@ -8,6 +8,12 @@ interface ProjectContextType {
   updateProject: (id: string, updates: Partial<Project>) => void
   submitBid: (projectId: string, bid: Bid) => void
   acceptBid: (projectId: string, bidId: string) => void
+  submitMilestone: (projectId: string, milestoneId: string, data: { note: string; attachments: string[] }) => void
+  reviewMilestone: (
+    projectId: string,
+    milestoneId: string,
+    data: { status: 'approved' | 'rejected'; rejectionReason?: string },
+  ) => void
 }
 
 const STORAGE_KEY = 'codeutopia_projects'
@@ -62,8 +68,68 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     )
   }
 
+  const submitMilestone = (projectId: string, milestoneId: string, data: { note: string; attachments: string[] }) => {
+    setProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p
+        return {
+          ...p,
+          milestones: p.milestones.map((m) => {
+            if (m.id !== milestoneId) return m
+            return {
+              ...m,
+              status: 'submitted',
+              submission: {
+                id: `sub_${Date.now()}`,
+                milestoneId: m.id,
+                submittedAt: new Date().toISOString(),
+                note: data.note,
+                attachments: data.attachments,
+                status: 'pending',
+              },
+            }
+          }),
+        }
+      }),
+    )
+  }
+
+  const reviewMilestone = (
+    projectId: string,
+    milestoneId: string,
+    data: { status: 'approved' | 'rejected'; rejectionReason?: string },
+  ) => {
+    setProjects((prev) =>
+      prev.map((p) => {
+        if (p.id !== projectId) return p
+        return {
+          ...p,
+          milestones: p.milestones.map((m) => {
+            if (m.id !== milestoneId) return m
+            
+            // If rejected, reset status to 'in_progress', otherwise 'approved'
+            const newStatus = data.status === 'rejected' ? 'in_progress' : 'approved'
+            
+            return {
+              ...m,
+              status: newStatus,
+              approvedAt: data.status === 'approved' ? new Date().toISOString() : undefined,
+              submission: m.submission
+                ? {
+                    ...m.submission,
+                    status: data.status,
+                    rejectionReason: data.rejectionReason,
+                  }
+                : undefined,
+            }
+          }),
+        }
+      }),
+    )
+  }
+
   return (
-    <ProjectContext.Provider value={{ projects, addProject, updateProject, submitBid, acceptBid }}>
+    <ProjectContext.Provider value={{ projects, addProject, updateProject, submitBid, acceptBid, submitMilestone, reviewMilestone }}>
       {children}
     </ProjectContext.Provider>
   )
