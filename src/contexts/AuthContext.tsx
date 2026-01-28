@@ -123,7 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser((prev) => {
       if (!prev) return null
       const updatedUser = { ...prev, ...updates }
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedUser))
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser))
       return updatedUser
     })
   }

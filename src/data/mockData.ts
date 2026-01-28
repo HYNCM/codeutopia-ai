@@ -245,6 +245,8 @@ export const mockProjects: Project[] = [
     updatedAt: '2026-01-20T10:00:00Z',
     aiAnalysis: mockAIAnalysis,
     visibility: 'public',
+    escrowBalance: 0,
+    totalPaid: 0,
   },
   {
     id: 'prj2',
@@ -332,6 +334,8 @@ export const mockProjects: Project[] = [
     createdAt: '2026-01-10T08:00:00Z',
     updatedAt: '2026-01-20T15:30:00Z',
     visibility: 'public',
+    escrowBalance: 30000,
+    totalPaid: 30000,
   },
   {
     id: 'prj3',
@@ -404,6 +408,8 @@ export const mockProjects: Project[] = [
     createdAt: '2026-01-22T14:00:00Z',
     updatedAt: '2026-01-22T14:00:00Z',
     visibility: 'public',
+    escrowBalance: 50000,
+    totalPaid: 0,
   },
   {
     id: 'prj4',
@@ -481,6 +487,8 @@ export const mockProjects: Project[] = [
     createdAt: '2026-01-02T09:00:00Z',
     updatedAt: '2026-01-20T16:00:00Z',
     visibility: 'public',
+    escrowBalance: 0,
+    totalPaid: 0,
   },
 ];
 

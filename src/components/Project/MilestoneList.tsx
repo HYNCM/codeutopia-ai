@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Calendar, DollarSign, FileText, Upload, Clock, AlertTriangle } from 'lucide-react';
-import { MilestoneStatus, MilestoneSubmission } from '../../types';
+import { MilestoneSubmission } from '../../types';
+
+// Extended status to support all view states
+type ViewMilestoneStatus = 'pending' | 'in_progress' | 'submitted' | 'approved' | 'rejected' | 'completed' | 'paid' | 'review' | 'disputed';
 
 interface ViewMilestone {
   id: string;
   title: string;
   description: string;
-  status: MilestoneStatus;
+  status: ViewMilestoneStatus;
   progress: number;
   startDate: string;
   dueDate: string;

@@ -48,6 +48,8 @@ export const Step8Preview: React.FC<StepProps> = ({ formData, onPrev }) => {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       visibility: (projectFlow.visibility as any) || 'public',
+      escrowBalance: 0,
+      totalPaid: 0,
     }
 
     addProject(newProject)

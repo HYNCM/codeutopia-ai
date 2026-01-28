@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import { ProjectProvider } from './contexts/ProjectContext'
 import { WalletProvider } from './contexts/WalletContext'
 import { AIProvider } from './contexts/AIContext'
+import { MessageProvider } from './contexts/MessageContext'
 import { Header } from './components/Layout/Header'
 import { ClientDashboard } from './pages/ClientDashboard'
 import { DeveloperDashboard } from './pages/DeveloperDashboard'
@@ -25,8 +26,7 @@ import ProjectManagementPage from './pages/ProjectManagementPage'
 import PaymentSettlementPage from './pages/PaymentSettlementPage'
 import ProjectCreatePage from './pages/ProjectCreate/ProjectCreatePage'
 import { AIAssistantPanel } from './components/AIAssistantPanel'
-import { AIChatPanel } from './components/AI/AIChatPanel'
-import { AIFloatingButton } from './components/AI/AIFloatingButton'
+import { AIChatPanel, AIFloatingButton } from './components/AI'
 
 export default function App() {
   return (
@@ -34,6 +34,7 @@ export default function App() {
       <AuthProvider>
         <ProjectProvider>
           <WalletProvider>
+            <MessageProvider>
             <AIProvider>
             <Routes>
             <Route path='/' element={<LandingPage />} />
@@ -177,7 +178,8 @@ export default function App() {
           <AIChatPanel />
           <AIFloatingButton />
           
-          </AIProvider>
+            </AIProvider>
+            </MessageProvider>
           </WalletProvider>
         </ProjectProvider>
       </AuthProvider>

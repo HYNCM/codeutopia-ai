@@ -51,7 +51,7 @@ interface ViewMilestone {
   id: string
   title: string
   description: string
-  status: 'pending' | 'in_progress' | 'review' | 'completed' | 'submitted' | 'approved' | 'rejected' | 'disputed'
+  status: 'pending' | 'in_progress' | 'review' | 'completed' | 'submitted' | 'approved' | 'rejected' | 'disputed' | 'paid'
   progress: number
   startDate: string
   dueDate: string

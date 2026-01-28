@@ -112,10 +112,10 @@ export interface Milestone {
   // Legacy support
   deliverables: string[];
 
-  // Enhanced data structure from Wizard Step 5
-  humanDeliverables: DeliverableConfig[];
-  aiDeliverables: DeliverableConfig[];
-  acceptanceCriteria: string[];
+  // Enhanced data structure from Wizard Step 5 (optional for backward compatibility)
+  humanDeliverables?: DeliverableConfig[];
+  aiDeliverables?: DeliverableConfig[];
+  acceptanceCriteria?: string[];
 
   // Execution Phase Data
   submission?: MilestoneSubmission;
@@ -154,12 +154,25 @@ export interface AIAnalysis {
 
 export interface Message {
   id: string;
+  conversationId?: string; // Group messages by conversation (optional for backward compatibility)
   senderId: string;
   receiverId: string;
   content: string;
   timestamp: string;
   read: boolean;
   attachments?: string[];
+  messageType?: 'text' | 'system' | 'file' | 'milestone_update'; // Optional for backward compatibility
+}
+
+export interface Conversation {
+  id: string;
+  participants: string[]; // User IDs
+  projectId?: string; // Optional link to project
+  projectTitle?: string;
+  lastMessage?: string;
+  lastMessageTime?: string;
+  unreadCount: number;
+  createdAt: string;
 }
 
 export interface Notification {
@@ -187,15 +200,15 @@ export interface Payment {
 
 export interface Transaction {
   id: string;
-  userId: string; // Owner of this transaction record
+  userId?: string; // Owner of this transaction record (optional for backward compatibility)
   relatedProjectId?: string;
   relatedMilestoneId?: string;
-  type: 'deposit' | 'withdrawal' | 'escrow_lock' | 'escrow_release' | 'service_fee';
+  type: 'deposit' | 'withdrawal' | 'escrow_lock' | 'escrow_release' | 'service_fee' | 'income';
   amount: number;
   currency: string;
   description: string;
   projectTitle?: string;
-  status: 'pending' | 'completed' | 'failed';
+  status?: 'pending' | 'completed' | 'failed'; // Optional for backward compatibility
   createdAt: string;
 }
 
