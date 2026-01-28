@@ -210,7 +210,15 @@ export function ProjectsPage() {
   )
 }
 
-function ProjectCard({ project, onBid, currentUser }: { project: Project; onBid: () => void; currentUser: User | null }) {
+function ProjectCard({
+  project,
+  onBid,
+  currentUser,
+}: {
+  project: Project
+  onBid: () => void
+  currentUser: User | null
+}) {
   const aiMatch = Math.floor(Math.random() * 20) + 80 // Demo AI match score
 
   const hasBidded = project.bids && currentUser && project.bids.some((b: Bid) => b.developerId === currentUser.id)

@@ -51,7 +51,16 @@ interface ViewMilestone {
   id: string
   title: string
   description: string
-  status: 'pending' | 'in_progress' | 'review' | 'completed' | 'submitted' | 'approved' | 'rejected' | 'disputed' | 'paid'
+  status:
+    | 'pending'
+    | 'in_progress'
+    | 'review'
+    | 'completed'
+    | 'submitted'
+    | 'approved'
+    | 'rejected'
+    | 'disputed'
+    | 'paid'
   progress: number
   startDate: string
   dueDate: string
@@ -163,7 +172,7 @@ const ProjectManagementPage: React.FC = () => {
           bidsCount: globalProject.bids?.length || 0,
           milestonesCount: globalProject.milestones.length,
           activeTab,
-        }
+        },
       })
     }
   }, [globalProject, activeTab, setContext])
@@ -171,28 +180,28 @@ const ProjectManagementPage: React.FC = () => {
   // Listen for AI Action events (e.g., highlight_risk, navigate)
   useEffect(() => {
     const handleAIAction = (event: CustomEvent) => {
-      const { type, payload } = event.detail;
-      
+      const { type, payload } = event.detail
+
       if (type === 'highlight_risk' && payload?.milestoneId) {
         // Switch to milestones tab and select the risky milestone
-        setActiveTab('milestones');
-        setSelectedMilestone(payload.milestoneId);
-        
+        setActiveTab('milestones')
+        setSelectedMilestone(payload.milestoneId)
+
         // Scroll to milestone after tab switch
         setTimeout(() => {
-          const element = document.getElementById(`milestone-${payload.milestoneId}`);
-          element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          element?.classList.add('ring-2', 'ring-red-500', 'ring-offset-2');
-          setTimeout(() => element?.classList.remove('ring-2', 'ring-red-500', 'ring-offset-2'), 3000);
-        }, 100);
+          const element = document.getElementById(`milestone-${payload.milestoneId}`)
+          element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          element?.classList.add('ring-2', 'ring-red-500', 'ring-offset-2')
+          setTimeout(() => element?.classList.remove('ring-2', 'ring-red-500', 'ring-offset-2'), 3000)
+        }, 100)
       } else if (type === 'navigate' && payload?.tab) {
-        setActiveTab(payload.tab);
+        setActiveTab(payload.tab)
       }
-    };
+    }
 
-    window.addEventListener('ai_action', handleAIAction as EventListener);
-    return () => window.removeEventListener('ai_action', handleAIAction as EventListener);
-  }, []);
+    window.addEventListener('ai_action', handleAIAction as EventListener)
+    return () => window.removeEventListener('ai_action', handleAIAction as EventListener)
+  }, [])
 
   // Adapter: Convert GlobalProject to ViewProject
   const viewProject: ViewProject | null = useMemo(() => {
@@ -348,17 +357,17 @@ const ProjectManagementPage: React.FC = () => {
           返回项目列表
         </button>
         <div className='flex space-x-3'>
-           <button 
-             onClick={() => setShowAIPanel(!showAIPanel)}
-             className={`p-2 rounded-lg transition-colors flex items-center space-x-2 ${
-               showAIPanel ? 'bg-purple-100 text-purple-700' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
-             }`}>
-             <Zap className={showAIPanel ? 'fill-current' : ''} size={20}/>
-             <span className="text-sm font-medium">AI 助手</span>
-           </button>
-           <button className='p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100'>
-             <MoreVertical className="w-5 h-5"/>
-           </button>
+          <button
+            onClick={() => setShowAIPanel(!showAIPanel)}
+            className={`p-2 rounded-lg transition-colors flex items-center space-x-2 ${
+              showAIPanel ? 'bg-purple-100 text-purple-700' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+            }`}>
+            <Zap className={showAIPanel ? 'fill-current' : ''} size={20} />
+            <span className='text-sm font-medium'>AI 助手</span>
+          </button>
+          <button className='p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100'>
+            <MoreVertical className='w-5 h-5' />
+          </button>
         </div>
       </div>
 
@@ -372,11 +381,12 @@ const ProjectManagementPage: React.FC = () => {
               <div className='p-3 bg-purple-50 rounded-xl'>
                 <Briefcase className='w-8 h-8 text-purple-600' />
               </div>
-              <span className={`px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider ${getStatusColor(viewProject.status)}`}>
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider ${getStatusColor(viewProject.status)}`}>
                 {viewProject.status}
               </span>
             </div>
-            
+
             <h1 className='text-xl font-bold text-gray-900 mb-2 leading-tight'>{viewProject.title}</h1>
             <div className='flex items-center text-gray-500 text-sm mb-6'>
               <MapPin className='w-4 h-4 mr-1' />
@@ -386,16 +396,18 @@ const ProjectManagementPage: React.FC = () => {
             <div className='space-y-4'>
               <div className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'>
                 <div className='flex items-center text-gray-600'>
-                   <DollarSign className='w-4 h-4 mr-2' />
-                   <span className='text-sm'>预算</span>
+                  <DollarSign className='w-4 h-4 mr-2' />
+                  <span className='text-sm'>预算</span>
                 </div>
-                <span className='font-bold text-gray-900'>{viewProject.currency} {viewProject.totalBudget.toLocaleString()}</span>
+                <span className='font-bold text-gray-900'>
+                  {viewProject.currency} {viewProject.totalBudget.toLocaleString()}
+                </span>
               </div>
-              
+
               <div className='flex items-center justify-between p-3 bg-gray-50 rounded-lg'>
                 <div className='flex items-center text-gray-600'>
-                   <Calendar className='w-4 h-4 mr-2' />
-                   <span className='text-sm'>开始时间</span>
+                  <Calendar className='w-4 h-4 mr-2' />
+                  <span className='text-sm'>开始时间</span>
                 </div>
                 <span className='font-medium text-gray-900'>{viewProject.startDate}</span>
               </div>
@@ -408,9 +420,7 @@ const ProjectManagementPage: React.FC = () => {
                   <Zap className='w-4 h-4 mr-2' />
                   AI 协作开启
                 </div>
-                <p className='text-xs text-purple-600/80 leading-relaxed'>
-                  AI 助手正在监控里程碑交付质量与风险。
-                </p>
+                <p className='text-xs text-purple-600/80 leading-relaxed'>AI 助手正在监控里程碑交付质量与风险。</p>
               </div>
             )}
           </div>
@@ -429,8 +439,8 @@ const ProjectManagementPage: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => {
-                   setActiveTab(tab.id as any)
-                   window.location.hash = tab.id
+                  setActiveTab(tab.id as any)
+                  window.location.hash = tab.id
                 }}
                 className={`flex items-center px-6 py-3 border-b-2 text-sm font-medium transition-colors ${
                   activeTab === tab.id
@@ -445,97 +455,105 @@ const ProjectManagementPage: React.FC = () => {
 
           {/* Progress Overview (Visible on Milestones Tab) */}
           {activeTab === 'milestones' && (
-             <div className='grid grid-cols-2 gap-4'>
-                <div className='bg-white p-5 rounded-xl border border-gray-200 shadow-sm'>
-                  <div className='flex justify-between mb-2'>
-                    <span className='text-sm text-gray-500'>总体进度</span>
-                    <span className='font-bold text-gray-900'>{viewProject.progress}%</span>
-                  </div>
-                  <div className='h-2 bg-gray-100 rounded-full overflow-hidden'>
-                    <div className='h-full bg-purple-600 rounded-full' style={{ width: `${viewProject.progress}%` }}></div>
-                   </div>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='bg-white p-5 rounded-xl border border-gray-200 shadow-sm'>
+                <div className='flex justify-between mb-2'>
+                  <span className='text-sm text-gray-500'>总体进度</span>
+                  <span className='font-bold text-gray-900'>{viewProject.progress}%</span>
                 </div>
-                <div className='bg-white p-5 rounded-xl border border-gray-200 shadow-sm'>
-                  <div className='flex justify-between mb-2'>
-                    <span className='text-sm text-gray-500'>预算消耗</span>
-                    <span className='font-bold text-gray-900'>${viewProject.spentBudget.toLocaleString()}</span>
-                  </div>
-                  <div className='h-2 bg-gray-100 rounded-full overflow-hidden'>
-                    <div className='h-full bg-green-500 rounded-full' style={{ width: `${(viewProject.spentBudget / viewProject.totalBudget) * 100}%` }}></div>
-                   </div>
+                <div className='h-2 bg-gray-100 rounded-full overflow-hidden'>
+                  <div
+                    className='h-full bg-purple-600 rounded-full'
+                    style={{ width: `${viewProject.progress}%` }}></div>
                 </div>
-             </div>
+              </div>
+              <div className='bg-white p-5 rounded-xl border border-gray-200 shadow-sm'>
+                <div className='flex justify-between mb-2'>
+                  <span className='text-sm text-gray-500'>预算消耗</span>
+                  <span className='font-bold text-gray-900'>${viewProject.spentBudget.toLocaleString()}</span>
+                </div>
+                <div className='h-2 bg-gray-100 rounded-full overflow-hidden'>
+                  <div
+                    className='h-full bg-green-500 rounded-full'
+                    style={{ width: `${(viewProject.spentBudget / viewProject.totalBudget) * 100}%` }}></div>
+                </div>
+              </div>
+            </div>
           )}
 
-        {/* Tab Content */}
-        {activeTab === 'details' && (
-          <div className='bg-white rounded-xl p-6 border border-gray-200 shadow-sm'>
-             <h3 className='text-lg font-bold text-gray-900 mb-4'>项目描述</h3>
-             <p className='text-gray-600 whitespace-pre-line leading-relaxed'>{viewProject.description}</p>
-             
-             <h3 className='text-lg font-bold text-gray-900 mt-8 mb-4'>技能需求</h3>
-             <div className='flex flex-wrap gap-2'>
+          {/* Tab Content */}
+          {activeTab === 'details' && (
+            <div className='bg-white rounded-xl p-6 border border-gray-200 shadow-sm'>
+              <h3 className='text-lg font-bold text-gray-900 mb-4'>项目描述</h3>
+              <p className='text-gray-600 whitespace-pre-line leading-relaxed'>{viewProject.description}</p>
+
+              <h3 className='text-lg font-bold text-gray-900 mt-8 mb-4'>技能需求</h3>
+              <div className='flex flex-wrap gap-2'>
                 {viewProject.tags.map((tag) => (
                   <span key={tag} className='px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600'>
                     {tag}
                   </span>
                 ))}
               </div>
-          </div>
-        )}
-
-        {activeTab === 'bids' && (
-          <BidList
-            bids={viewProject.bids}
-            currency={viewProject.currency}
-            onAccept={async (bid) => {
-              if (window.confirm(`确认接受此方案？系统将从您的余额中扣除/冻结项目资金 $${bid.proposedPrice.toLocaleString()}。`)) {
-                try {
-                  await escrowLock(viewProject.id, bid.proposedPrice, viewProject.title)
-                  acceptBid(viewProject.id, bid.id, bid.proposedPrice)
-                  alert('资金托管成功，项目正式启动！')
-                } catch (error) {
-                  const errorMessage = error instanceof Error ? error.message : '资金不足，请充值'
-                  alert(`操作失败: ${errorMessage}`)
-                }
-              }
-            }}
-          />
-        )}
-
-        {activeTab === 'milestones' && (
-          <MilestoneList
-            milestones={viewProject.milestones}
-            isOwner={isOwner}
-            isContractor={isContractor}
-            selectedMilestoneId={selectedMilestone}
-            onSelectMilestone={setSelectedMilestone}
-            onOpenSubmit={(m) => {
-              setActiveMilestoneForSubmit({ id: m.id, title: m.title })
-              setSubmitModalOpen(true)
-            }}
-            onOpenReview={(m) => {
-              setActiveMilestoneForReview({
-                id: m.id,
-                title: m.title,
-                amount: m.amount,
-                submission: m.submission,
-              })
-              setReviewModalOpen(true)
-            }}
-          />
-        )}
-
-        {activeTab === 'payments' && (
-          <div className='bg-white rounded-xl p-12 border border-gray-200 text-center'>
-            <div className='w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4'>
-              <DollarSign className='w-8 h-8 text-gray-400' />
             </div>
-            <h3 className='text-lg font-medium text-gray-900 mb-1'>资金结算</h3>
-            <p className='text-gray-500'>此处将显示项目的资金流向与结算记录。</p>
-          </div>
-        )}
-      </div>
+          )}
+
+          {activeTab === 'bids' && (
+            <BidList
+              bids={viewProject.bids}
+              currency={viewProject.currency}
+              onAccept={async (bid) => {
+                if (
+                  window.confirm(
+                    `确认接受此方案？系统将从您的余额中扣除/冻结项目资金 $${bid.proposedPrice.toLocaleString()}。`,
+                  )
+                ) {
+                  try {
+                    await escrowLock(viewProject.id, bid.proposedPrice, viewProject.title)
+                    acceptBid(viewProject.id, bid.id, bid.proposedPrice)
+                    alert('资金托管成功，项目正式启动！')
+                  } catch (error) {
+                    const errorMessage = error instanceof Error ? error.message : '资金不足，请充值'
+                    alert(`操作失败: ${errorMessage}`)
+                  }
+                }
+              }}
+            />
+          )}
+
+          {activeTab === 'milestones' && (
+            <MilestoneList
+              milestones={viewProject.milestones}
+              isOwner={isOwner}
+              isContractor={isContractor}
+              selectedMilestoneId={selectedMilestone}
+              onSelectMilestone={setSelectedMilestone}
+              onOpenSubmit={(m) => {
+                setActiveMilestoneForSubmit({ id: m.id, title: m.title })
+                setSubmitModalOpen(true)
+              }}
+              onOpenReview={(m) => {
+                setActiveMilestoneForReview({
+                  id: m.id,
+                  title: m.title,
+                  amount: m.amount,
+                  submission: m.submission,
+                })
+                setReviewModalOpen(true)
+              }}
+            />
+          )}
+
+          {activeTab === 'payments' && (
+            <div className='bg-white rounded-xl p-12 border border-gray-200 text-center'>
+              <div className='w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4'>
+                <DollarSign className='w-8 h-8 text-gray-400' />
+              </div>
+              <h3 className='text-lg font-medium text-gray-900 mb-1'>资金结算</h3>
+              <p className='text-gray-500'>此处将显示项目的资金流向与结算记录。</p>
+            </div>
+          )}
+        </div>
       </main>
 
       {/* AI Assistant Panel */}

@@ -51,11 +51,11 @@ export function ReviewSubmissionModal({
         status: decision === 'approve' ? 'approved' : 'rejected',
         rejectionReason: decision === 'reject' ? rejectionReason : undefined,
       })
-      
+
       if (decision === 'approve') {
         alert(`审核通过！已向承包商释放资金 $${milestoneAmount.toLocaleString()}`)
       }
-      
+
       onClose()
       setDecision(null)
       setRejectionReason('')
@@ -129,11 +129,11 @@ export function ReviewSubmissionModal({
                     ? 'border-green-500 bg-green-50 text-green-700'
                     : 'border-slate-200 hover:border-green-200 hover:bg-green-50/50 text-gray-600'
                 }`}>
-                <CheckCircle className={`w-8 h-8 mb-2 ${decision === 'approve' ? 'text-green-500' : 'text-gray-300'}`} />
+                <CheckCircle
+                  className={`w-8 h-8 mb-2 ${decision === 'approve' ? 'text-green-500' : 'text-gray-300'}`}
+                />
                 <span className='font-bold'>通過並放款 ({'$' + milestoneAmount.toLocaleString()})</span>
-                <span className='text-xs text-center mt-1 opacity-75'>
-                  資金將從託管賬戶釋放給承包商
-                </span>
+                <span className='text-xs text-center mt-1 opacity-75'>資金將從託管賬戶釋放給承包商</span>
               </button>
 
               <button
@@ -145,9 +145,7 @@ export function ReviewSubmissionModal({
                 }`}>
                 <XCircle className={`w-8 h-8 mb-2 ${decision === 'reject' ? 'text-red-500' : 'text-gray-300'}`} />
                 <span className='font-bold'>駁回修改</span>
-                <span className='text-xs text-center mt-1 opacity-75'>
-                  里程碑狀態將重置為"進行中"
-                </span>
+                <span className='text-xs text-center mt-1 opacity-75'>里程碑狀態將重置為"進行中"</span>
               </button>
             </div>
 

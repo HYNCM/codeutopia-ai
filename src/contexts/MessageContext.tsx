@@ -134,21 +134,20 @@ export const MessageProvider: React.FC<{ children: ReactNode }> = ({ children })
     .filter((c) => c.participants.includes(user?.id || ''))
     .reduce((sum, c) => sum + c.unreadCount, 0)
 
-  const setActiveConversation = useCallback((id: string | null) => {
-    setActiveConversationId(id)
-    if (id) {
-      // Mark messages as read when opening conversation
-      setMessages((prev) =>
-        prev.map((m) =>
-          m.conversationId === id && m.receiverId === user?.id ? { ...m, read: true } : m
+  const setActiveConversation = useCallback(
+    (id: string | null) => {
+      setActiveConversationId(id)
+      if (id) {
+        // Mark messages as read when opening conversation
+        setMessages((prev) =>
+          prev.map((m) => (m.conversationId === id && m.receiverId === user?.id ? { ...m, read: true } : m)),
         )
-      )
-      // Reset unread count
-      setConversations((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, unreadCount: 0 } : c))
-      )
-    }
-  }, [user?.id])
+        // Reset unread count
+        setConversations((prev) => prev.map((c) => (c.id === id ? { ...c, unreadCount: 0 } : c)))
+      }
+    },
+    [user?.id],
+  )
 
   const sendMessage = useCallback(
     (conversationId: string, content: string, attachments?: string[]) => {
@@ -183,28 +182,22 @@ export const MessageProvider: React.FC<{ children: ReactNode }> = ({ children })
                 lastMessageTime: newMessage.timestamp,
                 unreadCount: c.unreadCount + (receiverId !== user.id ? 0 : 1),
               }
-            : c
-        )
+            : c,
+        ),
       )
     },
-    [user, conversations]
+    [user, conversations],
   )
 
   const markAsRead = useCallback(
     (conversationId: string) => {
       if (!user) return
       setMessages((prev) =>
-        prev.map((m) =>
-          m.conversationId === conversationId && m.receiverId === user.id
-            ? { ...m, read: true }
-            : m
-        )
+        prev.map((m) => (m.conversationId === conversationId && m.receiverId === user.id ? { ...m, read: true } : m)),
       )
-      setConversations((prev) =>
-        prev.map((c) => (c.id === conversationId ? { ...c, unreadCount: 0 } : c))
-      )
+      setConversations((prev) => prev.map((c) => (c.id === conversationId ? { ...c, unreadCount: 0 } : c)))
     },
-    [user]
+    [user],
   )
 
   const getConversationMessages = useCallback(
@@ -213,7 +206,7 @@ export const MessageProvider: React.FC<{ children: ReactNode }> = ({ children })
         .filter((m) => m.conversationId === conversationId)
         .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
     },
-    [messages]
+    [messages],
   )
 
   const startConversation = useCallback(
@@ -232,7 +225,7 @@ export const MessageProvider: React.FC<{ children: ReactNode }> = ({ children })
       setConversations((prev) => [newConversation, ...prev])
       return newConversation.id
     },
-    [user]
+    [user],
   )
 
   const getOrCreateConversation = useCallback(
@@ -244,14 +237,14 @@ export const MessageProvider: React.FC<{ children: ReactNode }> = ({ children })
         (c) =>
           c.participants.includes(user.id) &&
           c.participants.includes(participantId) &&
-          (projectId ? c.projectId === projectId : true)
+          (projectId ? c.projectId === projectId : true),
       )
 
       if (existing) return existing.id
 
       return startConversation(participantId, projectId, projectTitle)
     },
-    [user, conversations, startConversation]
+    [user, conversations, startConversation],
   )
 
   return (

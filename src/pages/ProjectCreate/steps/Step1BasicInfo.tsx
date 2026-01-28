@@ -1,12 +1,12 @@
 import React from 'react'
 import { StepProps } from '../types'
-import { PROJECT_CATEGORIES, CURRENCIES, GLOBAL_REGIONS } from '../../../types'
+import { PROJECT_CATEGORIES, CURRENCIES, GLOBAL_REGIONS, CurrencyType } from '../../../types'
 import { Info, HelpCircle } from 'lucide-react'
 
 export const Step1BasicInfo: React.FC<StepProps> = ({ formData, updateFormData, onNext }) => {
   const { basicInfo } = formData
 
-  const handleChange = <K extends keyof typeof basicInfo>(field: K, value: typeof basicInfo[K]) => {
+  const handleChange = <K extends keyof typeof basicInfo>(field: K, value: (typeof basicInfo)[K]) => {
     updateFormData({
       basicInfo: {
         ...basicInfo,
@@ -128,7 +128,7 @@ export const Step1BasicInfo: React.FC<StepProps> = ({ formData, updateFormData, 
               <label className='block text-sm font-medium text-gray-700 mb-1'>項目週期</label>
               <select
                 value={basicInfo.duration}
-                onChange={(e) => handleChange('duration', e.target.value)}
+                onChange={(e) => handleChange('duration', e.target.value as 'short' | 'long' | 'flexible')}
                 className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'>
                 <option value='short'>短期 (小於1個月)</option>
                 <option value='long'>長期 (1-6個月)</option>
@@ -150,7 +150,7 @@ export const Step1BasicInfo: React.FC<StepProps> = ({ formData, updateFormData, 
                 <label className='block text-xs font-medium text-gray-500 mb-1'>預算類型</label>
                 <select
                   value={basicInfo.budgetType}
-                  onChange={(e) => handleChange('budgetType', e.target.value)}
+                  onChange={(e) => handleChange('budgetType', e.target.value as 'fixed' | 'hourly' | 'monthly')}
                   className='w-full px-3 py-2 border border-gray-300 rounded-md text-sm'>
                   <option value='fixed'>固定預算</option>
                   <option value='hourly'>按小時計費</option>
@@ -161,7 +161,7 @@ export const Step1BasicInfo: React.FC<StepProps> = ({ formData, updateFormData, 
                 <label className='block text-xs font-medium text-gray-500 mb-1'>貨幣</label>
                 <select
                   value={basicInfo.currency}
-                  onChange={(e) => handleChange('currency', e.target.value)}
+                  onChange={(e) => handleChange('currency', e.target.value as CurrencyType)}
                   className='w-full px-3 py-2 border border-gray-300 rounded-md text-sm'>
                   {CURRENCIES.map((c) => (
                     <option key={c.code} value={c.code}>

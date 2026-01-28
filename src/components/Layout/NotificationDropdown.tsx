@@ -24,14 +24,7 @@ const PRIORITY_STYLES: Record<string, string> = {
 export function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const {
-    notifications,
-    unreadCount,
-    markAsRead,
-    markAllAsRead,
-    removeNotification,
-    clearAll,
-  } = useNotifications()
+  const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll } = useNotifications()
 
   // Close dropdown when clicking outside
   useEffect(() => {

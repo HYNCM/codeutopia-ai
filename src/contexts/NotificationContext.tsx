@@ -105,33 +105,28 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
   // Calculate unread count
   const unreadCount = notifications.filter((n) => !n.read).length
 
-  const addNotification = useCallback(
-    (notification: Omit<AppNotification, 'id' | 'timestamp' | 'read'>) => {
-      const newNotification: AppNotification = {
-        ...notification,
-        id: crypto.randomUUID(),
-        timestamp: new Date().toISOString(),
-        read: false,
-        priority: notification.priority || 'normal',
-      }
+  const addNotification = useCallback((notification: Omit<AppNotification, 'id' | 'timestamp' | 'read'>) => {
+    const newNotification: AppNotification = {
+      ...notification,
+      id: crypto.randomUUID(),
+      timestamp: new Date().toISOString(),
+      read: false,
+      priority: notification.priority || 'normal',
+    }
 
-      setNotifications((prev) => [newNotification, ...prev])
+    setNotifications((prev) => [newNotification, ...prev])
 
-      // Optional: Browser notification if permission granted
-      if (Notification.permission === 'granted') {
-        new Notification(newNotification.title, {
-          body: newNotification.message,
-          icon: '/favicon.ico',
-        })
-      }
-    },
-    []
-  )
+    // Optional: Browser notification if permission granted
+    if (Notification.permission === 'granted') {
+      new Notification(newNotification.title, {
+        body: newNotification.message,
+        icon: '/favicon.ico',
+      })
+    }
+  }, [])
 
   const markAsRead = useCallback((id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
-    )
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)))
   }, [])
 
   const markAllAsRead = useCallback(() => {
@@ -150,7 +145,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ childr
     (type: NotificationType) => {
       return notifications.filter((n) => n.type === type)
     },
-    [notifications]
+    [notifications],
   )
 
   return (
@@ -181,7 +176,7 @@ export const useNotifications = () => {
 // Helper hook to request notification permission
 export const useNotificationPermission = () => {
   const [permission, setPermission] = useState<NotificationPermission>(
-    typeof Notification !== 'undefined' ? Notification.permission : 'default'
+    typeof Notification !== 'undefined' ? Notification.permission : 'default',
   )
 
   const requestPermission = useCallback(async () => {

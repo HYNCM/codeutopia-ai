@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import {
   Sparkles,
   Globe,
@@ -22,43 +22,42 @@ import {
   Smartphone,
   Monitor,
   Cpu,
-} from 'lucide-react';
+} from 'lucide-react'
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className='min-h-screen bg-gradient-to-b from-gray-50 to-white'>
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
+      <nav className='fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-50'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='flex items-center justify-between h-16'>
+            <div className='flex items-center space-x-2'>
+              <div className='w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center'>
+                <Sparkles className='w-6 h-6 text-white' />
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <span className='text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent'>
                 CodeUtopia.ai
               </span>
             </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <div className='hidden md:flex items-center space-x-8'>
+              <a href='#features' className='text-gray-600 hover:text-gray-900 transition-colors'>
                 平台功能
               </a>
-              <a href="#workflow" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <a href='#workflow' className='text-gray-600 hover:text-gray-900 transition-colors'>
                 工作流程
               </a>
-              <a href="#devmode" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <a href='#devmode' className='text-gray-600 hover:text-gray-900 transition-colors'>
                 開發模式
               </a>
-              <a href="#team" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <a href='#team' className='text-gray-600 hover:text-gray-900 transition-colors'>
                 團隊角色
               </a>
-              <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
+              <a href='#pricing' className='text-gray-600 hover:text-gray-900 transition-colors'>
                 定價方案
               </a>
               <Link
-                to="/login"
-                className="px-5 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all"
-              >
+                to='/login'
+                className='px-5 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all'>
                 登錄
               </Link>
             </div>
@@ -67,76 +66,75 @@ export function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
+      <section className='pt-32 pb-20 px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='text-center'>
+            <div className='inline-flex items-center space-x-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-6'>
+              <Sparkles className='w-4 h-4' />
               <span>全球首個智能體協作網路平台</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight'>
               讓 AI 成為你的
               <br />
-              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <span className='bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent'>
                 技術聯合創始人
               </span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            <p className='text-xl text-gray-600 max-w-3xl mx-auto mb-8'>
               告別繁瑣的團隊管理、複雜的工具整合、無休止的代碼審查。
-              <br />
-              在 CodeUtopia，你可以：
+              <br />在 CodeUtopia，你可以：
             </p>
 
             {/* Value Propositions */}
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-10">
+            <div className='flex flex-col md:flex-row items-center justify-center gap-6 mb-10'>
               {[
                 { text: '描述想法 → AI組建完美團隊', icon: '👥' },
                 { text: '自然語言需求 → 自動生成可運行代碼', icon: '💻' },
                 { text: '全球頂尖開發者匹配 → 24/7不間斷開發', icon: '🌍' },
                 { text: '從代碼到真機部署 → 全流程自動化驗證', icon: '🚀' },
               ].map((item, idx) => (
-                <div key={idx} className="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-100">
+                <div
+                  key={idx}
+                  className='flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-gray-100'>
                   <span>{item.icon}</span>
-                  <span className="text-gray-700 font-medium">{item.text}</span>
+                  <span className='text-gray-700 font-medium'>{item.text}</span>
                 </div>
               ))}
             </div>
 
-            <p className="text-lg text-gray-500 mb-4">
-              你的角色：<span className="font-semibold text-purple-600">創意總監</span>。
-              AI 的角色：<span className="font-semibold text-blue-600">執行所有技術細節</span>。
+            <p className='text-lg text-gray-500 mb-4'>
+              你的角色：<span className='font-semibold text-purple-600'>創意總監</span>。 AI 的角色：
+              <span className='font-semibold text-blue-600'>執行所有技術細節</span>。
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+            <div className='flex flex-col sm:flex-row items-center justify-center gap-4 mt-8'>
               <Link
-                to="/login"
-                className="flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/25"
-              >
+                to='/login'
+                className='flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/25'>
                 <span>🚀 開始創建你的第一個智能開發項目</span>
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className='w-5 h-5' />
               </Link>
               <a
-                href="#features"
-                className="flex items-center space-x-2 px-8 py-4 border border-gray-200 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors"
-              >
+                href='#features'
+                className='flex items-center space-x-2 px-8 py-4 border border-gray-200 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors'>
                 <span>觀看演示</span>
               </a>
             </div>
           </div>
 
           {/* Stats */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className='mt-16 grid grid-cols-2 md:grid-cols-4 gap-8'>
             {[
               { value: '50,000+', label: '全球開發者' },
               { value: '12,000+', label: '已完成專案' },
               { value: '14', label: '支援區域' },
               { value: '98.5%', label: '客戶滿意度' },
             ].map((stat, idx) => (
-              <div key={idx} className="text-center">
-                <p className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <div key={idx} className='text-center'>
+                <p className='text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent'>
                   {stat.value}
                 </p>
-                <p className="text-gray-500 mt-1">{stat.label}</p>
+                <p className='text-gray-500 mt-1'>{stat.label}</p>
               </div>
             ))}
           </div>
@@ -144,22 +142,18 @@ export function LandingPage() {
       </section>
 
       {/* Platform Features */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
+      <section id='features' className='py-20 px-4 sm:px-6 lg:px-8 bg-gray-50'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='text-center mb-12'>
+            <div className='inline-flex items-center space-x-2 px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-medium mb-6'>
+              <Sparkles className='w-4 h-4' />
               <span>✨ 一站式企業協作平台</span>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              整合 Slack + Upwork + ChatGPT + GitHub + 測試部署
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              團隊只需完成最後一哩審核，AI 搞定其餘一切！
-            </p>
+            <h2 className='text-3xl font-bold text-gray-900 mb-4'>整合 Slack + Upwork + ChatGPT + GitHub + 測試部署</h2>
+            <p className='text-xl text-gray-600 max-w-2xl mx-auto'>團隊只需完成最後一哩審核，AI 搞定其餘一切！</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-8'>
             {[
               {
                 icon: MessageSquare,
@@ -210,15 +204,12 @@ export function LandingPage() {
                 color: 'bg-indigo-100 text-indigo-600',
               },
             ].map((feature, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow"
-              >
+              <div key={idx} className='bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-shadow'>
                 <div className={`w-12 h-12 ${feature.color} rounded-xl flex items-center justify-center mb-4`}>
-                  <feature.icon className="w-6 h-6" />
+                  <feature.icon className='w-6 h-6' />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className='text-xl font-semibold text-gray-900 mb-2'>{feature.title}</h3>
+                <p className='text-gray-600'>{feature.description}</p>
               </div>
             ))}
           </div>
@@ -226,18 +217,16 @@ export function LandingPage() {
       </section>
 
       {/* Workflow */}
-      <section id="workflow" className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              🔄 AI 驅動的完整工作流程
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+      <section id='workflow' className='py-20 px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='text-center mb-12'>
+            <h2 className='text-3xl font-bold text-gray-900 mb-4'>🔄 AI 驅動的完整工作流程</h2>
+            <p className='text-xl text-gray-600 max-w-2xl mx-auto'>
               從 Research 到部署，AI 處理 85% 繁重工作，團隊專注審核決策
             </p>
           </div>
 
-          <div className="grid md:grid-cols-5 gap-8">
+          <div className='grid md:grid-cols-5 gap-8'>
             {[
               {
                 step: '1',
@@ -270,17 +259,19 @@ export function LandingPage() {
                 items: ['CI/CD 流水線', '真機部署', '監控告警'],
               },
             ].map((item, idx) => (
-              <div key={idx} className="relative text-center">
-                <div className="text-6xl mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                <div className="bg-gray-50 rounded-lg p-4">
+              <div key={idx} className='relative text-center'>
+                <div className='text-6xl mb-4'>{item.icon}</div>
+                <h3 className='text-xl font-bold text-gray-900 mb-3'>{item.title}</h3>
+                <div className='bg-gray-50 rounded-lg p-4'>
                   {item.items.map((subItem, subIdx) => (
-                    <p key={subIdx} className="text-gray-600 text-sm mb-1">{subItem}</p>
+                    <p key={subIdx} className='text-gray-600 text-sm mb-1'>
+                      {subItem}
+                    </p>
                   ))}
                 </div>
                 {idx < 4 && (
-                  <div className="hidden md:block absolute top-8 -right-4 text-purple-300">
-                    <ChevronRight className="w-8 h-8" />
+                  <div className='hidden md:block absolute top-8 -right-4 text-purple-300'>
+                    <ChevronRight className='w-8 h-8' />
                   </div>
                 )}
               </div>
@@ -290,16 +281,18 @@ export function LandingPage() {
       </section>
 
       {/* Development Modes */}
-      <section id="devmode" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900 to-blue-900 text-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">💻 靈活開發模式選擇</h2>
-            <p className="text-xl text-purple-200 max-w-2xl mx-auto">
+      <section
+        id='devmode'
+        className='py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900 to-blue-900 text-white'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='text-center mb-12'>
+            <h2 className='text-3xl font-bold mb-4'>💻 靈活開發模式選擇</h2>
+            <p className='text-xl text-purple-200 max-w-2xl mx-auto'>
               根據專案需求，選擇最適合的開發環境與測試驗證方式
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className='grid md:grid-cols-3 gap-8'>
             {[
               {
                 icon: Monitor,
@@ -350,24 +343,24 @@ export function LandingPage() {
                 badge: 'PC ↔️ CodeBox ↔️ 真機 即時同步',
               },
             ].map((mode, idx) => (
-              <div key={idx} className="bg-white rounded-2xl p-8 text-gray-900">
-                <div className="flex items-center space-x-3 mb-4">
-                  <mode.icon className="w-8 h-8 text-purple-600" />
+              <div key={idx} className='bg-white rounded-2xl p-8 text-gray-900'>
+                <div className='flex items-center space-x-3 mb-4'>
+                  <mode.icon className='w-8 h-8 text-purple-600' />
                   <div>
-                    <h3 className="text-xl font-bold">{mode.title}</h3>
-                    <p className="text-purple-600 font-medium">{mode.subtitle}</p>
+                    <h3 className='text-xl font-bold'>{mode.title}</h3>
+                    <p className='text-purple-600 font-medium'>{mode.subtitle}</p>
                   </div>
                 </div>
-                <p className="text-gray-600 mb-6">{mode.description}</p>
-                <ul className="space-y-2 mb-6">
+                <p className='text-gray-600 mb-6'>{mode.description}</p>
+                <ul className='space-y-2 mb-6'>
                   {mode.features.map((feature, fIdx) => (
-                    <li key={fIdx} className="flex items-center space-x-2 text-gray-600">
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    <li key={fIdx} className='flex items-center space-x-2 text-gray-600'>
+                      <CheckCircle className='w-4 h-4 text-green-500' />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <div className="bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-center font-medium">
+                <div className='bg-purple-100 text-purple-700 px-4 py-2 rounded-lg text-center font-medium'>
                   {mode.badge}
                 </div>
               </div>
@@ -377,16 +370,16 @@ export function LandingPage() {
       </section>
 
       {/* Team Roles */}
-      <section id="team" className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">👥 完整團隊協作角色</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+      <section id='team' className='py-20 px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='text-center mb-12'>
+            <h2 className='text-3xl font-bold text-gray-900 mb-4'>👥 完整團隊協作角色</h2>
+            <p className='text-xl text-gray-600 max-w-2xl mx-auto'>
               6 大核心角色，AI 輔助完成大部分工作，團隊只需最後審核
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-6">
+          <div className='grid md:grid-cols-3 lg:grid-cols-6 gap-6'>
             {[
               {
                 icon: '📋',
@@ -425,11 +418,11 @@ export function LandingPage() {
                 aiPercent: '95%',
               },
             ].map((role, idx) => (
-              <div key={idx} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center">
-                <div className="text-4xl mb-4">{role.icon}</div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{role.title}</h3>
-                <p className="text-gray-500 text-sm mb-4">{role.description}</p>
-                <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
+              <div key={idx} className='bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-center'>
+                <div className='text-4xl mb-4'>{role.icon}</div>
+                <h3 className='text-lg font-semibold text-gray-900 mb-2'>{role.title}</h3>
+                <p className='text-gray-500 text-sm mb-4'>{role.description}</p>
+                <div className='bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium'>
                   ✨ AI 輔助 {role.aiPercent}
                 </div>
               </div>
@@ -439,21 +432,21 @@ export function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">🚀 輕鬆起步方案</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              選擇最適合團隊規模的計劃，支援全球多幣種支付
-            </p>
+      <section id='pricing' className='py-20 px-4 sm:px-6 lg:px-8 bg-gray-50'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='text-center mb-12'>
+            <h2 className='text-3xl font-bold text-gray-900 mb-4'>🚀 輕鬆起步方案</h2>
+            <p className='text-xl text-gray-600 max-w-2xl mx-auto'>選擇最適合團隊規模的計劃，支援全球多幣種支付</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Startup</h3>
-              <p className="text-gray-500 mb-4">適合初創團隊 (5-15 人)</p>
-              <p className="text-4xl font-bold text-gray-900 mb-2">$299<span className="text-lg font-normal text-gray-500">/ 月</span></p>
-              <ul className="space-y-3 mb-8">
+          <div className='grid md:grid-cols-3 gap-8 max-w-5xl mx-auto'>
+            <div className='bg-white rounded-2xl p-8 shadow-sm border border-gray-100'>
+              <h3 className='text-xl font-semibold text-gray-900 mb-2'>Startup</h3>
+              <p className='text-gray-500 mb-4'>適合初創團隊 (5-15 人)</p>
+              <p className='text-4xl font-bold text-gray-900 mb-2'>
+                $299<span className='text-lg font-normal text-gray-500'>/ 月</span>
+              </p>
+              <ul className='space-y-3 mb-8'>
                 {[
                   'Slack 風格協作頻道',
                   'AI 助手 (10,000 tokens/月)',
@@ -462,28 +455,29 @@ export function LandingPage() {
                   '雲端部署 (5 個環境)',
                   'Email 支援',
                 ].map((feature, idx) => (
-                  <li key={idx} className="flex items-center space-x-3 text-gray-600">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  <li key={idx} className='flex items-center space-x-3 text-gray-600'>
+                    <CheckCircle className='w-5 h-5 text-green-500' />
                     <span>{feature}</span>
                   </li>
                 ))}
               </ul>
               <Link
-                to="/login"
-                className="block w-full py-3 text-center border border-gray-200 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-              >
+                to='/login'
+                className='block w-full py-3 text-center border border-gray-200 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors'>
                 登錄
               </Link>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-8 shadow-lg text-white relative transform scale-105">
-              <div className="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
+            <div className='bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-8 shadow-lg text-white relative transform scale-105'>
+              <div className='absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg'>
                 熱門推薦
               </div>
-              <h3 className="text-xl font-semibold mb-2">Business</h3>
-              <p className="text-purple-200 mb-4">適合成長企業 (15-50 人)</p>
-              <p className="text-4xl font-bold mb-2">$799<span className="text-lg font-normal text-purple-200">/ 月</span></p>
-              <ul className="space-y-3 mb-8">
+              <h3 className='text-xl font-semibold mb-2'>Business</h3>
+              <p className='text-purple-200 mb-4'>適合成長企業 (15-50 人)</p>
+              <p className='text-4xl font-bold mb-2'>
+                $799<span className='text-lg font-normal text-purple-200'>/ 月</span>
+              </p>
+              <ul className='space-y-3 mb-8'>
                 {[
                   '所有 Startup 功能',
                   'AI 助手 (無限制)',
@@ -493,25 +487,26 @@ export function LandingPage() {
                   '優先技術支援',
                   '專屬客戶經理',
                 ].map((feature, idx) => (
-                  <li key={idx} className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-yellow-300" />
+                  <li key={idx} className='flex items-center space-x-3'>
+                    <CheckCircle className='w-5 h-5 text-yellow-300' />
                     <span>{feature}</span>
                   </li>
                 ))}
               </ul>
               <Link
-                to="/login"
-                className="block w-full py-3 text-center bg-white text-purple-600 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-              >
+                to='/login'
+                className='block w-full py-3 text-center bg-white text-purple-600 rounded-lg font-medium hover:bg-gray-100 transition-colors'>
                 立即開始
               </Link>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Enterprise</h3>
-              <p className="text-gray-500 mb-4">適合大型組織 (50+ 人)</p>
-              <p className="text-4xl font-bold text-gray-900 mb-2">定制<span className="text-lg font-normal text-gray-500">/ 月</span></p>
-              <ul className="space-y-3 mb-8">
+            <div className='bg-white rounded-2xl p-8 shadow-sm border border-gray-100'>
+              <h3 className='text-xl font-semibold text-gray-900 mb-2'>Enterprise</h3>
+              <p className='text-gray-500 mb-4'>適合大型組織 (50+ 人)</p>
+              <p className='text-4xl font-bold text-gray-900 mb-2'>
+                定制<span className='text-lg font-normal text-gray-500'>/ 月</span>
+              </p>
+              <ul className='space-y-3 mb-8'>
                 {[
                   '所有 Business 功能',
                   '自定義 AI 模型訓練',
@@ -521,16 +516,15 @@ export function LandingPage() {
                   '7/24 專屬支援',
                   '客製化功能開發',
                 ].map((feature, idx) => (
-                  <li key={idx} className="flex items-center space-x-3 text-gray-600">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  <li key={idx} className='flex items-center space-x-3 text-gray-600'>
+                    <CheckCircle className='w-5 h-5 text-green-500' />
                     <span>{feature}</span>
                   </li>
                 ))}
               </ul>
               <Link
-                to="/login"
-                className="block w-full py-3 text-center border border-gray-200 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-              >
+                to='/login'
+                className='block w-full py-3 text-center border border-gray-200 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors'>
                 聯絡銷售
               </Link>
             </div>
@@ -539,26 +533,20 @@ export function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            準備好開始你的智能開發項目了嗎？
-          </h2>
-          <p className="text-xl text-gray-600 mb-8">
-            讓 AI 成為你的技術聯合創始人，告別繁瑣的團隊管理
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <section className='py-20 px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-4xl mx-auto text-center'>
+          <h2 className='text-3xl font-bold text-gray-900 mb-4'>準備好開始你的智能開發項目了嗎？</h2>
+          <p className='text-xl text-gray-600 mb-8'>讓 AI 成為你的技術聯合創始人，告別繁瑣的團隊管理</p>
+          <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
             <Link
-              to="/login"
-              className="flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/25"
-            >
+              to='/login'
+              className='flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/25'>
               <span>🚀 開始創建</span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className='w-5 h-5' />
             </Link>
             <a
-              href="#features"
-              className="flex items-center space-x-2 px-8 py-4 border border-gray-200 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors"
-            >
+              href='#features'
+              className='flex items-center space-x-2 px-8 py-4 border border-gray-200 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors'>
               <span>了解更多</span>
             </a>
           </div>
@@ -566,53 +554,103 @@ export function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
+      <footer className='bg-gray-900 text-gray-400 py-12 px-4 sm:px-6 lg:px-8'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='grid md:grid-cols-4 gap-8'>
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-white" />
+              <div className='flex items-center space-x-2 mb-4'>
+                <div className='w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center'>
+                  <Sparkles className='w-6 h-6 text-white' />
                 </div>
-                <span className="text-xl font-bold text-white">CodeUtopia.ai</span>
+                <span className='text-xl font-bold text-white'>CodeUtopia.ai</span>
               </div>
-              <p className="text-sm">
+              <p className='text-sm'>
                 AI 驅動的企業級協作開發平台，Slack + Upwork + ChatGPT + GitHub + 測試部署，一站式搞定！
               </p>
             </div>
             <div>
-              <h4 className="font-semibold text-white mb-4">平台功能</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#features" className="hover:text-white transition-colors">Slack 協作</a></li>
-                <li><a href="#features" className="hover:text-white transition-colors">人才匹配</a></li>
-                <li><a href="#features" className="hover:text-white transition-colors">AI 助手</a></li>
-                <li><a href="#devmode" className="hover:text-white transition-colors">開發模式</a></li>
+              <h4 className='font-semibold text-white mb-4'>平台功能</h4>
+              <ul className='space-y-2 text-sm'>
+                <li>
+                  <a href='#features' className='hover:text-white transition-colors'>
+                    Slack 協作
+                  </a>
+                </li>
+                <li>
+                  <a href='#features' className='hover:text-white transition-colors'>
+                    人才匹配
+                  </a>
+                </li>
+                <li>
+                  <a href='#features' className='hover:text-white transition-colors'>
+                    AI 助手
+                  </a>
+                </li>
+                <li>
+                  <a href='#devmode' className='hover:text-white transition-colors'>
+                    開發模式
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-white mb-4">團隊角色</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#team" className="hover:text-white transition-colors">產品經理</a></li>
-                <li><a href="#team" className="hover:text-white transition-colors">架構師</a></li>
-                <li><a href="#team" className="hover:text-white transition-colors">代碼工程師</a></li>
-                <li><a href="#team" className="hover:text-white transition-colors">測試工程師</a></li>
+              <h4 className='font-semibold text-white mb-4'>團隊角色</h4>
+              <ul className='space-y-2 text-sm'>
+                <li>
+                  <a href='#team' className='hover:text-white transition-colors'>
+                    產品經理
+                  </a>
+                </li>
+                <li>
+                  <a href='#team' className='hover:text-white transition-colors'>
+                    架構師
+                  </a>
+                </li>
+                <li>
+                  <a href='#team' className='hover:text-white transition-colors'>
+                    代碼工程師
+                  </a>
+                </li>
+                <li>
+                  <a href='#team' className='hover:text-white transition-colors'>
+                    測試工程師
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold text-white mb-4">支援中心</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">使用說明</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API 文檔</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">聯繫我們</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">隱私政策</a></li>
+              <h4 className='font-semibold text-white mb-4'>支援中心</h4>
+              <ul className='space-y-2 text-sm'>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    使用說明
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    API 文檔
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    聯繫我們
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    隱私政策
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between">
-            <p className="text-sm">© 2026 CodeUtopia.ai. All rights reserved. | AI-Driven Enterprise Collaboration Platform</p>
+          <div className='border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between'>
+            <p className='text-sm'>
+              © 2026 CodeUtopia.ai. All rights reserved. | AI-Driven Enterprise Collaboration Platform
+            </p>
           </div>
         </div>
       </footer>
     </div>
-  );
+  )
 }

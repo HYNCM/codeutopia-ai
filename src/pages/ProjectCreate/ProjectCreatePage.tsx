@@ -42,19 +42,19 @@ export const ProjectCreatePage: React.FC = () => {
           budgetMin: formData.basicInfo.budgetMin,
           budgetMax: formData.basicInfo.budgetMax,
           skills: formData.talentRequirement.skills,
-        }
-      }
+        },
+      },
     })
   }, [currentStep, formData.basicInfo.title, formData.basicInfo.description, formData.basicInfo.category, setContext])
 
   // Listen for AI Action events (e.g., autofill)
   useEffect(() => {
     const handleAIAction = (event: CustomEvent) => {
-      const { type, payload } = event.detail;
-      
+      const { type, payload } = event.detail
+
       if (type === 'autofill_form' && payload) {
         // Map AI payload to form structure
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           basicInfo: {
             ...prev.basicInfo,
@@ -67,20 +67,20 @@ export const ProjectCreatePage: React.FC = () => {
           talentRequirement: {
             ...prev.talentRequirement,
             skills: payload.skills || prev.talentRequirement.skills,
-          }
-        }));
-        
-        // Visual feedback: flash animation
-        document.querySelector('main')?.classList.add('animate-pulse');
-        setTimeout(() => {
-          document.querySelector('main')?.classList.remove('animate-pulse');
-        }, 1000);
-      }
-    };
+          },
+        }))
 
-    window.addEventListener('ai_action', handleAIAction as EventListener);
-    return () => window.removeEventListener('ai_action', handleAIAction as EventListener);
-  }, []);
+        // Visual feedback: flash animation
+        document.querySelector('main')?.classList.add('animate-pulse')
+        setTimeout(() => {
+          document.querySelector('main')?.classList.remove('animate-pulse')
+        }, 1000)
+      }
+    }
+
+    window.addEventListener('ai_action', handleAIAction as EventListener)
+    return () => window.removeEventListener('ai_action', handleAIAction as EventListener)
+  }, [])
 
   const updateFormData = (updates: Partial<ProjectCreateFormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }))

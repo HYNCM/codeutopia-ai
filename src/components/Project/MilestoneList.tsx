@@ -1,32 +1,41 @@
-import React from 'react';
-import { Calendar, DollarSign, FileText, Upload, Clock, AlertTriangle } from 'lucide-react';
-import { MilestoneSubmission } from '../../types';
+import React from 'react'
+import { Calendar, DollarSign, FileText, Upload, Clock, AlertTriangle } from 'lucide-react'
+import { MilestoneSubmission } from '../../types'
 
 // Extended status to support all view states
-type ViewMilestoneStatus = 'pending' | 'in_progress' | 'submitted' | 'approved' | 'rejected' | 'completed' | 'paid' | 'review' | 'disputed';
+type ViewMilestoneStatus =
+  | 'pending'
+  | 'in_progress'
+  | 'submitted'
+  | 'approved'
+  | 'rejected'
+  | 'completed'
+  | 'paid'
+  | 'review'
+  | 'disputed'
 
 interface ViewMilestone {
-  id: string;
-  title: string;
-  description: string;
-  status: ViewMilestoneStatus;
-  progress: number;
-  startDate: string;
-  dueDate: string;
-  budget: number;
-  currency: string;
-  deliverables: { id: string; name: string }[];
-  submission?: MilestoneSubmission;
+  id: string
+  title: string
+  description: string
+  status: ViewMilestoneStatus
+  progress: number
+  startDate: string
+  dueDate: string
+  budget: number
+  currency: string
+  deliverables: { id: string; name: string }[]
+  submission?: MilestoneSubmission
 }
 
 interface MilestoneListProps {
-  milestones: ViewMilestone[];
-  isOwner: boolean;
-  isContractor: boolean;
-  selectedMilestoneId: string | null;
-  onSelectMilestone: (id: string | null) => void;
-  onOpenSubmit: (milestone: { id: string; title: string }) => void;
-  onOpenReview: (milestone: { id: string; title: string; amount: number; submission: MilestoneSubmission }) => void;
+  milestones: ViewMilestone[]
+  isOwner: boolean
+  isContractor: boolean
+  selectedMilestoneId: string | null
+  onSelectMilestone: (id: string | null) => void
+  onOpenSubmit: (milestone: { id: string; title: string }) => void
+  onOpenReview: (milestone: { id: string; title: string; amount: number; submission: MilestoneSubmission }) => void
 }
 
 export const MilestoneList: React.FC<MilestoneListProps> = ({
@@ -47,9 +56,9 @@ export const MilestoneList: React.FC<MilestoneListProps> = ({
       paid: 'bg-green-100 text-green-700',
       rejected: 'bg-red-100 text-red-700',
       completed: 'bg-green-100 text-green-700',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-700';
-  };
+    }
+    return colors[status] || 'bg-gray-100 text-gray-700'
+  }
 
   return (
     <div className='space-y-6'>
@@ -62,10 +71,14 @@ export const MilestoneList: React.FC<MilestoneListProps> = ({
         <div className='space-y-6'>
           {milestones.map((milestone) => (
             <div key={milestone.id} className='relative pl-6 border-l-2 border-gray-200'>
-              <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 bg-white ${
-                 ['completed', 'approved', 'paid'].includes(milestone.status) ? 'border-green-500 bg-green-500' : 
-                 milestone.status === 'in_progress' ? 'border-blue-500' : 'border-gray-300'
-              }`}></div>
+              <div
+                className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 bg-white ${
+                  ['completed', 'approved', 'paid'].includes(milestone.status)
+                    ? 'border-green-500 bg-green-500'
+                    : milestone.status === 'in_progress'
+                      ? 'border-blue-500'
+                      : 'border-gray-300'
+                }`}></div>
 
               <div
                 className={`p-4 rounded-lg border transition-all cursor-pointer ${
@@ -101,7 +114,9 @@ export const MilestoneList: React.FC<MilestoneListProps> = ({
                     <h5 className='text-sm font-medium text-gray-700 mb-2'>交付物清单:</h5>
                     <ul className='space-y-2'>
                       {milestone.deliverables.map((d) => (
-                        <li key={d.id} className='flex items-center text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg'>
+                        <li
+                          key={d.id}
+                          className='flex items-center text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg'>
                           <FileText className='w-3 h-3 mr-2 text-gray-400' />
                           {d.name}
                         </li>
@@ -112,8 +127,8 @@ export const MilestoneList: React.FC<MilestoneListProps> = ({
                     {isContractor && ['pending', 'in_progress', 'rejected'].includes(milestone.status) && (
                       <button
                         onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenSubmit({ id: milestone.id, title: milestone.title });
+                          e.stopPropagation()
+                          onOpenSubmit({ id: milestone.id, title: milestone.title })
                         }}
                         className='mt-4 w-full py-2 bg-gray-900 hover:bg-black text-white rounded-lg font-medium text-sm transition-colors flex items-center justify-center shadow-sm'>
                         <Upload className='w-4 h-4 mr-2' />
@@ -132,14 +147,14 @@ export const MilestoneList: React.FC<MilestoneListProps> = ({
                           {isOwner && (
                             <button
                               onClick={(e) => {
-                                e.stopPropagation();
+                                e.stopPropagation()
                                 if (milestone.submission) {
                                   onOpenReview({
                                     id: milestone.id,
                                     title: milestone.title,
                                     amount: milestone.budget,
                                     submission: milestone.submission,
-                                  });
+                                  })
                                 }
                               }}
                               className='px-3 py-1.5 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-xs font-medium transition-colors shadow-sm'>
@@ -173,5 +188,5 @@ export const MilestoneList: React.FC<MilestoneListProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

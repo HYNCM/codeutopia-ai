@@ -107,10 +107,10 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
           ...p,
           milestones: p.milestones.map((m) => {
             if (m.id !== milestoneId) return m
-            
+
             // If rejected, reset status to 'in_progress', otherwise 'approved'
             const newStatus = data.status === 'rejected' ? 'in_progress' : 'approved'
-            
+
             return {
               ...m,
               status: newStatus,
@@ -130,7 +130,8 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
   }
 
   return (
-    <ProjectContext.Provider value={{ projects, addProject, updateProject, submitBid, acceptBid, submitMilestone, reviewMilestone }}>
+    <ProjectContext.Provider
+      value={{ projects, addProject, updateProject, submitBid, acceptBid, submitMilestone, reviewMilestone }}>
       {children}
     </ProjectContext.Provider>
   )

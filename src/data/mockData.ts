@@ -1,4 +1,4 @@
-import { Project, User, Bid, Milestone, Message, Notification, Payment, Transaction, AIAnalysis } from '../types';
+import { Project, User, Bid, Milestone, Message, Notification, Payment, Transaction, AIAnalysis } from '../types'
 
 export const mockClients: User[] = [
   {
@@ -35,7 +35,7 @@ export const mockClients: User[] = [
     timezone: 'Asia/Hong_Kong',
     bio: '領先的金融科技服務提供商',
   },
-];
+]
 
 export const mockDevelopers: User[] = [
   {
@@ -153,7 +153,7 @@ export const mockDevelopers: User[] = [
     ],
     certifications: ['Apple Certified iOS Developer'],
   },
-];
+]
 
 export const mockAIAnalysis: AIAnalysis = {
   taskCount: 12,
@@ -170,7 +170,7 @@ export const mockAIAnalysis: AIAnalysis = {
   suggestedTechStack: ['React 18', 'TypeScript', 'Node.js', 'PostgreSQL', 'AWS'],
   complexity: 'high',
   marketRate: 2500,
-};
+}
 
 export const mockProjects: Project[] = [
   {
@@ -326,7 +326,8 @@ export const mockProjects: Project[] = [
         developerRating: 4.7,
         proposedPrice: 280000,
         deliveryDays: 100,
-        proposal: '我是NLP和AI開發專家，過去3年專注於智能對話系統開發。曾為多家金融機構設計客服AI系統，熟悉LLM微調和部署。有信心按時高質量交付。',
+        proposal:
+          '我是NLP和AI開發專家，過去3年專注於智能對話系統開發。曾為多家金融機構設計客服AI系統，熟悉LLM微調和部署。有信心按時高質量交付。',
         status: 'accepted',
         createdAt: '2026-01-15T09:00:00Z',
       },
@@ -490,7 +491,7 @@ export const mockProjects: Project[] = [
     escrowBalance: 0,
     totalPaid: 0,
   },
-];
+]
 
 export const mockMessages: Message[] = [
   {
@@ -517,7 +518,7 @@ export const mockMessages: Message[] = [
     timestamp: '2026-01-19T10:00:00Z',
     read: true,
   },
-];
+]
 
 export const mockNotifications: Notification[] = [
   {
@@ -565,7 +566,7 @@ export const mockNotifications: Notification[] = [
     read: true,
     link: '/profile',
   },
-];
+]
 
 export const mockPayments: Payment[] = [
   {
@@ -602,7 +603,7 @@ export const mockPayments: Payment[] = [
     type: 'milestone',
     createdAt: '2026-01-20T00:00:00Z',
   },
-];
+]
 
 export const mockTransactions: Transaction[] = [
   {
@@ -640,7 +641,7 @@ export const mockTransactions: Transaction[] = [
     projectTitle: '電商平台前端重構',
     createdAt: '2026-01-05T12:00:00Z',
   },
-];
+]
 
 export const categoryLabels: Record<string, string> = {
   web_dev: 'Web開發',
@@ -651,7 +652,7 @@ export const categoryLabels: Record<string, string> = {
   ai_ml: 'AI/機器學習',
   writing: '文案撰寫',
   other: '其他',
-};
+}
 
 export const statusLabels: Record<string, { text: string; color: string }> = {
   draft: { text: '草稿', color: 'gray' },
@@ -661,23 +662,86 @@ export const statusLabels: Record<string, { text: string; color: string }> = {
   completed: { text: '已完成', color: 'green' },
   disputed: { text: '爭議中', color: 'red' },
   cancelled: { text: '已取消', color: 'gray' },
-};
+}
 
 export const PROJECT_CATEGORIES = [
-  { value: 'web_dev', label: 'Web開發', icon: 'Globe', subcategories: ['前端開發', '後端開發', '全棧開發', 'CMS開發', '電子商務'] },
-  { value: 'mobile_dev', label: '移動應用開發', icon: 'Smartphone', subcategories: ['iOS開發', 'Android開發', 'React Native', 'Flutter', '小程序開發'] },
-  { value: 'ui_ux', label: 'UI/UX設計', icon: 'Palette', subcategories: ['網頁設計', '移動端設計', '產品設計', '品牌設計', '原型設計'] },
-  { value: 'backend', label: '後端開發', icon: 'Server', subcategories: ['API開發', '數據庫設計', '系統架構', '微服務', '雲服務'] },
-  { value: 'devops', label: 'DevOps', icon: 'Settings', subcategories: ['CI/CD', '容器化', '雲部署', '監控運維', '自動化測試'] },
-  { value: 'ai_ml', label: 'AI/機器學習', icon: 'Brain', subcategories: ['機器學習', '深度學習', '自然語言處理', '電腦視覺', 'AI集成'] },
-  { value: 'writing', label: '文案撰寫', icon: 'FileText', subcategories: ['技術文檔', '內容創作', '翻譯', 'SEO文案', '產品說明'] },
+  {
+    value: 'web_dev',
+    label: 'Web開發',
+    icon: 'Globe',
+    subcategories: ['前端開發', '後端開發', '全棧開發', 'CMS開發', '電子商務'],
+  },
+  {
+    value: 'mobile_dev',
+    label: '移動應用開發',
+    icon: 'Smartphone',
+    subcategories: ['iOS開發', 'Android開發', 'React Native', 'Flutter', '小程序開發'],
+  },
+  {
+    value: 'ui_ux',
+    label: 'UI/UX設計',
+    icon: 'Palette',
+    subcategories: ['網頁設計', '移動端設計', '產品設計', '品牌設計', '原型設計'],
+  },
+  {
+    value: 'backend',
+    label: '後端開發',
+    icon: 'Server',
+    subcategories: ['API開發', '數據庫設計', '系統架構', '微服務', '雲服務'],
+  },
+  {
+    value: 'devops',
+    label: 'DevOps',
+    icon: 'Settings',
+    subcategories: ['CI/CD', '容器化', '雲部署', '監控運維', '自動化測試'],
+  },
+  {
+    value: 'ai_ml',
+    label: 'AI/機器學習',
+    icon: 'Brain',
+    subcategories: ['機器學習', '深度學習', '自然語言處理', '電腦視覺', 'AI集成'],
+  },
+  {
+    value: 'writing',
+    label: '文案撰寫',
+    icon: 'FileText',
+    subcategories: ['技術文檔', '內容創作', '翻譯', 'SEO文案', '產品說明'],
+  },
   { value: 'other', label: '其他', icon: 'MoreHorizontal', subcategories: [] },
-];
+]
 
 export const SKILLS = [
-  'React', 'Vue.js', 'Angular', 'TypeScript', 'Node.js', 'Python', 'Java',
-  'Go', 'Rust', 'Swift', 'Kotlin', 'Docker', 'Kubernetes', 'AWS', 'GCP',
-  'PostgreSQL', 'MongoDB', 'Redis', 'GraphQL', 'REST API', 'UI/UX', 'Figma',
-  'TensorFlow', 'PyTorch', 'NLP', 'Computer Vision', 'DevOps', 'CI/CD',
-  '區塊鏈', '小程序', '電子商務系統', 'CRM系統', 'ERP系統'
-];
+  'React',
+  'Vue.js',
+  'Angular',
+  'TypeScript',
+  'Node.js',
+  'Python',
+  'Java',
+  'Go',
+  'Rust',
+  'Swift',
+  'Kotlin',
+  'Docker',
+  'Kubernetes',
+  'AWS',
+  'GCP',
+  'PostgreSQL',
+  'MongoDB',
+  'Redis',
+  'GraphQL',
+  'REST API',
+  'UI/UX',
+  'Figma',
+  'TensorFlow',
+  'PyTorch',
+  'NLP',
+  'Computer Vision',
+  'DevOps',
+  'CI/CD',
+  '區塊鏈',
+  '小程序',
+  '電子商務系統',
+  'CRM系統',
+  'ERP系統',
+]

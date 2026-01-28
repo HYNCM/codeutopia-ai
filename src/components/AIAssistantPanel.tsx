@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   Sparkles,
   Brain,
@@ -20,26 +20,21 @@ import {
   Layout,
   TestTube,
   Sparkle,
-} from 'lucide-react';
+} from 'lucide-react'
 
 // AI 角色类型定義
-export type AIRoleType =
-  | 'product_manager'
-  | 'ux_designer'
-  | 'frontend_engineer'
-  | 'backend_engineer'
-  | 'qa_engineer';
+export type AIRoleType = 'product_manager' | 'ux_designer' | 'frontend_engineer' | 'backend_engineer' | 'qa_engineer'
 
 // AI 角色配置
 interface AIRoleConfig {
-  id: AIRoleType;
-  name: string;
-  nameZh: string;
-  icon: typeof Brain;
-  description: string;
-  color: string;
-  bgColor: string;
-  capabilities: string[];
+  id: AIRoleType
+  name: string
+  nameZh: string
+  icon: typeof Brain
+  description: string
+  color: string
+  bgColor: string
+  capabilities: string[]
 }
 
 // AI 角色配置數據
@@ -94,26 +89,26 @@ const AI_ROLES: AIRoleConfig[] = [
     bgColor: 'bg-red-500/20',
     capabilities: ['測試用例生成', '自動化測試腳本', 'Bug 報告', '質量評估報告'],
   },
-];
+]
 
 // 任務狀態
 interface TaskStatus {
-  id: string;
-  role: AIRoleType;
-  task: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
-  progress: number;
-  result?: string;
-  createdAt: Date;
+  id: string
+  role: AIRoleType
+  task: string
+  status: 'pending' | 'processing' | 'completed' | 'failed'
+  progress: number
+  result?: string
+  createdAt: Date
 }
 
 // AI 協助面板屬性
 interface AIAssistantPanelProps {
-  projectId?: string;
-  milestoneId?: string;
-  currentRole: 'project_initiator' | 'contractor' | 'regional_manager' | 'webadmin';
-  onTaskComplete?: (role: AIRoleType, result: any) => void;
-  codeBoxCompatible?: boolean; // 是否兼容 CodeBox 硬件開發
+  projectId?: string
+  milestoneId?: string
+  currentRole: 'project_initiator' | 'contractor' | 'regional_manager' | 'webadmin'
+  onTaskComplete?: (role: AIRoleType, result: any) => void
+  codeBoxCompatible?: boolean // 是否兼容 CodeBox 硬件開發
 }
 
 // 里程碑選項
@@ -123,7 +118,7 @@ const MILESTONE_OPTIONS = [
   { id: 'm3', name: '第三里程碑：開發實現' },
   { id: 'm4', name: '第四里程碑：測試驗收' },
   { id: 'm5', name: '第五里程碑：交付上線' },
-];
+]
 
 export function AIAssistantPanel({
   projectId,
@@ -132,19 +127,19 @@ export function AIAssistantPanel({
   onTaskComplete,
   codeBoxCompatible = false,
 }: AIAssistantPanelProps) {
-  const [selectedRole, setSelectedRole] = useState<AIRoleType | null>(null);
-  const [taskInput, setTaskInput] = useState('');
-  const [selectedMilestone, setSelectedMilestone] = useState<string>('');
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [taskHistory, setTaskHistory] = useState<TaskStatus[]>([]);
-  const [resultExpanded, setResultExpanded] = useState<string | null>(null);
-  const [showSettings, setShowSettings] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<AIRoleType | null>(null)
+  const [taskInput, setTaskInput] = useState('')
+  const [selectedMilestone, setSelectedMilestone] = useState<string>('')
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [taskHistory, setTaskHistory] = useState<TaskStatus[]>([])
+  const [resultExpanded, setResultExpanded] = useState<string | null>(null)
+  const [showSettings, setShowSettings] = useState(false)
 
   // 處理 AI 任務提交
   const handleSubmitTask = async () => {
-    if (!selectedRole || !taskInput.trim()) return;
+    if (!selectedRole || !taskInput.trim()) return
 
-    const taskId = `task_${Date.now()}`;
+    const taskId = `task_${Date.now()}`
     const newTask: TaskStatus = {
       id: taskId,
       role: selectedRole,
@@ -152,47 +147,41 @@ export function AIAssistantPanel({
       status: 'processing',
       progress: 0,
       createdAt: new Date(),
-    };
+    }
 
-    setTaskHistory((prev) => [newTask, ...prev]);
-    setIsProcessing(true);
-    setTaskInput('');
+    setTaskHistory((prev) => [newTask, ...prev])
+    setIsProcessing(true)
+    setTaskInput('')
 
     // 模擬 AI 處理過程
-    const roleConfig = AI_ROLES.find((r) => r.id === selectedRole)!;
+    const roleConfig = AI_ROLES.find((r) => r.id === selectedRole)!
 
     // 模擬處理進度
-    let progress = 0;
+    let progress = 0
     const progressInterval = setInterval(() => {
-      progress += Math.random() * 30;
+      progress += Math.random() * 30
       if (progress >= 100) {
-        progress = 100;
-        clearInterval(progressInterval);
+        progress = 100
+        clearInterval(progressInterval)
 
         // 生成模擬結果
-        const mockResult = generateMockResult(selectedRole, taskInput, codeBoxCompatible);
+        const mockResult = generateMockResult(selectedRole, taskInput, codeBoxCompatible)
 
         setTaskHistory((prev) =>
-          prev.map((t) =>
-            t.id === taskId
-              ? { ...t, status: 'completed', progress: 100, result: mockResult }
-              : t
-          )
-        );
+          prev.map((t) => (t.id === taskId ? { ...t, status: 'completed', progress: 100, result: mockResult } : t)),
+        )
 
-        setIsProcessing(false);
-        onTaskComplete?.(selectedRole, mockResult);
+        setIsProcessing(false)
+        onTaskComplete?.(selectedRole, mockResult)
       } else {
-        setTaskHistory((prev) =>
-          prev.map((t) => (t.id === taskId ? { ...t, progress: Math.floor(progress) } : t))
-        );
+        setTaskHistory((prev) => prev.map((t) => (t.id === taskId ? { ...t, progress: Math.floor(progress) } : t)))
       }
-    }, 500);
-  };
+    }, 500)
+  }
 
   // 生成模擬結果
   const generateMockResult = (role: AIRoleType, task: string, codeBox: boolean): string => {
-    const roleData = AI_ROLES.find((r) => r.id === role)!;
+    const roleData = AI_ROLES.find((r) => r.id === role)!
 
     const results: Record<AIRoleType, string> = {
       product_manager: `## 需求分析報告
@@ -350,57 +339,56 @@ describe('Project Management', () => {
 - 代碼覆蓋率 ≥ 80%
 - 測試通過率 ≥ 95%
 - 無 Critical 級別 Bug`,
-    };
+    }
 
-    return results[role];
-  };
+    return results[role]
+  }
 
   // 複製結果到剪貼板
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-  };
+    navigator.clipboard.writeText(text)
+  }
 
   // 下載結果
   const downloadResult = (taskId: string, result: string) => {
-    const blob = new Blob([result], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `ai_result_${taskId}.md`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+    const blob = new Blob([result], { type: 'text/markdown' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `ai_result_${taskId}.md`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   return (
-    <div className="bg-gray-800/50 rounded-2xl border border-gray-700/50 overflow-hidden">
+    <div className='bg-gray-800/50 rounded-2xl border border-gray-700/50 overflow-hidden'>
       {/* 面板標題 */}
-      <div className="px-6 py-4 border-b border-gray-700/50 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-purple-400" />
+      <div className='px-6 py-4 border-b border-gray-700/50 flex items-center justify-between'>
+        <div className='flex items-center space-x-3'>
+          <div className='w-10 h-10 bg-gradient-to-br from-purple-500/20 to-blue-500/20 rounded-xl flex items-center justify-center'>
+            <Sparkles className='w-5 h-5 text-purple-400' />
           </div>
           <div>
-            <h3 className="text-white font-semibold">AI 協助角色</h3>
-            <p className="text-sm text-gray-400">
+            <h3 className='text-white font-semibold'>AI 協助角色</h3>
+            <p className='text-sm text-gray-400'>
               {currentRole === 'project_initiator' ? '調用 AI 輔助項目管理' : '調用 AI 輔助任務交付'}
             </p>
           </div>
         </div>
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className="p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition-colors"
-        >
-          <Settings className="w-5 h-5" />
+          className='p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-lg transition-colors'>
+          <Settings className='w-5 h-5' />
         </button>
       </div>
 
       {/* 設置區域 */}
       {showSettings && (
-        <div className="px-6 py-4 bg-gray-900/50 border-b border-gray-700/50">
-          <div className="grid grid-cols-2 gap-4">
+        <div className='px-6 py-4 bg-gray-900/50 border-b border-gray-700/50'>
+          <div className='grid grid-cols-2 gap-4'>
             <div>
-              <label className="block text-sm text-gray-400 mb-2">輸出語言</label>
-              <select className="w-full py-2 px-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm">
+              <label className='block text-sm text-gray-400 mb-2'>輸出語言</label>
+              <select className='w-full py-2 px-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm'>
                 <option>跟隨界面語言</option>
                 <option>English</option>
                 <option>繁體中文</option>
@@ -408,22 +396,22 @@ describe('Project Management', () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-2">輸出格式</label>
-              <select className="w-full py-2 px-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm">
+              <label className='block text-sm text-gray-400 mb-2'>輸出格式</label>
+              <select className='w-full py-2 px-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm'>
                 <option>Markdown</option>
                 <option>JSON</option>
                 <option>純文本</option>
               </select>
             </div>
             {codeBoxCompatible && (
-              <div className="col-span-2">
-                <label className="flex items-center space-x-3">
+              <div className='col-span-2'>
+                <label className='flex items-center space-x-3'>
                   <input
-                    type="checkbox"
+                    type='checkbox'
                     defaultChecked
-                    className="w-4 h-4 rounded border-gray-600 bg-gray-700 text-purple-500 focus:ring-purple-500"
+                    className='w-4 h-4 rounded border-gray-600 bg-gray-700 text-purple-500 focus:ring-purple-500'
                   />
-                  <span className="text-sm text-gray-300">CodeBox 硬件開發模式（自動適配端側參數）</span>
+                  <span className='text-sm text-gray-300'>CodeBox 硬件開發模式（自動適配端側參數）</span>
                 </label>
               </div>
             )}
@@ -432,9 +420,9 @@ describe('Project Management', () => {
       )}
 
       {/* AI 角色選擇 */}
-      <div className="px-6 py-4 border-b border-gray-700/50">
-        <label className="block text-sm text-gray-400 mb-3">選擇 AI 協助角色</label>
-        <div className="grid grid-cols-5 gap-2">
+      <div className='px-6 py-4 border-b border-gray-700/50'>
+        <label className='block text-sm text-gray-400 mb-3'>選擇 AI 協助角色</label>
+        <div className='grid grid-cols-5 gap-2'>
           {AI_ROLES.map((role) => (
             <button
               key={role.id}
@@ -443,8 +431,7 @@ describe('Project Management', () => {
                 selectedRole === role.id
                   ? `border-${role.color.replace('text-', '')} bg-${role.bgColor}`
                   : 'border-gray-700 hover:border-gray-600 bg-gray-800/50'
-              }`}
-            >
+              }`}>
               <div className={`w-8 h-8 ${role.bgColor} rounded-lg flex items-center justify-center mx-auto mb-2`}>
                 <role.icon className={`w-4 h-4 ${role.color}`} />
               </div>
@@ -457,52 +444,54 @@ describe('Project Management', () => {
 
         {/* 選中角色說明 */}
         {selectedRole && (
-          <div className="mt-4 p-4 bg-gray-900/50 rounded-xl">
+          <div className='mt-4 p-4 bg-gray-900/50 rounded-xl'>
             {(() => {
-              const role = AI_ROLES.find(r => r.id === selectedRole);
-              if (!role) return null;
+              const role = AI_ROLES.find((r) => r.id === selectedRole)
+              if (!role) return null
               return (
-                <div className="flex items-start space-x-3">
-                  <div className={`w-10 h-10 ${role.bgColor} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                <div className='flex items-start space-x-3'>
+                  <div
+                    className={`w-10 h-10 ${role.bgColor} rounded-lg flex items-center justify-center flex-shrink-0`}>
                     <role.icon className={`w-5 h-5 ${role.color}`} />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="text-white font-medium">{role.nameZh}</h4>
-                    <p className="text-sm text-gray-400 mt-1">{role.description}</p>
-                    <div className="flex flex-wrap gap-2 mt-2">
+                  <div className='flex-1'>
+                    <h4 className='text-white font-medium'>{role.nameZh}</h4>
+                    <p className='text-sm text-gray-400 mt-1'>{role.description}</p>
+                    <div className='flex flex-wrap gap-2 mt-2'>
                       {role.capabilities.map((cap) => (
-                        <span key={cap} className="px-2 py-0.5 bg-gray-800 rounded text-xs text-gray-300">
+                        <span key={cap} className='px-2 py-0.5 bg-gray-800 rounded text-xs text-gray-300'>
                           {cap}
                         </span>
                       ))}
                     </div>
                   </div>
                 </div>
-              );
+              )
             })()}
           </div>
         )}
       </div>
 
       {/* 任務輸入區域 */}
-      <div className="px-6 py-4 border-b border-gray-700/50">
-        <label className="block text-sm text-gray-400 mb-3">描述您的需求</label>
-        <div className="space-y-3">
+      <div className='px-6 py-4 border-b border-gray-700/50'>
+        <label className='block text-sm text-gray-400 mb-3'>描述您的需求</label>
+        <div className='space-y-3'>
           <textarea
             value={taskInput}
             onChange={(e) => setTaskInput(e.target.value)}
-            placeholder={`例如：${selectedRole ? `請${AI_ROLES.find(r => r.id === selectedRole)!.nameZh}幫我${AI_ROLES.find(r => r.id === selectedRole)!.capabilities[0]}` : '請描述您的需求...'}`}
-            className="w-full h-24 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 resize-none"
+            placeholder={`例如：${selectedRole ? `請${AI_ROLES.find((r) => r.id === selectedRole)!.nameZh}幫我${AI_ROLES.find((r) => r.id === selectedRole)!.capabilities[0]}` : '請描述您的需求...'}`}
+            className='w-full h-24 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 resize-none'
           />
-          <div className="flex items-center justify-between">
+          <div className='flex items-center justify-between'>
             <select
               value={selectedMilestone}
               onChange={(e) => setSelectedMilestone(e.target.value)}
-              className="py-2 px-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
-            >
-              <option value="">關聯里程碑（可選）</option>
+              className='py-2 px-3 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm'>
+              <option value=''>關聯里程碑（可選）</option>
               {MILESTONE_OPTIONS.map((m) => (
-                <option key={m.id} value={m.id}>{m.name}</option>
+                <option key={m.id} value={m.id}>
+                  {m.name}
+                </option>
               ))}
             </select>
             <button
@@ -512,16 +501,15 @@ describe('Project Management', () => {
                 !selectedRole || !taskInput.trim() || isProcessing
                   ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-lg shadow-purple-500/25'
-              }`}
-            >
+              }`}>
               {isProcessing ? (
                 <>
-                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <RefreshCw className='w-4 h-4 animate-spin' />
                   <span>處理中...</span>
                 </>
               ) : (
                 <>
-                  <Send className="w-4 h-4" />
+                  <Send className='w-4 h-4' />
                   <span>提交任務</span>
                 </>
               )}
@@ -532,79 +520,76 @@ describe('Project Management', () => {
 
       {/* 任務歷史 */}
       {taskHistory.length > 0 && (
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-white font-medium">任務歷史</h4>
-            <span className="text-sm text-gray-400">{taskHistory.length} 個任務</span>
+        <div className='px-6 py-4'>
+          <div className='flex items-center justify-between mb-4'>
+            <h4 className='text-white font-medium'>任務歷史</h4>
+            <span className='text-sm text-gray-400'>{taskHistory.length} 個任務</span>
           </div>
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {taskHistory.map((task) => (
-              <div
-                key={task.id}
-                className="bg-gray-900/50 rounded-xl overflow-hidden border border-gray-700/50"
-              >
+              <div key={task.id} className='bg-gray-900/50 rounded-xl overflow-hidden border border-gray-700/50'>
                 {/* 任務頭部 */}
                 <button
                   onClick={() => setResultExpanded(resultExpanded === task.id ? null : task.id)}
-                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-8 h-8 ${AI_ROLES.find(r => r.id === task.role)!.bgColor} rounded-lg flex items-center justify-center`}>
+                  className='w-full px-4 py-3 flex items-center justify-between hover:bg-gray-800/50 transition-colors'>
+                  <div className='flex items-center space-x-3'>
+                    <div
+                      className={`w-8 h-8 ${AI_ROLES.find((r) => r.id === task.role)!.bgColor} rounded-lg flex items-center justify-center`}>
                       {task.status === 'processing' ? (
-                        <RefreshCw className={`w-4 h-4 ${AI_ROLES.find(r => r.id === task.role)!.color} animate-spin`} />
+                        <RefreshCw
+                          className={`w-4 h-4 ${AI_ROLES.find((r) => r.id === task.role)!.color} animate-spin`}
+                        />
                       ) : task.status === 'completed' ? (
-                        <CheckCircle className={`w-4 h-4 ${AI_ROLES.find(r => r.id === task.role)!.color}`} />
+                        <CheckCircle className={`w-4 h-4 ${AI_ROLES.find((r) => r.id === task.role)!.color}`} />
                       ) : (
-                        <AlertCircle className="w-4 h-4 text-red-400" />
+                        <AlertCircle className='w-4 h-4 text-red-400' />
                       )}
                     </div>
-                    <div className="text-left">
-                      <div className="text-white font-medium text-sm">{AI_ROLES.find(r => r.id === task.role)!.nameZh}</div>
-                      <div className="text-gray-400 text-xs truncate max-w-xs">{task.task}</div>
+                    <div className='text-left'>
+                      <div className='text-white font-medium text-sm'>
+                        {AI_ROLES.find((r) => r.id === task.role)!.nameZh}
+                      </div>
+                      <div className='text-gray-400 text-xs truncate max-w-xs'>{task.task}</div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
+                  <div className='flex items-center space-x-3'>
                     {task.status === 'processing' && (
-                      <div className="w-24 h-1.5 bg-gray-700 rounded-full overflow-hidden">
+                      <div className='w-24 h-1.5 bg-gray-700 rounded-full overflow-hidden'>
                         <div
-                          className="h-full bg-purple-500 transition-all duration-300"
+                          className='h-full bg-purple-500 transition-all duration-300'
                           style={{ width: `${task.progress}%` }}
                         />
                       </div>
                     )}
-                    {task.status === 'completed' && (
-                      <span className="text-xs text-green-400">已完成</span>
-                    )}
+                    {task.status === 'completed' && <span className='text-xs text-green-400'>已完成</span>}
                     {resultExpanded === task.id ? (
-                      <ChevronUp className="w-4 h-4 text-gray-400" />
+                      <ChevronUp className='w-4 h-4 text-gray-400' />
                     ) : (
-                      <ChevronDown className="w-4 h-4 text-gray-400" />
+                      <ChevronDown className='w-4 h-4 text-gray-400' />
                     )}
                   </div>
                 </button>
 
                 {/* 任務結果 */}
                 {resultExpanded === task.id && task.result && (
-                  <div className="border-t border-gray-700/50">
-                    <div className="p-4">
-                      <div className="prose prose-invert prose-sm max-w-none">
-                        <pre className="bg-gray-900 rounded-lg p-4 text-gray-300 text-xs overflow-x-auto whitespace-pre-wrap font-mono">
+                  <div className='border-t border-gray-700/50'>
+                    <div className='p-4'>
+                      <div className='prose prose-invert prose-sm max-w-none'>
+                        <pre className='bg-gray-900 rounded-lg p-4 text-gray-300 text-xs overflow-x-auto whitespace-pre-wrap font-mono'>
                           {task.result}
                         </pre>
                       </div>
-                      <div className="flex items-center justify-end space-x-3 mt-4 pt-3 border-t border-gray-700/50">
+                      <div className='flex items-center justify-end space-x-3 mt-4 pt-3 border-t border-gray-700/50'>
                         <button
                           onClick={() => copyToClipboard(task.result!)}
-                          className="flex items-center space-x-1 px-3 py-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors text-sm"
-                        >
-                          <Copy className="w-4 h-4" />
+                          className='flex items-center space-x-1 px-3 py-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors text-sm'>
+                          <Copy className='w-4 h-4' />
                           <span>複製</span>
                         </button>
                         <button
                           onClick={() => downloadResult(task.id, task.result!)}
-                          className="flex items-center space-x-1 px-3 py-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors text-sm"
-                        >
-                          <Download className="w-4 h-4" />
+                          className='flex items-center space-x-1 px-3 py-1.5 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors text-sm'>
+                          <Download className='w-4 h-4' />
                           <span>下載</span>
                         </button>
                       </div>
@@ -618,12 +603,12 @@ describe('Project Management', () => {
       )}
 
       {/* 底部提示 */}
-      <div className="px-6 py-4 bg-gray-900/30 border-t border-gray-700/50">
-        <div className="flex items-center space-x-2 text-xs text-gray-400">
-          <Sparkle className="w-4 h-4 text-purple-400" />
+      <div className='px-6 py-4 bg-gray-900/30 border-t border-gray-700/50'>
+        <div className='flex items-center space-x-2 text-xs text-gray-400'>
+          <Sparkle className='w-4 h-4 text-purple-400' />
           <span>AI 協助角色僅提供輔助能力，核心決策由人類掌控</span>
         </div>
       </div>
     </div>
-  );
+  )
 }

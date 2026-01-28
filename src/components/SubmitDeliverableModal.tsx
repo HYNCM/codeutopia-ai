@@ -42,7 +42,7 @@ export function SubmitDeliverableModal({
         note,
         attachments,
       })
-      
+
       onClose()
       setNote('')
       setLinksText('')

@@ -1,13 +1,13 @@
 import React from 'react'
 import { StepProps } from '../types'
-import { SKILLS, GLOBAL_REGIONS } from '../../../types'
+import { SKILLS, GLOBAL_REGIONS, TalentLevel } from '../../../types'
 import { Check, Plus, X } from 'lucide-react'
 
 export const Step2TalentReq: React.FC<StepProps> = ({ formData, updateFormData, onNext, onPrev }) => {
   const { talentRequirement } = formData
   const [skillInput, setSkillInput] = React.useState('')
 
-  const handleChange = <K extends keyof typeof talentRequirement>(field: K, value: typeof talentRequirement[K]) => {
+  const handleChange = <K extends keyof typeof talentRequirement>(field: K, value: (typeof talentRequirement)[K]) => {
     updateFormData({
       talentRequirement: {
         ...talentRequirement,
@@ -139,7 +139,7 @@ export const Step2TalentReq: React.FC<StepProps> = ({ formData, updateFormData, 
                       name='level'
                       value={level.id}
                       checked={talentRequirement.level === level.id}
-                      onChange={(e) => handleChange('level', e.target.value)}
+                      onChange={(e) => handleChange('level', e.target.value as TalentLevel)}
                       className='sr-only'
                     />
                     <span className='text-sm font-medium'>{level.label}</span>
@@ -169,7 +169,7 @@ export const Step2TalentReq: React.FC<StepProps> = ({ formData, updateFormData, 
                       name='workMode'
                       value={mode.id}
                       checked={talentRequirement.workMode === mode.id}
-                      onChange={(e) => handleChange('workMode', e.target.value)}
+                      onChange={(e) => handleChange('workMode', e.target.value as 'remote' | 'hybrid' | 'onsite')}
                       className='sr-only'
                     />
                     <span className='text-sm font-medium'>{mode.label}</span>
