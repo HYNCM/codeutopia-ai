@@ -2,6 +2,8 @@ import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { ProjectProvider } from './contexts/ProjectContext'
+import { WalletProvider } from './contexts/WalletContext'
+import { AIProvider } from './contexts/AIContext'
 import { Header } from './components/Layout/Header'
 import { ClientDashboard } from './pages/ClientDashboard'
 import { DeveloperDashboard } from './pages/DeveloperDashboard'
@@ -23,13 +25,17 @@ import ProjectManagementPage from './pages/ProjectManagementPage'
 import PaymentSettlementPage from './pages/PaymentSettlementPage'
 import ProjectCreatePage from './pages/ProjectCreate/ProjectCreatePage'
 import { AIAssistantPanel } from './components/AIAssistantPanel'
+import { AIChatPanel } from './components/AI/AIChatPanel'
+import { AIFloatingButton } from './components/AI/AIFloatingButton'
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <ProjectProvider>
-          <Routes>
+          <WalletProvider>
+            <AIProvider>
+            <Routes>
             <Route path='/' element={<LandingPage />} />
             <Route path='/login' element={<LoginPage />} />
 
@@ -166,17 +172,29 @@ export default function App() {
             <Route path='/analytics' element={<Navigate to='/admin' replace />} />
             <Route path='/notifications' element={<Navigate to='/messages' replace />} />
           </Routes>
+          
+          {/* Global AI Copilot Components */}
+          <AIChatPanel />
+          <AIFloatingButton />
+          
+          </AIProvider>
+          </WalletProvider>
         </ProjectProvider>
       </AuthProvider>
     </BrowserRouter>
   )
 }
 
+import { Sidebar } from './components/Layout/Sidebar'
+
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className='min-h-screen bg-gray-50'>
       <Header />
-      <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>{children}</main>
+      <Sidebar />
+      <div className='pl-64 transition-all duration-300'>
+        <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6'>{children}</main>
+      </div>
     </div>
   )
 }

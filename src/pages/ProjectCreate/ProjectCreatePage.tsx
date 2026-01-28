@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ProjectCreateFormData } from '../../types'
 import { INITIAL_FORM_DATA } from './constants'
 import { Step1BasicInfo } from './steps/Step1BasicInfo'
@@ -10,6 +10,7 @@ import { Step6Settlement } from './steps/Step6Settlement'
 import { Step7CrossRegion } from './steps/Step7CrossRegion'
 import { Step8Preview } from './steps/Step8Preview'
 import { ChevronRight } from 'lucide-react'
+import { useAI } from '../../contexts/AIContext'
 
 const STEPS = [
   { id: 1, title: '基本信息', desc: '項目核心要素' },
@@ -25,6 +26,61 @@ const STEPS = [
 export const ProjectCreatePage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState<ProjectCreateFormData>(INITIAL_FORM_DATA)
+  const { setContext } = useAI()
+
+  // Inject AI Context: Let Cortex know we're creating a project
+  useEffect(() => {
+    setContext({
+      type: 'project_create',
+      data: {
+        currentStep,
+        stepTitle: STEPS[currentStep - 1]?.title,
+        formData: {
+          title: formData.basicInfo.title,
+          description: formData.basicInfo.description,
+          category: formData.basicInfo.category,
+          budgetMin: formData.basicInfo.budgetMin,
+          budgetMax: formData.basicInfo.budgetMax,
+          skills: formData.talentRequirement.skills,
+        }
+      }
+    })
+  }, [currentStep, formData.basicInfo.title, formData.basicInfo.description, formData.basicInfo.category, setContext])
+
+  // Listen for AI Action events (e.g., autofill)
+  useEffect(() => {
+    const handleAIAction = (event: CustomEvent) => {
+      const { type, payload } = event.detail;
+      
+      if (type === 'autofill_form' && payload) {
+        // Map AI payload to form structure
+        setFormData(prev => ({
+          ...prev,
+          basicInfo: {
+            ...prev.basicInfo,
+            title: payload.title || prev.basicInfo.title,
+            description: payload.description || prev.basicInfo.description,
+            category: payload.category || prev.basicInfo.category,
+            budgetMin: payload.budget_min || prev.basicInfo.budgetMin,
+            budgetMax: payload.budget_max || prev.basicInfo.budgetMax,
+          },
+          talentRequirement: {
+            ...prev.talentRequirement,
+            skills: payload.skills || prev.talentRequirement.skills,
+          }
+        }));
+        
+        // Visual feedback: flash animation
+        document.querySelector('main')?.classList.add('animate-pulse');
+        setTimeout(() => {
+          document.querySelector('main')?.classList.remove('animate-pulse');
+        }, 1000);
+      }
+    };
+
+    window.addEventListener('ai_action', handleAIAction as EventListener);
+    return () => window.removeEventListener('ai_action', handleAIAction as EventListener);
+  }, []);
 
   const updateFormData = (updates: Partial<ProjectCreateFormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }))

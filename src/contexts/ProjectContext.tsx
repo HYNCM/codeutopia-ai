@@ -7,7 +7,7 @@ interface ProjectContextType {
   addProject: (project: Project) => void
   updateProject: (id: string, updates: Partial<Project>) => void
   submitBid: (projectId: string, bid: Bid) => void
-  acceptBid: (projectId: string, bidId: string) => void
+  acceptBid: (projectId: string, bidId: string, amount?: number) => void
   submitMilestone: (projectId: string, milestoneId: string, data: { note: string; attachments: string[] }) => void
   reviewMilestone: (
     projectId: string,
@@ -53,13 +53,14 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
     setProjects((prev) => prev.map((p) => (p.id === projectId ? { ...p, bids: [...(p.bids || []), bid] } : p)))
   }
 
-  const acceptBid = (projectId: string, bidId: string) => {
+  const acceptBid = (projectId: string, bidId: string, amount?: number) => {
     setProjects((prev) =>
       prev.map((p) => {
         if (p.id !== projectId) return p
         return {
           ...p,
           status: 'in_progress',
+          escrowBalance: (p.escrowBalance || 0) + (amount || 0), // Update escrow balance
           bids: (p.bids || []).map((b) =>
             b.id === bidId ? { ...b, status: 'accepted' } : b.status === 'pending' ? { ...b, status: 'rejected' } : b,
           ),

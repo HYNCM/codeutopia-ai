@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { CheckCircle, XCircle, AlertTriangle, FileText, ExternalLink, Download } from 'lucide-react'
 import { MilestoneSubmission } from '../types'
 import { useProjects } from '../contexts/ProjectContext'
+import { useWallet } from '../contexts/WalletContext'
 
 interface ReviewSubmissionModalProps {
   isOpen: boolean
@@ -9,6 +10,8 @@ interface ReviewSubmissionModalProps {
   projectId: string
   milestoneId: string
   milestoneTitle: string
+  milestoneAmount: number // New prop
+  contractorId: string // New prop
   submission: MilestoneSubmission
 }
 
@@ -18,9 +21,12 @@ export function ReviewSubmissionModal({
   projectId,
   milestoneId,
   milestoneTitle,
+  milestoneAmount,
+  contractorId,
   submission,
 }: ReviewSubmissionModalProps) {
   const { reviewMilestone } = useProjects()
+  const { escrowRelease } = useWallet()
 
   const [decision, setDecision] = useState<'approve' | 'reject' | null>(null)
   const [rejectionReason, setRejectionReason] = useState('')
@@ -35,15 +41,27 @@ export function ReviewSubmissionModal({
     setIsSubmitting(true)
 
     try {
+      // 1. If approving, release funds first
+      if (decision === 'approve') {
+        await escrowRelease(projectId, milestoneId, milestoneAmount, contractorId)
+      }
+
+      // 2. Update Milestone Status
       reviewMilestone(projectId, milestoneId, {
         status: decision === 'approve' ? 'approved' : 'rejected',
         rejectionReason: decision === 'reject' ? rejectionReason : undefined,
       })
+      
+      if (decision === 'approve') {
+        alert(`审核通过！已向承包商释放资金 $${milestoneAmount.toLocaleString()}`)
+      }
+      
       onClose()
       setDecision(null)
       setRejectionReason('')
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to review milestone:', error)
+      alert(`操作失败: ${error.message}`)
     } finally {
       setIsSubmitting(false)
     }
@@ -111,7 +129,7 @@ export function ReviewSubmissionModal({
                     : 'border-slate-200 hover:border-green-200 hover:bg-green-50/50 text-gray-600'
                 }`}>
                 <CheckCircle className={`w-8 h-8 mb-2 ${decision === 'approve' ? 'text-green-500' : 'text-gray-300'}`} />
-                <span className='font-bold'>通過並放款</span>
+                <span className='font-bold'>通過並放款 ({'$' + milestoneAmount.toLocaleString()})</span>
                 <span className='text-xs text-center mt-1 opacity-75'>
                   資金將從託管賬戶釋放給承包商
                 </span>
