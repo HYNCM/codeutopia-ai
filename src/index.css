@@ -3,8 +3,33 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  /* Light Theme (Default - Swiss Minimalism) */
+  :root,
+  .light {
     --radius: 0.5rem;
+
+    /* Theme Colors */
+    --bg-primary: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
+    --bg-input: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #334155;
+    --text-muted: #64748b;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --border-subtle: #e2e8f0;
+
+    /* Accent Colors */
+    --cta-green: #22c55e;
+    --accent-purple: #8b5cf6;
+    --accent-blue: #3b82f6;
+
+    /* Glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-blur: 12px;
+
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -15,7 +40,29 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  /* Dark Theme (OLED Optimized) */
   .dark {
+    --bg-primary: #020617;
+    --bg-card: #0f172a;
+    --bg-card-hover: #1e293b;
+    --bg-input: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-subtle: #334155;
+
+    /* Accent Colors */
+    --cta-green: #22c55e;
+    --accent-purple: #a78bfa;
+    --accent-blue: #60a5fa;
+
+    /* Glassmorphism */
+    --glass-bg: rgba(15, 23, 42, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-blur: 12px;
+
+    /* Sidebar */
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -25,15 +72,77 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Theme transition */
+  html {
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
 }
 
 @layer components {
+  /* Theme-aware card styles */
+  .theme-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .theme-card-hover:hover {
+    background-color: var(--bg-card-hover);
+  }
+
+  .theme-input {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .theme-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .theme-text {
+    color: var(--text-primary);
+  }
+
+  .theme-text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .theme-text-muted {
+    color: var(--text-muted);
+  }
+
+  .theme-bg {
+    background-color: var(--bg-card-hover);
+  }
+
   .btn-primary {
     @apply inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    transition: background-color 150ms ease;
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--bg-card-hover);
   }
 
   .card {
@@ -70,6 +179,62 @@
 
   .badge-gray {
     @apply bg-gray-100 text-gray-700;
+  }
+
+  /* Glassmorphism Cards */
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    @apply rounded-2xl;
+  }
+
+  .glass-card-light {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    @apply rounded-2xl;
+  }
+
+  /* Dark Theme Cards */
+  .dark-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    @apply rounded-2xl transition-colors duration-200;
+  }
+
+  .dark-card:hover {
+    background: var(--bg-card-hover);
+  }
+
+  /* Interactive Elements */
+  .clickable {
+    @apply cursor-pointer transition-all duration-200;
+  }
+
+  .clickable:hover {
+    @apply opacity-90;
+  }
+
+  /* Sidebar Dark Theme */
+  .sidebar-dark {
+    background: var(--bg-card);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .sidebar-item {
+    @apply flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer;
+  }
+
+  .sidebar-item:hover {
+    background: rgba(139, 92, 246, 0.1);
+  }
+
+  .sidebar-item-active {
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--accent-purple);
   }
 }
 
