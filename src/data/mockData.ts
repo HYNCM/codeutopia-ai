@@ -491,6 +491,86 @@ export const mockProjects: Project[] = [
     escrowBalance: 0,
     totalPaid: 0,
   },
+
+  {
+    id: 'prj5',
+    title: '跨國電商支付系統整合',
+    description: `協助整合多個國際支付網關（Stripe, PayPal, Alipay）到現有電商平台。
+
+主要工作內容：
+1. 設計統一支付接口層
+2. 實作各支付網關對接
+3. 處理多幣種轉換與匯率同步
+4. 支付安全與合規性檢查
+5. 交易日誌與對帳系統`,
+    category: 'backend',
+    subcategory: 'API開發',
+    clientId: 'c2',
+    clientName: '數位金融集團',
+    clientAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Company2',
+    status: 'in_progress',
+    budget: {
+      min: 120000,
+      max: 200000,
+      currency: 'TWD',
+    },
+    duration: '2個月',
+    skills: ['Node.js', 'Stripe API', 'PayPal API', 'Security'],
+    milestones: [
+      {
+        id: 'm16',
+        title: '支付接口設計',
+        description: '完成統一支付接口設計與文檔',
+        amount: 30000,
+        dueDate: '2026-02-10',
+        status: 'completed',
+        approvedAt: '2026-01-20T10:00:00Z',
+        paidAt: '2026-01-20T12:00:00Z',
+        order: 1,
+        deliverables: ['接口文檔', '架構圖'],
+      },
+      {
+        id: 'm17',
+        title: '核心支付功能',
+        description: '完成 Stripe 和 PayPal 整合',
+        amount: 80000,
+        dueDate: '2026-03-01',
+        status: 'in_progress',
+        order: 2,
+        deliverables: ['源代碼', '整合測試報告'],
+      },
+      {
+        id: 'm18',
+        title: '測試與上線',
+        description: '整合測試與生產環境部署',
+        amount: 40000,
+        dueDate: '2026-03-20',
+        status: 'pending',
+        order: 3,
+        deliverables: ['驗收報告', '部署手冊'],
+      },
+    ],
+    bids: [
+      {
+        id: 'bid3',
+        projectId: 'prj5',
+        developerId: '2',
+        developerName: 'Alex Chen',
+        developerAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
+        developerRating: 4.9,
+        proposedPrice: 150000,
+        deliveryDays: 45,
+        proposal: '擁有豐富的支付系統整合經驗，曾主導多個跨國電商支付專案。',
+        status: 'accepted',
+        createdAt: '2026-01-10T11:00:00Z',
+      },
+    ],
+    createdAt: '2026-01-05T09:00:00Z',
+    updatedAt: '2026-01-22T16:00:00Z',
+    visibility: 'public',
+    escrowBalance: 80000,
+    totalPaid: 30000,
+  },
 ]
 
 export const mockMessages: Message[] = [

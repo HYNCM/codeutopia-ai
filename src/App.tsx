@@ -6,6 +6,7 @@ import { WalletProvider } from './contexts/WalletContext'
 import { AIProvider } from './contexts/AIContext'
 import { MessageProvider } from './contexts/MessageContext'
 import { NotificationProvider } from './contexts/NotificationContext'
+import { ThemeProvider } from './contexts/ThemeContext'
 import { Header } from './components/Layout/Header'
 import { ClientDashboard } from './pages/ClientDashboard'
 import { DeveloperDashboard } from './pages/DeveloperDashboard'
@@ -26,165 +27,239 @@ import SupplyPoolPage from './pages/SupplyPoolPage'
 import ProjectManagementPage from './pages/ProjectManagementPage'
 import PaymentSettlementPage from './pages/PaymentSettlementPage'
 import ProjectCreatePage from './pages/ProjectCreate/ProjectCreatePage'
+import NotFoundPage from './pages/NotFoundPage'
 import { AIAssistantPanel } from './components/AIAssistantPanel'
 import { AIChatPanel, AIFloatingButton } from './components/AI'
+import { ProtectedRoute } from './components/Auth/ProtectedRoute'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <ProjectProvider>
-          <WalletProvider>
-            <MessageProvider>
-              <NotificationProvider>
-                <AIProvider>
-                  <Routes>
-                    <Route path='/' element={<LandingPage />} />
-                    <Route path='/login' element={<LoginPage />} />
+      <ThemeProvider>
+        <AuthProvider>
+          <ProjectProvider>
+            <WalletProvider>
+              <MessageProvider>
+                <NotificationProvider>
+                  <AIProvider>
+                    <Routes>
+                      <Route path='/' element={<LandingPage />} />
+                      <Route path='/login' element={<LoginPage />} />
 
-                    {/* Role specific dashboards */}
-                    <Route
-                      path='/dashboard/initiator'
-                      element={
-                        <Layout>
-                          <ProjectInitiatorDashboard currentRole='project_initiator' />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/dashboard/contractor'
-                      element={
-                        <Layout>
-                          <ContractorDashboard currentRole='contractor' />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/dashboard/webadmin'
-                      element={
-                        <Layout>
-                          <WebadminDashboard currentRole='webadmin' />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/dashboard/regional'
-                      element={
-                        <Layout>
-                          <RegionalManagerDashboard currentRole='regional_manager' />
-                        </Layout>
-                      }
-                    />
+                      {/* Role specific dashboards */}
+                      <Route
+                        path='/dashboard/initiator'
+                        element={
+                          <ProtectedRoute allowedRoles={['project_initiator']}>
+                            <Layout>
+                              <ProjectInitiatorDashboard currentRole='project_initiator' />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/dashboard/contractor'
+                        element={
+                          <ProtectedRoute allowedRoles={['contractor']}>
+                            <Layout>
+                              <ContractorDashboard currentRole='contractor' />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/dashboard/webadmin'
+                        element={
+                          <ProtectedRoute allowedRoles={['webadmin']}>
+                            <Layout>
+                              <WebadminDashboard currentRole='webadmin' />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/dashboard/regional'
+                        element={
+                          <ProtectedRoute allowedRoles={['regional_manager']}>
+                            <Layout>
+                              <RegionalManagerDashboard currentRole='regional_manager' />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    <Route
-                      path='/dashboard'
-                      element={
-                        <Layout>
-                          <ClientDashboard />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/developer-dashboard'
-                      element={
-                        <Layout>
-                          <DeveloperDashboard />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/projects'
-                      element={
-                        <Layout>
-                          <ProjectsPage />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/projects/:id'
-                      element={
-                        <Layout>
-                          <ProjectManagementPage />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/post-project'
-                      element={
-                        <Layout>
-                          <ProjectCreatePage />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/talent'
-                      element={
-                        <Layout>
-                          <TalentPoolPage />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/transactions'
-                      element={
-                        <Layout>
-                          <TransactionsPage />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/messages'
-                      element={
-                        <Layout>
-                          <MessagesPage />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/profile'
-                      element={
-                        <Layout>
-                          <ProfilePage />
-                        </Layout>
-                      }
-                    />
-                    <Route
-                      path='/admin'
-                      element={
-                        <Layout>
-                          <AdminDashboard />
-                        </Layout>
-                      }
-                    />
+                      <Route
+                        path='/dashboard'
+                        element={
+                          <ProtectedRoute allowedRoles={['project_initiator']}>
+                            <Layout>
+                              <ClientDashboard />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/developer-dashboard'
+                        element={
+                          <ProtectedRoute allowedRoles={['contractor']}>
+                            <Layout>
+                              <DeveloperDashboard />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/projects'
+                        element={
+                          <ProtectedRoute>
+                            <Layout>
+                              <ProjectsPage />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      {/* /projects/new must come BEFORE /projects/:id */}
+                      <Route
+                        path='/projects/new'
+                        element={
+                          <ProtectedRoute allowedRoles={['project_initiator']}>
+                            <Layout>
+                              <ProjectCreatePage />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/projects/:id'
+                        element={
+                          <ProtectedRoute>
+                            <Layout>
+                              <ProjectManagementPage />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/post-project'
+                        element={
+                          <ProtectedRoute allowedRoles={['project_initiator']}>
+                            <Layout>
+                              <ProjectCreatePage />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/talent'
+                        element={
+                          <ProtectedRoute>
+                            <Layout>
+                              <TalentPoolPage />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/transactions'
+                        element={
+                          <ProtectedRoute>
+                            <Layout>
+                              <TransactionsPage />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/messages'
+                        element={
+                          <ProtectedRoute>
+                            <Layout>
+                              <MessagesPage />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/profile'
+                        element={
+                          <ProtectedRoute>
+                            <Layout>
+                              <ProfilePage />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path='/admin'
+                        element={
+                          <ProtectedRoute allowedRoles={['webadmin']}>
+                            <Layout>
+                              <AdminDashboard />
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    {/* Global Design House Supply Pool */}
-                    <Route path='/supply-pool' element={<SupplyPoolPage />} />
-                    {/* Project Management */}
-                    <Route path='/projects/manage' element={<ProjectManagementPage />} />
-                    {/* Payment & Settlement */}
-                    <Route path='/payments' element={<PaymentSettlementPage />} />
-                    {/* AI Assistant Panel (standalone) */}
-                    <Route path='/ai-assistant' element={<AIAssistantPanel currentRole='project_initiator' />} />
+                      {/* Global Design House Supply Pool */}
+                      <Route
+                        path='/supply-pool'
+                        element={
+                          <ProtectedRoute>
+                            <SupplyPoolPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      {/* Project Management */}
+                      <Route
+                        path='/projects/manage'
+                        element={
+                          <ProtectedRoute>
+                            <ProjectManagementPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      {/* Payment & Settlement */}
+                      <Route
+                        path='/payments'
+                        element={
+                          <ProtectedRoute>
+                            <PaymentSettlementPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      {/* AI Assistant Panel (standalone) */}
+                      <Route
+                        path='/ai-assistant'
+                        element={
+                          <ProtectedRoute>
+                            <AIAssistantPanel currentRole='project_initiator' />
+                          </ProtectedRoute>
+                        }
+                      />
 
-                    {/* Redirects for demo */}
-                    <Route path='/my-projects' element={<Navigate to='/projects' replace />} />
-                    <Route path='/earnings' element={<Navigate to='/transactions' replace />} />
-                    <Route path='/contracts' element={<Navigate to='/projects' replace />} />
-                    <Route path='/reports' element={<Navigate to='/admin' replace />} />
-                    <Route path='/settings' element={<Navigate to='/profile' replace />} />
-                    <Route path='/analytics' element={<Navigate to='/admin' replace />} />
-                    <Route path='/notifications' element={<Navigate to='/messages' replace />} />
-                  </Routes>
+                      {/* Redirects for demo */}
+                      <Route path='/my-projects' element={<Navigate to='/projects' replace />} />
+                      <Route path='/earnings' element={<Navigate to='/transactions' replace />} />
+                      <Route path='/contracts' element={<Navigate to='/projects' replace />} />
+                      <Route path='/reports' element={<Navigate to='/admin' replace />} />
+                      <Route path='/settings' element={<Navigate to='/profile' replace />} />
+                      <Route path='/analytics' element={<Navigate to='/admin' replace />} />
+                      <Route path='/notifications' element={<Navigate to='/messages' replace />} />
 
-                  {/* Global AI Copilot Components */}
-                  <AIChatPanel />
-                  <AIFloatingButton />
-                </AIProvider>
-              </NotificationProvider>
-            </MessageProvider>
-          </WalletProvider>
-        </ProjectProvider>
-      </AuthProvider>
+                      {/* 404 Catch-all - must be last */}
+                      <Route path='*' element={<NotFoundPage />} />
+                    </Routes>
+
+                    {/* Global AI Copilot Components */}
+                    <AIChatPanel />
+                    <AIFloatingButton />
+                  </AIProvider>
+                </NotificationProvider>
+              </MessageProvider>
+            </WalletProvider>
+          </ProjectProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }
@@ -193,7 +268,7 @@ import { Sidebar } from './components/Layout/Sidebar'
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='min-h-screen bg-[var(--bg-primary)] transition-colors duration-150'>
       <Header />
       <Sidebar />
       <div className='pl-64 transition-all duration-300'>
