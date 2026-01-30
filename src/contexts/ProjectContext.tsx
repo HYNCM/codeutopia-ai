@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { Project, Bid } from '../types'
-import { mockProjects } from '../data/mockData'
+import { projectService } from '../services/projectService'
 
 interface ProjectContextType {
   projects: Project[]
@@ -21,25 +21,38 @@ const STORAGE_KEY = 'codeutopia_projects'
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined)
 
 export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  // Initialize state from localStorage if available, otherwise use mockProjects
-  const [projects, setProjects] = useState<Project[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      return stored ? JSON.parse(stored) : mockProjects
-    } catch (error) {
-      console.error('Failed to load projects from localStorage:', error)
-      return mockProjects
+  const [projects, setProjects] = useState<Project[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY)
+        if (stored) {
+          setProjects(JSON.parse(stored))
+        } else {
+          const initialProjects = await projectService.getProjects()
+          setProjects(initialProjects)
+        }
+      } catch (error) {
+        console.error('Failed to load projects:', error)
+      } finally {
+        setIsLoading(false)
+      }
     }
-  })
+    loadProjects()
+  }, [])
 
   // Persist projects to localStorage whenever they change
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(projects))
-    } catch (error) {
-      console.error('Failed to save projects to localStorage:', error)
+    if (!isLoading && projects.length > 0) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(projects))
+      } catch (error) {
+        console.error('Failed to save projects to localStorage:', error)
+      }
     }
-  }, [projects])
+  }, [projects, isLoading])
 
   const addProject = (project: Project) => {
     setProjects((prev) => [project, ...prev])

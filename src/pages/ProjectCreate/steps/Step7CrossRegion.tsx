@@ -157,7 +157,9 @@ export const Step7CrossRegion: React.FC<StepProps> = ({ formData, updateFormData
                   ].map((opt) => (
                     <button
                       key={opt.v}
-                      onClick={() => updateConfig({ meetingFrequency: opt.v as 'daily' | 'weekly' | 'biweekly' | 'monthly' })}
+                      onClick={() =>
+                        updateConfig({ meetingFrequency: opt.v as 'daily' | 'weekly' | 'biweekly' | 'monthly' })
+                      }
                       className={`text-sm py-2 rounded-lg border text-center ${
                         crossRegion.meetingFrequency === opt.v
                           ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
