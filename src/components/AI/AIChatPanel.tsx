@@ -1,11 +1,20 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useAI } from '../../contexts/AIContext'
-import { X, Send, Sparkles, User, Bot, Trash2 } from 'lucide-react'
+import { X, Send, Sparkles, User, Bot, Trash2, Zap } from 'lucide-react'
 import { ActionCard } from './ActionCard'
 import { AIActionData } from '../../types/ai'
 
+// Role display names
+const ROLE_LABELS: Record<string, string> = {
+  client: '客户模式',
+  developer: '开发者模式',
+  admin: '管理员模式',
+  guest: '访客模式',
+}
+
 export const AIChatPanel: React.FC = () => {
-  const { isOpen, toggleOpen, messages, sendMessage, isThinking, clearHistory } = useAI()
+  const { isOpen, toggleOpen, messages, sendMessage, isThinking, isStreaming, clearHistory, userRole, quickActions } =
+    useAI()
   const [input, setInput] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -19,11 +28,11 @@ export const AIChatPanel: React.FC = () => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100)
     }
-  }, [messages, isOpen])
+  }, [messages, isOpen, isStreaming])
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault()
-    if (!input.trim() || isThinking) return
+    if (!input.trim() || isThinking || isStreaming) return
 
     const text = input
     setInput('')
@@ -54,6 +63,11 @@ export const AIChatPanel: React.FC = () => {
             <span className='text-xs px-2 py-0.5 bg-purple-100 rounded-full font-medium'>BETA</span>
           </div>
           <div className='flex items-center space-x-2'>
+            {/* Role Indicator */}
+            <span className='text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full flex items-center space-x-1'>
+              <Zap className='w-3 h-3' />
+              <span>{ROLE_LABELS[userRole] || userRole}</span>
+            </span>
             <button
               onClick={clearHistory}
               className='p-2 text-gray-400 hover:text-red-500 transition-colors'
@@ -73,7 +87,7 @@ export const AIChatPanel: React.FC = () => {
               <div className='w-16 h-16 bg-purple-50 rounded-full flex items-center justify-center'>
                 <Bot className='w-8 h-8 text-purple-300' />
               </div>
-              <p text-sm>Start a conversation...</p>
+              <p className='text-sm'>正在加载...</p>
             </div>
           )}
 
@@ -101,16 +115,23 @@ export const AIChatPanel: React.FC = () => {
                         ? 'bg-gray-900 text-white rounded-tr-sm'
                         : 'bg-white border border-gray-200 text-gray-800 rounded-tl-sm shadow-sm'
                     }`}>
-                    <p className='whitespace-pre-line leading-relaxed pb-1'>{msg.content}</p>
+                    {/* Content with cursor animation when streaming */}
+                    <p className='whitespace-pre-line leading-relaxed pb-1'>
+                      {msg.content}
+                      {/* Typing cursor for streaming */}
+                      {isStreaming && msg.role === 'assistant' && messages[messages.length - 1]?.id === msg.id && (
+                        <span className='inline-block w-2 h-4 bg-purple-500 ml-0.5 animate-pulse' />
+                      )}
+                    </p>
                   </div>
 
-                  {/* AI Action Cards */}
-                  {msg.role === 'assistant' && msg.metadata?.action && (
+                  {/* AI Action Cards - only show when not streaming */}
+                  {msg.role === 'assistant' && msg.metadata?.action && !isStreaming && (
                     <ActionCard action={msg.metadata.action} onExecute={handleAction} />
                   )}
 
-                  {/* Suggestion Chips */}
-                  {msg.role === 'assistant' && msg.metadata?.chips && (
+                  {/* Suggestion Chips - only show when not streaming */}
+                  {msg.role === 'assistant' && msg.metadata?.chips && !isStreaming && (
                     <div className='flex flex-wrap gap-2 animate-fade-in-up'>
                       {msg.metadata.chips.map((chip) => (
                         <button
@@ -154,6 +175,23 @@ export const AIChatPanel: React.FC = () => {
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Quick Actions Bar */}
+        {quickActions.length > 0 && messages.length > 0 && !isThinking && !isStreaming && (
+          <div className='px-4 py-2 bg-gray-50 border-t border-gray-100'>
+            <div className='flex items-center space-x-2 overflow-x-auto scrollbar-hide'>
+              <span className='text-xs text-gray-400 whitespace-nowrap'>快捷：</span>
+              {quickActions.slice(0, 4).map((action) => (
+                <button
+                  key={action}
+                  onClick={() => sendMessage(action)}
+                  className='px-2 py-1 text-xs bg-white border border-gray-200 rounded-md hover:bg-gray-50 text-gray-600 whitespace-nowrap transition-colors'>
+                  {action}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Input Area */}
         <div className='p-4 bg-white border-t border-gray-200'>
           <form onSubmit={handleSubmit} className='relative'>
@@ -162,19 +200,18 @@ export const AIChatPanel: React.FC = () => {
               type='text'
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder='Ask Cortex for help...'
-              className='w-full pl-4 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-sm'
+              placeholder='向 Cortex 提问...'
+              disabled={isStreaming}
+              className='w-full pl-4 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 transition-all text-sm disabled:opacity-50'
             />
             <button
               type='submit'
-              disabled={!input.trim() || isThinking}
+              disabled={!input.trim() || isThinking || isStreaming}
               className='absolute right-2 top-2 p-1.5 bg-gray-900 text-white rounded-lg hover:bg-black disabled:opacity-30 disabled:hover:bg-gray-900 transition-colors'>
               <Send className='w-4 h-4' />
             </button>
           </form>
-          <p className='text-[10px] text-center text-gray-400 mt-2'>
-            AI can make mistakes. Please verify important information.
-          </p>
+          <p className='text-[10px] text-center text-gray-400 mt-2'>AI 可能会出错，请验证重要信息</p>
         </div>
       </div>
     </>
