@@ -211,7 +211,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900'>
       {/* Header */}
-      <header className='bg-slate-800/80 backdrop-blur-md border-b border-purple-500/30 sticky top-0 z-50'>
+      <header className='bg-[var(--bg-card)] backdrop-blur-md border-b border-purple-500/30 sticky top-0 z-50'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex justify-between items-center h-16'>
             {/* Logo */}
@@ -227,14 +227,14 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
 
             {/* Region Selector */}
             <div className='flex items-center space-x-4'>
-              <div className='flex items-center space-x-2 bg-slate-700/50 rounded-lg px-4 py-2'>
+              <div className='flex items-center space-x-2 bg-[var(--bg-card-hover)] rounded-lg px-4 py-2'>
                 <MapPin className='w-4 h-4 text-purple-400' />
                 <select
                   value={selectedRegion}
                   onChange={(e) => setSelectedRegion(e.target.value)}
                   className='bg-transparent text-white font-medium focus:outline-none cursor-pointer'>
                   {regions.map((region) => (
-                    <option key={region.regionId} value={region.regionId} className='bg-slate-700'>
+                    <option key={region.regionId} value={region.regionId} className='bg-[var(--bg-input)]'>
                       {region.regionName} ({region.regionNameEn})
                     </option>
                   ))}
@@ -243,18 +243,18 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
 
               {/* Search */}
               <div className='relative hidden lg:block'>
-                <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400' />
+                <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]' />
                 <input
                   type='text'
                   placeholder='搜索用户、项目、报告...'
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className='w-80 bg-slate-700/50 border border-purple-500/30 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors'
+                  className='w-80 bg-[var(--bg-card-hover)] border border-purple-500/30 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors'
                 />
               </div>
 
               {/* Notifications */}
-              <button className='relative p-2 text-gray-400 hover:text-white transition-colors'>
+              <button className='relative p-2 text-[var(--text-muted)] hover:text-white transition-colors'>
                 <Bell className='w-5 h-5' />
                 <span className='absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center'>
                   {pendingTasks.length}
@@ -267,7 +267,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
                   showAIPanel
                     ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
-                    : 'bg-slate-700/50 text-gray-300 hover:text-white'
+                    : 'bg-[var(--bg-card-hover)] text-[var(--text-secondary)] hover:text-white'
                 }`}>
                 <MessageSquare className='w-4 h-4' />
                 <span className='hidden sm:inline'>AI 助手</span>
@@ -280,7 +280,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                 </div>
                 <div className='hidden md:block'>
                   <p className='text-sm font-medium text-white'>区域主理人</p>
-                  <p className='text-xs text-gray-400'>全球运营中心</p>
+                  <p className='text-xs text-[var(--text-muted)]'>全球运营中心</p>
                 </div>
               </div>
             </div>
@@ -291,7 +291,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
       {/* Main Content */}
       <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
         {/* Tab Navigation */}
-        <div className='flex space-x-1 bg-slate-800/50 rounded-xl p-1 mb-6 overflow-x-auto'>
+        <div className='flex space-x-1 bg-[var(--bg-card)] rounded-xl p-1 mb-6 overflow-x-auto'>
           {[
             { id: 'overview', label: '总览', icon: BarChart3 },
             { id: 'projects', label: '项目管理', icon: Briefcase },
@@ -306,7 +306,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
                 activeTab === tab.id
                   ? 'bg-purple-500 text-white shadow-lg'
-                  : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                  : 'text-[var(--text-muted)] hover:text-white hover:bg-[var(--bg-card-hover)]'
               }`}>
               <tab.icon className='w-4 h-4' />
               <span className='text-sm font-medium'>{tab.label}</span>
@@ -322,12 +322,12 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
               <div className='flex justify-between items-start'>
                 <div>
                   <h2 className='text-2xl font-bold text-white mb-2'>欢迎回来，区域主理人 👋</h2>
-                  <p className='text-gray-300 mb-4'>
+                  <p className='text-[var(--text-secondary)] mb-4'>
                     当前管理区域:{' '}
                     <span className='text-purple-400 font-medium'>
                       {regions.find((r) => r.regionId === selectedRegion)?.regionName}
                     </span>
-                    <span className='text-gray-500 ml-2'>
+                    <span className='text-[var(--text-disabled)] ml-2'>
                       ({regions.find((r) => r.regionId === selectedRegion)?.countryCount} 个国家/地区)
                     </span>
                   </p>
@@ -335,7 +335,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                     <button className='bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors'>
                       生成区域报告
                     </button>
-                    <button className='bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors'>
+                    <button className='bg-[var(--bg-input)] hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors'>
                       查看待办事项
                     </button>
                   </div>
@@ -344,7 +344,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                   <div className='text-3xl font-bold text-white'>
                     {new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' })}
                   </div>
-                  <div className='text-gray-400 text-sm'>
+                  <div className='text-[var(--text-muted)] text-sm'>
                     {new Date().toLocaleDateString('zh-CN', { weekday: 'long' })}
                   </div>
                 </div>
@@ -385,7 +385,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
               ].map((stat, index) => (
                 <div
                   key={index}
-                  className='bg-slate-800/50 backdrop-blur-sm rounded-xl p-5 border border-purple-500/20 hover:border-purple-500/40 transition-all group'>
+                  className='bg-[var(--bg-card)] backdrop-blur-sm rounded-xl p-5 border border-purple-500/20 hover:border-purple-500/40 transition-all group'>
                   <div className='flex justify-between items-start mb-4'>
                     <div
                       className={`w-10 h-10 rounded-lg bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
@@ -397,7 +397,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                     </span>
                   </div>
                   <div className='text-2xl font-bold text-white mb-1'>{stat.value}</div>
-                  <div className='text-gray-400 text-sm'>{stat.label}</div>
+                  <div className='text-[var(--text-muted)] text-sm'>{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -405,7 +405,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
             {/* Regional Overview */}
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
               {/* Regional Performance */}
-              <div className='lg:col-span-2 bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-purple-500/20'>
+              <div className='lg:col-span-2 bg-[var(--bg-card)] backdrop-blur-sm rounded-xl p-6 border border-purple-500/20'>
                 <div className='flex justify-between items-center mb-6'>
                   <h3 className='text-lg font-semibold text-white'>区域运营数据</h3>
                   <button className='text-purple-400 hover:text-purple-300 text-sm flex items-center'>
@@ -419,7 +419,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                       className={`p-4 rounded-lg transition-all cursor-pointer ${
                         selectedRegion === region.regionId
                           ? 'bg-purple-500/20 border border-purple-500/40'
-                          : 'bg-slate-700/30 hover:bg-slate-700/50'
+                          : 'bg-[var(--bg-input)]/30 hover:bg-[var(--bg-card-hover)]'
                       }`}
                       onClick={() => setSelectedRegion(region.regionId)}>
                       <div className='flex justify-between items-center mb-3'>
@@ -427,12 +427,12 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                           <div className={`w-3 h-3 rounded-full ${getRegionColor(region.regionId)}`} />
                           <div>
                             <div className='font-medium text-white'>{region.regionName}</div>
-                            <div className='text-xs text-gray-400'>{region.regionNameEn}</div>
+                            <div className='text-xs text-[var(--text-muted)]'>{region.regionNameEn}</div>
                           </div>
                         </div>
                         <div className='flex items-center space-x-4 text-sm'>
-                          <span className='text-gray-400'>{region.activeUsers.toLocaleString()} 用户</span>
-                          <span className='text-gray-400'>{region.activeProjects} 项目</span>
+                          <span className='text-[var(--text-muted)]'>{region.activeUsers.toLocaleString()} 用户</span>
+                          <span className='text-[var(--text-muted)]'>{region.activeProjects} 项目</span>
                           <span
                             className={`flex items-center ${region.growth > 0 ? 'text-green-400' : 'text-red-400'}`}>
                             {region.growth > 0 ? (
@@ -445,7 +445,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                         </div>
                       </div>
                       {/* Progress Bar */}
-                      <div className='h-2 bg-slate-700 rounded-full overflow-hidden'>
+                      <div className='h-2 bg-[var(--bg-input)] rounded-full overflow-hidden'>
                         <div
                           className={`h-full rounded-full ${getRegionColor(region.regionId)}`}
                           style={{ width: `${(region.revenue / 10000000) * 100}%` }}
@@ -457,7 +457,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
               </div>
 
               {/* Pending Tasks */}
-              <div className='bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-purple-500/20'>
+              <div className='bg-[var(--bg-card)] backdrop-blur-sm rounded-xl p-6 border border-purple-500/20'>
                 <div className='flex justify-between items-center mb-6'>
                   <h3 className='text-lg font-semibold text-white'>待办事项</h3>
                   <span className='bg-red-500/20 text-red-400 text-xs px-2 py-1 rounded-full'>
@@ -468,15 +468,15 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                   {pendingTasks.map((task) => (
                     <div
                       key={task.id}
-                      className='p-3 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-colors cursor-pointer'>
+                      className='p-3 bg-[var(--bg-input)]/30 rounded-lg hover:bg-[var(--bg-card-hover)] transition-colors cursor-pointer'>
                       <div className='flex justify-between items-start mb-2'>
                         <span className={`text-xs px-2 py-0.5 rounded-full ${getPriorityColor(task.priority)}`}>
                           {task.priority === 'high' ? '紧急' : task.priority === 'medium' ? '中等' : '普通'}
                         </span>
-                        <span className='text-xs text-gray-500'>{task.time}</span>
+                        <span className='text-xs text-[var(--text-disabled)]'>{task.time}</span>
                       </div>
                       <div className='text-white text-sm font-medium mb-1'>{task.title}</div>
-                      <div className='text-xs text-gray-400'>区域: {task.region}</div>
+                      <div className='text-xs text-[var(--text-muted)]'>区域: {task.region}</div>
                     </div>
                   ))}
                 </div>
@@ -489,7 +489,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
             {/* AI Operations & Quick Actions */}
             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
               {/* AI Scheduling Requests */}
-              <div className='bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-purple-500/20'>
+              <div className='bg-[var(--bg-card)] backdrop-blur-sm rounded-xl p-6 border border-purple-500/20'>
                 <div className='flex justify-between items-center mb-6'>
                   <h3 className='text-lg font-semibold text-white'>AI 调度请求</h3>
                   <span className='bg-purple-500/20 text-purple-400 text-xs px-2 py-1 rounded-full'>
@@ -498,7 +498,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                 </div>
                 <div className='space-y-3'>
                   {aiSchedulingRequests.slice(0, 3).map((request) => (
-                    <div key={request.id} className='p-3 bg-slate-700/30 rounded-lg'>
+                    <div key={request.id} className='p-3 bg-[var(--bg-input)]/30 rounded-lg'>
                       <div className='flex justify-between items-center mb-2'>
                         <div className='flex items-center space-x-2'>
                           <div className='w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center'>
@@ -506,7 +506,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                           </div>
                           <div>
                             <div className='text-sm font-medium text-white'>{request.aiRole}</div>
-                            <div className='text-xs text-gray-400'>项目 #{request.projectId}</div>
+                            <div className='text-xs text-[var(--text-muted)]'>项目 #{request.projectId}</div>
                           </div>
                         </div>
                         <span className={`text-xs px-2 py-0.5 rounded-full ${getStatusColor(request.status)}`}>
@@ -517,7 +517,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                               : '已升级'}
                         </span>
                       </div>
-                      <div className='text-xs text-gray-400 mb-2'>{request.reason}</div>
+                      <div className='text-xs text-[var(--text-muted)] mb-2'>{request.reason}</div>
                       {request.status === 'pending' && (
                         <div className='flex space-x-2'>
                           <button className='flex-1 py-1.5 bg-green-500/20 text-green-400 text-xs rounded-lg hover:bg-green-500/30 transition-colors'>
@@ -534,7 +534,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
               </div>
 
               {/* Quick Actions */}
-              <div className='bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-purple-500/20'>
+              <div className='bg-[var(--bg-card)] backdrop-blur-sm rounded-xl p-6 border border-purple-500/20'>
                 <h3 className='text-lg font-semibold text-white mb-6'>快捷操作</h3>
                 <div className='grid grid-cols-2 gap-3'>
                   {[
@@ -547,7 +547,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                   ].map((action, index) => (
                     <button
                       key={index}
-                      className='p-4 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-all group text-left'>
+                      className='p-4 bg-[var(--bg-input)]/30 rounded-lg hover:bg-[var(--bg-card-hover)] transition-all group text-left'>
                       <div
                         className={`w-8 h-8 ${action.color} rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform`}>
                         <action.icon className='w-4 h-4 text-white' />
@@ -567,7 +567,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
             <div className='flex justify-between items-center'>
               <h2 className='text-xl font-bold text-white'>区域项目管理</h2>
               <div className='flex space-x-3'>
-                <select className='bg-slate-700/50 text-white rounded-lg px-4 py-2 text-sm border border-purple-500/30'>
+                <select className='bg-[var(--bg-card-hover)] text-white rounded-lg px-4 py-2 text-sm border border-purple-500/30'>
                   <option value=''>所有区域</option>
                   {regions.map((r) => (
                     <option key={r.regionId} value={r.regionId}>
@@ -589,19 +589,19 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                 { label: '已完成', value: 892, color: 'bg-green-500' },
                 { label: '有问题', value: 8, color: 'bg-red-500' },
               ].map((stat, index) => (
-                <div key={index} className='bg-slate-800/50 rounded-xl p-5 border border-purple-500/20'>
+                <div key={index} className='bg-[var(--bg-card)] rounded-xl p-5 border border-purple-500/20'>
                   <div className={`w-3 h-3 ${stat.color} rounded-full mb-3`} />
                   <div className='text-2xl font-bold text-white'>{stat.value}</div>
-                  <div className='text-gray-400 text-sm'>{stat.label}</div>
+                  <div className='text-[var(--text-muted)] text-sm'>{stat.label}</div>
                 </div>
               ))}
             </div>
 
             {/* Project List */}
-            <div className='bg-slate-800/50 rounded-xl p-6 border border-purple-500/20'>
+            <div className='bg-[var(--bg-card)] rounded-xl p-6 border border-purple-500/20'>
               <table className='w-full'>
                 <thead>
-                  <tr className='text-left text-gray-400 text-sm border-b border-slate-700'>
+                  <tr className='text-left text-[var(--text-muted)] text-sm border-b border-[var(--border-color)]'>
                     <th className='pb-3 font-medium'>项目名称</th>
                     <th className='pb-3 font-medium'>发起方</th>
                     <th className='pb-3 font-medium'>承接方</th>
@@ -654,10 +654,10 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                       status: '待审核',
                     },
                   ].map((project, index) => (
-                    <tr key={index} className='border-b border-slate-700/50 hover:bg-slate-700/30'>
+                    <tr key={index} className='border-b border-[var(--border-color)]/50 hover:bg-[var(--bg-input)]/30'>
                       <td className='py-4 font-medium'>{project.name}</td>
-                      <td className='py-4 text-gray-400'>{project.initiator}</td>
-                      <td className='py-4 text-gray-400'>{project.contractor}</td>
+                      <td className='py-4 text-[var(--text-muted)]'>{project.initiator}</td>
+                      <td className='py-4 text-[var(--text-muted)]'>{project.contractor}</td>
                       <td className='py-4'>
                         <span className={`text-xs px-2 py-1 rounded-full ${getRegionColor(project.region)} text-white`}>
                           {project.region}
@@ -665,13 +665,13 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                       </td>
                       <td className='py-4'>
                         <div className='flex items-center space-x-2'>
-                          <div className='w-24 h-2 bg-slate-700 rounded-full'>
+                          <div className='w-24 h-2 bg-[var(--bg-input)] rounded-full'>
                             <div
                               className='h-full bg-purple-500 rounded-full'
                               style={{ width: `${project.progress}%` }}
                             />
                           </div>
-                          <span className='text-gray-400'>{project.progress}%</span>
+                          <span className='text-[var(--text-muted)]'>{project.progress}%</span>
                         </div>
                       </td>
                       <td className='py-4'>
@@ -706,7 +706,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                 <input
                   type='text'
                   placeholder='搜索用户...'
-                  className='bg-slate-700/50 text-white rounded-lg px-4 py-2 text-sm border border-purple-500/30 w-64'
+                  className='bg-[var(--bg-card-hover)] text-white rounded-lg px-4 py-2 text-sm border border-purple-500/30 w-64'
                 />
                 <button className='bg-purple-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-600 transition-colors'>
                   导出用户列表
@@ -723,23 +723,23 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                 { label: '全局管理员', value: 23, icon: Settings },
                 { label: 'AI 助手', value: 5, icon: Star },
               ].map((stat, index) => (
-                <div key={index} className='bg-slate-800/50 rounded-xl p-5 border border-purple-500/20'>
+                <div key={index} className='bg-[var(--bg-card)] rounded-xl p-5 border border-purple-500/20'>
                   <div className='flex items-center space-x-3 mb-3'>
                     <div className='w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center'>
                       <stat.icon className='w-5 h-5 text-purple-400' />
                     </div>
                     <div className='text-2xl font-bold text-white'>{stat.value.toLocaleString()}</div>
                   </div>
-                  <div className='text-gray-400 text-sm'>{stat.label}</div>
+                  <div className='text-[var(--text-muted)] text-sm'>{stat.label}</div>
                 </div>
               ))}
             </div>
 
             {/* User List */}
-            <div className='bg-slate-800/50 rounded-xl p-6 border border-purple-500/20'>
+            <div className='bg-[var(--bg-card)] rounded-xl p-6 border border-purple-500/20'>
               <table className='w-full'>
                 <thead>
-                  <tr className='text-left text-gray-400 text-sm border-b border-slate-700'>
+                  <tr className='text-left text-[var(--text-muted)] text-sm border-b border-[var(--border-color)]'>
                     <th className='pb-3 font-medium'>用户</th>
                     <th className='pb-3 font-medium'>角色</th>
                     <th className='pb-3 font-medium'>区域</th>
@@ -792,7 +792,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                       status: '活跃',
                     },
                   ].map((user, index) => (
-                    <tr key={index} className='border-b border-slate-700/50 hover:bg-slate-700/30'>
+                    <tr key={index} className='border-b border-[var(--border-color)]/50 hover:bg-[var(--bg-input)]/30'>
                       <td className='py-4'>
                         <div className='flex items-center space-x-3'>
                           <div className='w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-xs font-medium'>
@@ -801,18 +801,18 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                           <span className='font-medium'>{user.name}</span>
                         </div>
                       </td>
-                      <td className='py-4 text-gray-400'>{user.role}</td>
-                      <td className='py-4 text-gray-400'>{user.region}</td>
-                      <td className='py-4 text-gray-400'>{user.time}</td>
+                      <td className='py-4 text-[var(--text-muted)]'>{user.role}</td>
+                      <td className='py-4 text-[var(--text-muted)]'>{user.region}</td>
+                      <td className='py-4 text-[var(--text-muted)]'>{user.time}</td>
                       <td className='py-4'>
                         <div className='flex items-center space-x-2'>
-                          <div className='w-16 h-2 bg-slate-700 rounded-full'>
+                          <div className='w-16 h-2 bg-[var(--bg-input)] rounded-full'>
                             <div
                               className={`h-full rounded-full ${user.activity > 70 ? 'bg-green-500' : 'bg-yellow-500'}`}
                               style={{ width: `${user.activity}%` }}
                             />
                           </div>
-                          <span className='text-gray-400'>{user.activity}%</span>
+                          <span className='text-[var(--text-muted)]'>{user.activity}%</span>
                         </div>
                       </td>
                       <td className='py-4'>
@@ -840,7 +840,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
             <div className='flex justify-between items-center'>
               <h2 className='text-xl font-bold text-white'>运营报告</h2>
               <div className='flex space-x-3'>
-                <select className='bg-slate-700/50 text-white rounded-lg px-4 py-2 text-sm border border-purple-500/30'>
+                <select className='bg-[var(--bg-card-hover)] text-white rounded-lg px-4 py-2 text-sm border border-purple-500/30'>
                   <option value='monthly'>月度报告</option>
                   <option value='quarterly'>季度报告</option>
                   <option value='yearly'>年度报告</option>
@@ -863,16 +863,16 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
               ].map((report, index) => (
                 <div
                   key={index}
-                  className='bg-slate-800/50 rounded-xl p-5 border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer'>
+                  className='bg-[var(--bg-card)] rounded-xl p-5 border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer'>
                   <div className='flex items-start justify-between mb-4'>
                     <div className='w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center'>
                       <FileText className='w-5 h-5 text-purple-400' />
                     </div>
-                    <span className='text-xs text-gray-400'>{report.date}</span>
+                    <span className='text-xs text-[var(--text-muted)]'>{report.date}</span>
                   </div>
                   <h3 className='font-medium text-white mb-2'>{report.title}</h3>
                   <div className='flex justify-between items-center'>
-                    <span className='text-xs text-gray-400'>区域: {report.region}</span>
+                    <span className='text-xs text-[var(--text-muted)]'>区域: {report.region}</span>
                     <span className='text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full'>{report.status}</span>
                   </div>
                 </div>
@@ -887,7 +887,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
             <div className='flex justify-between items-center'>
               <h2 className='text-xl font-bold text-white'>争议处理</h2>
               <div className='flex space-x-3'>
-                <select className='bg-slate-700/50 text-white rounded-lg px-4 py-2 text-sm border border-purple-500/30'>
+                <select className='bg-[var(--bg-card-hover)] text-white rounded-lg px-4 py-2 text-sm border border-purple-500/30'>
                   <option value=''>所有状态</option>
                   <option value='preliminary'>初步处理</option>
                   <option value='escalated'>已升级</option>
@@ -904,19 +904,19 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                 { label: '升级至全局', value: 3, color: 'bg-red-500' },
                 { label: '已解决', value: 156, color: 'bg-green-500' },
               ].map((stat, index) => (
-                <div key={index} className='bg-slate-800/50 rounded-xl p-5 border border-purple-500/20'>
+                <div key={index} className='bg-[var(--bg-card)] rounded-xl p-5 border border-purple-500/20'>
                   <div className={`w-3 h-3 ${stat.color} rounded-full mb-3`} />
                   <div className='text-2xl font-bold text-white'>{stat.value}</div>
-                  <div className='text-gray-400 text-sm'>{stat.label}</div>
+                  <div className='text-[var(--text-muted)] text-sm'>{stat.label}</div>
                 </div>
               ))}
             </div>
 
             {/* Dispute List */}
-            <div className='bg-slate-800/50 rounded-xl p-6 border border-purple-500/20'>
+            <div className='bg-[var(--bg-card)] rounded-xl p-6 border border-purple-500/20'>
               <table className='w-full'>
                 <thead>
-                  <tr className='text-left text-gray-400 text-sm border-b border-slate-700'>
+                  <tr className='text-left text-[var(--text-muted)] text-sm border-b border-[var(--border-color)]'>
                     <th className='pb-3 font-medium'>争议ID</th>
                     <th className='pb-3 font-medium'>项目名称</th>
                     <th className='pb-3 font-medium'>涉及方</th>
@@ -928,16 +928,16 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                 </thead>
                 <tbody className='text-white text-sm'>
                   {regionalDisputes.map((dispute) => (
-                    <tr key={dispute.id} className='border-b border-slate-700/50 hover:bg-slate-700/30'>
+                    <tr key={dispute.id} className='border-b border-[var(--border-color)]/50 hover:bg-[var(--bg-input)]/30'>
                       <td className='py-4 font-medium'>{dispute.id}</td>
-                      <td className='py-4 text-gray-400'>{dispute.projectName}</td>
-                      <td className='py-4 text-gray-400'>
+                      <td className='py-4 text-[var(--text-muted)]'>{dispute.projectName}</td>
+                      <td className='py-4 text-[var(--text-muted)]'>
                         <div className='text-xs'>
                           <div>发起方: {dispute.initiator}</div>
                           <div>承接方: {dispute.contractor}</div>
                         </div>
                       </td>
-                      <td className='py-4 text-gray-400'>${dispute.amount.toLocaleString()}</td>
+                      <td className='py-4 text-[var(--text-muted)]'>${dispute.amount.toLocaleString()}</td>
                       <td className='py-4'>
                         <span className={`text-xs px-2 py-1 rounded-full ${getRegionColor(dispute.region)} text-white`}>
                           {dispute.region}
@@ -982,12 +982,12 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                 { role: 'Backend Engineer AI', usage: 2234, rate: '85%' },
                 { role: 'QA Engineer AI', usage: 1567, rate: '74%' },
               ].map((stat, index) => (
-                <div key={index} className='bg-slate-800/50 rounded-xl p-5 border border-purple-500/20'>
+                <div key={index} className='bg-[var(--bg-card)] rounded-xl p-5 border border-purple-500/20'>
                   <div className='text-sm font-medium text-white mb-3'>{stat.role}</div>
                   <div className='flex justify-between items-end'>
                     <div>
                       <div className='text-2xl font-bold text-white'>{stat.usage.toLocaleString()}</div>
-                      <div className='text-gray-400 text-xs'>使用次数</div>
+                      <div className='text-[var(--text-muted)] text-xs'>使用次数</div>
                     </div>
                     <div className='text-green-400 text-sm'>{stat.rate} 满意度</div>
                   </div>
@@ -996,7 +996,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
             </div>
 
             {/* Scheduling Rules */}
-            <div className='bg-slate-800/50 rounded-xl p-6 border border-purple-500/20'>
+            <div className='bg-[var(--bg-card)] rounded-xl p-6 border border-purple-500/20'>
               <h3 className='text-lg font-semibold text-white mb-6'>调度规则配置</h3>
               <div className='space-y-4'>
                 {[
@@ -1005,10 +1005,10 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                   { name: '新项目优先', description: '新项目可获得额外的AI辅助时间', status: 'active' },
                   { name: '复杂项目增强', description: '里程碑数超过5个时自动启用多AI协同', status: 'inactive' },
                 ].map((rule, index) => (
-                  <div key={index} className='p-4 bg-slate-700/30 rounded-lg flex justify-between items-center'>
+                  <div key={index} className='p-4 bg-[var(--bg-input)]/30 rounded-lg flex justify-between items-center'>
                     <div>
                       <div className='font-medium text-white mb-1'>{rule.name}</div>
-                      <div className='text-sm text-gray-400'>{rule.description}</div>
+                      <div className='text-sm text-[var(--text-muted)]'>{rule.description}</div>
                     </div>
                     <div className='flex items-center space-x-3'>
                       <span
@@ -1017,7 +1017,7 @@ const RegionalManagerDashboard: React.FC<RegionalManagerDashboardProps> = ({ cur
                         }`}>
                         {rule.status === 'active' ? '启用' : '禁用'}
                       </span>
-                      <button className='text-gray-400 hover:text-white'>
+                      <button className='text-[var(--text-muted)] hover:text-white'>
                         <Settings className='w-4 h-4' />
                       </button>
                     </div>

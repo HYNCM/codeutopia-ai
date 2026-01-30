@@ -139,9 +139,9 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'projects' | 'disputes' | 'settings'>('overview')
 
   return (
-    <div className='min-h-screen bg-gray-900 text-white'>
+    <div className='min-h-screen bg-[var(--bg-primary)] text-white'>
       {/* 頂部導航欄 */}
-      <header className='bg-gray-800 border-b border-gray-700 sticky top-0 z-40'>
+      <header className='bg-[var(--bg-card)] border-b border-[var(--border-color)] sticky top-0 z-40'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex items-center justify-between h-16'>
             {/* Logo */}
@@ -153,7 +153,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                 <span className='text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent'>
                   CodeUtopia.ai
                 </span>
-                <div className='text-xs text-gray-400'>管理後台</div>
+                <div className='text-xs text-[var(--text-muted)]'>管理後台</div>
               </div>
             </div>
 
@@ -172,7 +172,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     activeTab === tab.id
                       ? 'bg-purple-600 text-white'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                      : 'text-[var(--text-muted)] hover:text-white hover:bg-[var(--bg-input)]'
                   }`}>
                   <tab.icon className='w-4 h-4' />
                   <span>{tab.name}</span>
@@ -183,7 +183,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
             {/* 右側功能 */}
             <div className='flex items-center space-x-4'>
               {/* 系統通知 */}
-              <button className='relative p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors'>
+              <button className='relative p-2 text-[var(--text-muted)] hover:text-white hover:bg-[var(--bg-input)] rounded-lg transition-colors'>
                 <Bell className='w-5 h-5' />
                 <span className='absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full' />
               </button>
@@ -192,7 +192,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
               <div className='flex items-center space-x-3'>
                 <div className='text-right hidden sm:block'>
                   <div className='text-sm font-medium text-white'>系統管理員</div>
-                  <div className='text-xs text-gray-400'>超級管理員</div>
+                  <div className='text-xs text-[var(--text-muted)]'>超級管理員</div>
                 </div>
                 <div className='w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center'>
                   <Shield className='w-5 h-5 text-white' />
@@ -243,9 +243,9 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                   color: 'amber',
                 },
               ].map((stat, idx) => (
-                <div key={idx} className='bg-gray-800 rounded-2xl p-6 border border-gray-700'>
+                <div key={idx} className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)]'>
                   <div className='flex items-center justify-between mb-4'>
-                    <span className='text-sm text-gray-400'>{stat.label}</span>
+                    <span className='text-sm text-[var(--text-muted)]'>{stat.label}</span>
                     <div className={`w-10 h-10 bg-${stat.color}-500/20 rounded-xl flex items-center justify-center`}>
                       <stat.icon className={`w-5 h-5 text-${stat.color}-400`} />
                     </div>
@@ -254,7 +254,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                   <div className={`flex items-center text-sm ${stat.positive ? 'text-green-400' : 'text-amber-400'}`}>
                     {stat.positive ? <ArrowUpRight className='w-4 h-4 mr-1' /> : <Clock className='w-4 h-4 mr-1' />}
                     <span>{stat.change}</span>
-                    <span className='text-gray-500 ml-1'>較上月</span>
+                    <span className='text-[var(--text-disabled)] ml-1'>較上月</span>
                   </div>
                 </div>
               ))}
@@ -264,10 +264,10 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
               {/* 左側：區域數據與 AI 統計 */}
               <div className='col-span-12 lg:col-span-8 space-y-6'>
                 {/* 區域數據 */}
-                <div className='bg-gray-800 rounded-2xl p-6 border border-gray-700'>
+                <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)]'>
                   <div className='flex items-center justify-between mb-4'>
                     <h2 className='text-lg font-semibold text-white'>區域運營數據</h2>
-                    <select className='py-1.5 px-3 bg-gray-700 border border-gray-600 rounded-lg text-sm text-white'>
+                    <select className='py-1.5 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-sm text-white'>
                       <option>近30天</option>
                       <option>近90天</option>
                       <option>近1年</option>
@@ -276,7 +276,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                   <div className='overflow-x-auto'>
                     <table className='w-full'>
                       <thead>
-                        <tr className='text-left text-sm text-gray-400 border-b border-gray-700'>
+                        <tr className='text-left text-sm text-[var(--text-muted)] border-b border-[var(--border-color)]'>
                           <th className='pb-3 font-medium'>區域</th>
                           <th className='pb-3 font-medium'>用戶數</th>
                           <th className='pb-3 font-medium'>項目數</th>
@@ -306,9 +306,9 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                                 <span className='font-medium text-white'>{region.name}</span>
                               </div>
                             </td>
-                            <td className='py-4 text-gray-300'>{region.users.toLocaleString()}</td>
-                            <td className='py-4 text-gray-300'>{region.projects}</td>
-                            <td className='py-4 text-gray-300'>${(region.revenue / 1000).toFixed(0)}K</td>
+                            <td className='py-4 text-[var(--text-secondary)]'>{region.users.toLocaleString()}</td>
+                            <td className='py-4 text-[var(--text-secondary)]'>{region.projects}</td>
+                            <td className='py-4 text-[var(--text-secondary)]'>${(region.revenue / 1000).toFixed(0)}K</td>
                             <td className='py-4'>
                               <span className='flex items-center text-green-400'>
                                 <ArrowUpRight className='w-4 h-4 mr-1' />
@@ -326,7 +326,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                 </div>
 
                 {/* AI 運營數據 */}
-                <div className='bg-gray-800 rounded-2xl p-6 border border-gray-700'>
+                <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)]'>
                   <div className='flex items-center justify-between mb-4'>
                     <div className='flex items-center space-x-3'>
                       <div className='w-10 h-10 bg-purple-500/20 rounded-xl flex items-center justify-center'>
@@ -334,7 +334,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                       </div>
                       <div>
                         <h2 className='text-lg font-semibold text-white'>AI 協助角色運營數據</h2>
-                        <p className='text-sm text-gray-400'>監控 AI 角色調用情況與人類滿意度</p>
+                        <p className='text-sm text-[var(--text-muted)]'>監控 AI 角色調用情況與人類滿意度</p>
                       </div>
                     </div>
                   </div>
@@ -345,9 +345,9 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                       { label: '平均滿意度', value: `${AI_STATS.avgSatisfaction} ★`, icon: TrendingUp },
                       { label: '成功率', value: `${AI_STATS.successRate}%`, icon: CheckCircle },
                     ].map((stat, idx) => (
-                      <div key={idx} className='p-4 bg-gray-700/50 rounded-xl'>
+                      <div key={idx} className='p-4 bg-[var(--bg-card-hover)] rounded-xl'>
                         <div className='flex items-center justify-between mb-2'>
-                          <span className='text-sm text-gray-400'>{stat.label}</span>
+                          <span className='text-sm text-[var(--text-muted)]'>{stat.label}</span>
                           <stat.icon className='w-4 h-4 text-purple-400' />
                         </div>
                         <div className='text-xl font-bold text-white'>{stat.value}</div>
@@ -355,18 +355,18 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                     ))}
                   </div>
                   <div>
-                    <h3 className='text-sm font-medium text-gray-400 mb-3'>AI 角色調用分佈</h3>
+                    <h3 className='text-sm font-medium text-[var(--text-muted)] mb-3'>AI 角色調用分佈</h3>
                     <div className='space-y-2'>
                       {AI_STATS.roleDistribution.map((item, idx) => (
                         <div key={idx} className='flex items-center space-x-3'>
-                          <span className='text-sm text-gray-300 w-32'>{item.role}</span>
-                          <div className='flex-1 h-2 bg-gray-700 rounded-full overflow-hidden'>
+                          <span className='text-sm text-[var(--text-secondary)] w-32'>{item.role}</span>
+                          <div className='flex-1 h-2 bg-[var(--bg-input)] rounded-full overflow-hidden'>
                             <div
                               className='h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full'
                               style={{ width: `${item.percentage}%` }}
                             />
                           </div>
-                          <span className='text-sm text-gray-400 w-12'>{item.percentage}%</span>
+                          <span className='text-sm text-[var(--text-muted)] w-12'>{item.percentage}%</span>
                         </div>
                       ))}
                     </div>
@@ -377,7 +377,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
               {/* 右側：待審核與最近活動 */}
               <div className='col-span-12 lg:col-span-4 space-y-6'>
                 {/* 待審核項目 */}
-                <div className='bg-gray-800 rounded-2xl p-6 border border-gray-700'>
+                <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)]'>
                   <div className='flex items-center justify-between mb-4'>
                     <h2 className='text-lg font-semibold text-white'>待審核</h2>
                     <span className='px-2 py-1 bg-amber-500/20 text-amber-400 rounded text-sm'>
@@ -388,7 +388,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                     {PENDING_REVIEWS.map((item) => (
                       <div
                         key={item.id}
-                        className='p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-colors cursor-pointer'>
+                        className='p-3 bg-[var(--bg-card-hover)] rounded-xl hover:bg-[var(--bg-input)] transition-colors cursor-pointer'>
                         <div className='flex items-start justify-between mb-2'>
                           <div className='flex items-center space-x-2'>
                             {item.type === 'project' ? (
@@ -402,20 +402,20 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                             <span className='px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-xs'>緊急</span>
                           )}
                         </div>
-                        <div className='flex items-center justify-between text-xs text-gray-400'>
+                        <div className='flex items-center justify-between text-xs text-[var(--text-muted)]'>
                           <span>{item.submitter}</span>
                           <span>{item.submittedAt}</span>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <button className='w-full mt-4 py-2 bg-gray-700 text-gray-300 rounded-xl text-sm hover:bg-gray-600 transition-colors'>
+                  <button className='w-full mt-4 py-2 bg-[var(--bg-input)] text-[var(--text-secondary)] rounded-xl text-sm hover:bg-gray-600 transition-colors'>
                     查看全部待審核
                   </button>
                 </div>
 
                 {/* 最近活動 */}
-                <div className='bg-gray-800 rounded-2xl p-6 border border-gray-700'>
+                <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)]'>
                   <div className='flex items-center justify-between mb-4'>
                     <h2 className='text-lg font-semibold text-white'>最近活動</h2>
                   </div>
@@ -450,16 +450,16 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                         </div>
                         <div className='flex-1'>
                           <div className='text-sm font-medium text-white'>{activity.title}</div>
-                          <div className='text-xs text-gray-400'>{activity.description}</div>
+                          <div className='text-xs text-[var(--text-muted)]'>{activity.description}</div>
                         </div>
-                        <span className='text-xs text-gray-500'>{activity.time}</span>
+                        <span className='text-xs text-[var(--text-disabled)]'>{activity.time}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* 快捷操作 */}
-                <div className='bg-gray-800 rounded-2xl p-6 border border-gray-700'>
+                <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)]'>
                   <h2 className='text-lg font-semibold text-white mb-4'>快捷操作</h2>
                   <div className='grid grid-cols-2 gap-3'>
                     {[
@@ -470,9 +470,9 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                     ].map((action, idx) => (
                       <button
                         key={idx}
-                        className={`p-3 bg-gray-700/50 rounded-xl hover:bg-gray-700 transition-colors text-center`}>
+                        className={`p-3 bg-[var(--bg-card-hover)] rounded-xl hover:bg-[var(--bg-input)] transition-colors text-center`}>
                         <action.icon className={`w-5 h-5 text-${action.color}-400 mx-auto mb-2`} />
-                        <span className='text-sm text-gray-300'>{action.label}</span>
+                        <span className='text-sm text-[var(--text-secondary)]'>{action.label}</span>
                       </button>
                     ))}
                   </div>
@@ -488,29 +488,29 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
             <div className='flex items-center justify-between'>
               <div>
                 <h1 className='text-2xl font-bold text-white'>用戶管理</h1>
-                <p className='text-gray-400 mt-1'>管理全平台用戶、角色權限與違規處理</p>
+                <p className='text-[var(--text-muted)] mt-1'>管理全平台用戶、角色權限與違規處理</p>
               </div>
             </div>
 
             {/* 搜索和篩選 */}
-            <div className='bg-gray-800 rounded-2xl p-4 border border-gray-700'>
+            <div className='bg-[var(--bg-card)] rounded-2xl p-4 border border-[var(--border-color)]'>
               <div className='flex items-center space-x-4'>
                 <div className='flex-1 relative'>
-                  <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
+                  <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]' />
                   <input
                     type='text'
                     placeholder='搜索用戶...'
-                    className='w-full pl-12 pr-4 py-2.5 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500'
+                    className='w-full pl-12 pr-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500'
                   />
                 </div>
-                <select className='py-2.5 px-4 bg-gray-700 border border-gray-600 rounded-xl text-white'>
+                <select className='py-2.5 px-4 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-white'>
                   <option>全部角色</option>
                   <option>項目主理人</option>
                   <option>接案者</option>
                   <option>區域主理人</option>
                   <option>管理員</option>
                 </select>
-                <select className='py-2.5 px-4 bg-gray-700 border border-gray-600 rounded-xl text-white'>
+                <select className='py-2.5 px-4 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-white'>
                   <option>全部狀態</option>
                   <option>正常</option>
                   <option>已禁用</option>
@@ -520,16 +520,16 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
             </div>
 
             {/* 用戶列表 */}
-            <div className='bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden'>
+            <div className='bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)] overflow-hidden'>
               <table className='w-full'>
-                <thead className='bg-gray-700/50'>
+                <thead className='bg-[var(--bg-card-hover)]'>
                   <tr>
-                    <th className='px-6 py-4 text-left text-sm font-medium text-gray-400'>用戶</th>
-                    <th className='px-6 py-4 text-left text-sm font-medium text-gray-400'>角色</th>
-                    <th className='px-6 py-4 text-left text-sm font-medium text-gray-400'>狀態</th>
-                    <th className='px-6 py-4 text-left text-sm font-medium text-gray-400'>註冊時間</th>
-                    <th className='px-6 py-4 text-left text-sm font-medium text-gray-400'>項目/收益</th>
-                    <th className='px-6 py-4 text-right text-sm font-medium text-gray-400'>操作</th>
+                    <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>用戶</th>
+                    <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>角色</th>
+                    <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>狀態</th>
+                    <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>註冊時間</th>
+                    <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>項目/收益</th>
+                    <th className='px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]'>操作</th>
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-gray-700'>
@@ -571,7 +571,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                       revenue: 245000,
                     },
                   ].map((user, idx) => (
-                    <tr key={idx} className='hover:bg-gray-700/50'>
+                    <tr key={idx} className='hover:bg-[var(--bg-card-hover)]'>
                       <td className='px-6 py-4'>
                         <div className='flex items-center space-x-3'>
                           <div className='w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-medium'>
@@ -579,7 +579,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                           </div>
                           <div>
                             <div className='font-medium text-white'>{user.name}</div>
-                            <div className='text-sm text-gray-400'>{user.company || user.skills || user.region}</div>
+                            <div className='text-sm text-[var(--text-muted)]'>{user.company || user.skills || user.region}</div>
                           </div>
                         </div>
                       </td>
@@ -603,8 +603,8 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                           正常
                         </span>
                       </td>
-                      <td className='px-6 py-4 text-sm text-gray-400'>{user.joined}</td>
-                      <td className='px-6 py-4 text-sm text-gray-300'>
+                      <td className='px-6 py-4 text-sm text-[var(--text-muted)]'>{user.joined}</td>
+                      <td className='px-6 py-4 text-sm text-[var(--text-secondary)]'>
                         {user.projects} 項目 / $
                         {(user.spent || user.earned || user.revenue) > 1000
                           ? (user.spent || user.earned || user.revenue) / 1000 + 'K'
@@ -612,13 +612,13 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                       </td>
                       <td className='px-6 py-4 text-right'>
                         <div className='flex items-center justify-end space-x-2'>
-                          <button className='p-2 text-gray-400 hover:text-white hover:bg-gray-600 rounded-lg transition-colors'>
+                          <button className='p-2 text-[var(--text-muted)] hover:text-white hover:bg-gray-600 rounded-lg transition-colors'>
                             <Eye className='w-4 h-4' />
                           </button>
-                          <button className='p-2 text-gray-400 hover:text-white hover:bg-gray-600 rounded-lg transition-colors'>
+                          <button className='p-2 text-[var(--text-muted)] hover:text-white hover:bg-gray-600 rounded-lg transition-colors'>
                             <Edit className='w-4 h-4' />
                           </button>
-                          <button className='p-2 text-gray-400 hover:text-red-400 hover:bg-gray-600 rounded-lg transition-colors'>
+                          <button className='p-2 text-[var(--text-muted)] hover:text-red-400 hover:bg-gray-600 rounded-lg transition-colors'>
                             <Lock className='w-4 h-4' />
                           </button>
                         </div>
@@ -636,19 +636,19 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
           <div className='space-y-6'>
             <div>
               <h1 className='text-2xl font-bold text-white'>項目審核</h1>
-              <p className='text-gray-400 mt-1'>審核項目發布、監控項目異常、統計區域業績</p>
+              <p className='text-[var(--text-muted)] mt-1'>審核項目發布、監控項目異常、統計區域業績</p>
             </div>
 
             {/* 待審核項目列表 */}
-            <div className='bg-gray-800 rounded-2xl p-6 border border-gray-700'>
+            <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)]'>
               <h2 className='text-lg font-semibold text-white mb-4'>待審核項目</h2>
               <div className='space-y-4'>
                 {PENDING_REVIEWS.filter((p) => p.type === 'project').map((project) => (
-                  <div key={project.id} className='p-4 bg-gray-700/50 rounded-xl'>
+                  <div key={project.id} className='p-4 bg-[var(--bg-card-hover)] rounded-xl'>
                     <div className='flex items-start justify-between mb-3'>
                       <div>
                         <h3 className='font-medium text-white'>{project.title}</h3>
-                        <p className='text-sm text-gray-400'>
+                        <p className='text-sm text-[var(--text-muted)]'>
                           提交者：{project.submitter} • {project.submittedAt}
                         </p>
                       </div>
@@ -660,7 +660,7 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                       </div>
                     </div>
                     <div className='flex items-center justify-end space-x-3'>
-                      <button className='px-4 py-2 border border-gray-600 text-gray-300 rounded-lg text-sm hover:bg-gray-600 transition-colors'>
+                      <button className='px-4 py-2 border border-[var(--border-subtle)] text-[var(--text-secondary)] rounded-lg text-sm hover:bg-gray-600 transition-colors'>
                         查看詳情
                       </button>
                       <button className='px-4 py-2 bg-red-500/20 text-red-400 rounded-lg text-sm hover:bg-red-500/30 transition-colors'>
@@ -682,12 +682,12 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
           <div className='space-y-6'>
             <div>
               <h1 className='text-2xl font-bold text-white'>爭議處理</h1>
-              <p className='text-gray-400 mt-1'>處理用戶爭議、進行調解與最終裁定</p>
+              <p className='text-[var(--text-muted)] mt-1'>處理用戶爭議、進行調解與最終裁定</p>
             </div>
 
             {/* 爭議列表 */}
-            <div className='bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden'>
-              <div className='px-6 py-4 border-b border-gray-700'>
+            <div className='bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)] overflow-hidden'>
+              <div className='px-6 py-4 border-b border-[var(--border-color)]'>
                 <div className='flex items-center justify-between'>
                   <h2 className='font-semibold text-white'>待處理爭議</h2>
                   <span className='px-2 py-1 bg-amber-500/20 text-amber-400 rounded text-sm'>{DISPUTES.length} 項</span>
@@ -695,11 +695,11 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
               </div>
               <div className='divide-y divide-gray-700'>
                 {DISPUTES.map((dispute) => (
-                  <div key={dispute.id} className='p-6 hover:bg-gray-700/50 transition-colors'>
+                  <div key={dispute.id} className='p-6 hover:bg-[var(--bg-card-hover)] transition-colors'>
                     <div className='flex items-start justify-between mb-3'>
                       <div>
                         <h3 className='font-medium text-white'>{dispute.project}</h3>
-                        <p className='text-sm text-gray-400'>
+                        <p className='text-sm text-[var(--text-muted)]'>
                           {dispute.type} • 發起人：{dispute.initiator}
                         </p>
                       </div>
@@ -708,12 +708,12 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
                       </span>
                     </div>
                     <div className='flex items-center justify-between'>
-                      <div className='text-sm text-gray-400'>
+                      <div className='text-sm text-[var(--text-muted)]'>
                         涉及金額：<span className='text-white font-medium'>{dispute.amount}</span>
                         <span className='ml-4'>創建時間：{dispute.createdAt}</span>
                       </div>
                       <div className='flex space-x-3'>
-                        <button className='px-4 py-2 border border-gray-600 text-gray-300 rounded-lg text-sm hover:bg-gray-600 transition-colors'>
+                        <button className='px-4 py-2 border border-[var(--border-subtle)] text-[var(--text-secondary)] rounded-lg text-sm hover:bg-gray-600 transition-colors'>
                           查看證據
                         </button>
                         <button className='px-4 py-2 bg-amber-500/20 text-amber-400 rounded-lg text-sm hover:bg-amber-500/30 transition-colors'>
@@ -736,67 +736,67 @@ export default function WebadminDashboard({ currentRole }: WebadminDashboardProp
           <div className='space-y-6'>
             <div>
               <h1 className='text-2xl font-bold text-white'>規則配置</h1>
-              <p className='text-gray-400 mt-1'>配置平台結算規則、權限設置與 AI 角色參數</p>
+              <p className='text-[var(--text-muted)] mt-1'>配置平台結算規則、權限設置與 AI 角色參數</p>
             </div>
 
             {/* 結算規則配置 */}
-            <div className='bg-gray-800 rounded-2xl p-6 border border-gray-700'>
+            <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)]'>
               <h2 className='text-lg font-semibold text-white mb-4'>結算規則配置</h2>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 <div>
-                  <label className='block text-sm text-gray-400 mb-2'>基礎佣金比例</label>
+                  <label className='block text-sm text-[var(--text-muted)] mb-2'>基礎佣金比例</label>
                   <div className='flex items-center space-x-4'>
                     <div className='flex-1'>
-                      <span className='text-sm text-gray-500'>項目主理人</span>
+                      <span className='text-sm text-[var(--text-disabled)]'>項目主理人</span>
                       <input
                         type='number'
                         defaultValue='10'
-                        className='w-full mt-1 py-2 px-3 bg-gray-700 border border-gray-600 rounded-lg text-white'
+                        className='w-full mt-1 py-2 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-white'
                       />
                     </div>
                     <div className='flex-1'>
-                      <span className='text-sm text-gray-500'>接案者</span>
+                      <span className='text-sm text-[var(--text-disabled)]'>接案者</span>
                       <input
                         type='number'
                         defaultValue='5'
-                        className='w-full mt-1 py-2 px-3 bg-gray-700 border border-gray-600 rounded-lg text-white'
+                        className='w-full mt-1 py-2 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-white'
                       />
                     </div>
                   </div>
                 </div>
                 <div>
-                  <label className='block text-sm text-gray-400 mb-2'>逾期支付違約金</label>
+                  <label className='block text-sm text-[var(--text-muted)] mb-2'>逾期支付違約金</label>
                   <div className='flex items-center space-x-4'>
                     <input
                       type='number'
                       defaultValue='0.5'
-                      className='flex-1 py-2 px-3 bg-gray-700 border border-gray-600 rounded-lg text-white'
+                      className='flex-1 py-2 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-white'
                     />
-                    <span className='text-gray-400'>% / 天</span>
+                    <span className='text-[var(--text-muted)]'>% / 天</span>
                   </div>
                 </div>
                 <div>
-                  <label className='block text-sm text-gray-400 mb-2'>里程碑保證金上限</label>
+                  <label className='block text-sm text-[var(--text-muted)] mb-2'>里程碑保證金上限</label>
                   <div className='flex items-center space-x-4'>
                     <input
                       type='number'
                       defaultValue='20'
-                      className='flex-1 py-2 px-3 bg-gray-700 border border-gray-600 rounded-lg text-white'
+                      className='flex-1 py-2 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-white'
                     />
-                    <span className='text-gray-400'>%</span>
+                    <span className='text-[var(--text-muted)]'>%</span>
                   </div>
                 </div>
                 <div>
-                  <label className='block text-sm text-gray-400 mb-2'>結算時效</label>
+                  <label className='block text-sm text-[var(--text-muted)] mb-2'>結算時效</label>
                   <input
                     type='number'
                     defaultValue='48'
-                    className='flex-1 py-2 px-3 bg-gray-700 border border-gray-600 rounded-lg text-white'
+                    className='flex-1 py-2 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-white'
                   />
-                  <span className='text-sm text-gray-500 ml-2'>小時內</span>
+                  <span className='text-sm text-[var(--text-disabled)] ml-2'>小時內</span>
                 </div>
               </div>
-              <div className='mt-6 pt-6 border-t border-gray-700 flex justify-end'>
+              <div className='mt-6 pt-6 border-t border-[var(--border-color)] flex justify-end'>
                 <button className='px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all'>
                   保存配置
                 </button>
