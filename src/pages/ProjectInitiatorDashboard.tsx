@@ -36,152 +36,7 @@ import { AIAssistantPanel, AIRoleType } from '../components/AIAssistantPanel'
 import { useProjects } from '../contexts/ProjectContext'
 import { useAuth } from '../contexts/AuthContext'
 import { Project } from '../types'
-
-// 模擬數據
-const DASHBOARD_STATS = {
-  totalProjects: 12,
-  activeProjects: 8,
-  pendingApplications: 5,
-  connectedTalents: 23,
-  aiAssistCalls: 156,
-  pendingMilestones: 7,
-  totalSpent: 285000,
-  completionRate: 94,
-}
-
-const RECOMMENDED_TALENTS = [
-  {
-    id: '1',
-    name: '王建國',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Wang',
-    role: '資深全棧工程師',
-    skills: ['React', 'Node.js', 'Python', 'AI/ML'],
-    rating: 4.9,
-    completedProjects: 28,
-    hourlyRate: 85,
-    availability: 'available',
-    matchScore: 95,
-    region: '台灣',
-    timezone: 'Asia/Taipei',
-  },
-  {
-    id: '2',
-    name: '李美華',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Li',
-    role: 'UX 設計師',
-    skills: ['Figma', 'UI Design', 'Prototyping', 'User Research'],
-    rating: 4.8,
-    completedProjects: 34,
-    hourlyRate: 75,
-    availability: 'busy',
-    matchScore: 88,
-    region: '新加坡',
-    timezone: 'Asia/Singapore',
-  },
-  {
-    id: '3',
-    name: '陳志偉',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Chen',
-    role: '後端架構師',
-    skills: ['Go', 'Kubernetes', 'System Design', 'PostgreSQL'],
-    rating: 5.0,
-    completedProjects: 19,
-    hourlyRate: 120,
-    availability: 'available',
-    matchScore: 92,
-    region: '日本',
-    timezone: 'Asia/Tokyo',
-  },
-]
-
-const PENDING_TASKS = [
-  {
-    id: 't1',
-    type: 'application',
-    title: '新人才申請 (3)',
-    description: '王建國申請參與智能客服項目',
-    time: '2小時前',
-    priority: 'high',
-  },
-  {
-    id: 't2',
-    type: 'milestone',
-    title: '里程碑驗收 (1)',
-    description: '「代碼開發里程碑」待驗收',
-    time: '5小時前',
-    priority: 'medium',
-  },
-  {
-    id: 't3',
-    type: 'message',
-    title: '人才溝通回覆',
-    description: '李美華詢問設計需求細節',
-    time: '1天前',
-    priority: 'low',
-  },
-  {
-    id: 't4',
-    type: 'ai',
-    title: 'AI 成果審核 (2)',
-    description: 'UX設計師AI輸出待確認',
-    time: '1天前',
-    priority: 'medium',
-  },
-  {
-    id: 't5',
-    type: 'payment',
-    title: '里程碑結算',
-    description: '「需求確認里程碑」待付款',
-    time: '2天前',
-    priority: 'high',
-  },
-]
-
-const ACTIVE_PROJECTS = [
-  {
-    id: 'p1',
-    title: '智能客服系統開發',
-    status: 'in_progress',
-    progress: 65,
-    budget: 45000,
-    spent: 29250,
-    connectedTalents: 4,
-    milestones: [
-      { id: 'm1', name: '需求確認', status: 'completed', paid: true },
-      { id: 'm2', name: '代碼開發', status: 'in_progress', paid: true },
-      { id: 'm3', name: '測試驗收', status: 'pending', paid: false },
-    ],
-    aiAssistants: ['frontend_engineer', 'qa_engineer'],
-    lastActivity: '2小時前',
-  },
-  {
-    id: 'p2',
-    title: '數據分析平台 UI/UX 優化',
-    status: 'in_progress',
-    progress: 40,
-    budget: 28000,
-    spent: 11200,
-    connectedTalents: 2,
-    milestones: [
-      { id: 'm1', name: '設計調研', status: 'completed', paid: true },
-      { id: 'm2', name: '原型設計', status: 'in_progress', paid: false },
-      { id: 'm3', name: '交付驗收', status: 'pending', paid: false },
-    ],
-    aiAssistants: ['ux_designer'],
-    lastActivity: '5小時前',
-  },
-]
-
-const REGIONS = [
-  { id: 'us', name: '美國', flag: '🇺🇸', currency: 'USD' },
-  { id: 'eu', name: '歐洲', flag: '🇪🇺', currency: 'EUR' },
-  { id: 'cn', name: '中國大陸', flag: '🇨🇳', currency: 'CNY' },
-  { id: 'tw', name: '台灣', flag: '🇹🇼', currency: 'TWD' },
-  { id: 'jp', name: '日本', flag: '🇯🇵', currency: 'JPY' },
-  { id: 'in', name: '印度', flag: '🇮🇳', currency: 'INR' },
-  { id: 'au', name: '澳洲', flag: '🇦🇺', currency: 'AUD' },
-  { id: 'sea', name: '東南亞', flag: '🌏', currency: 'USD' },
-]
+import { DASHBOARD_STATS, RECOMMENDED_TALENTS, PENDING_TASKS, REGIONS } from '../services/mockData'
 
 interface ProjectInitiatorDashboardProps {
   currentRole?: string
@@ -199,91 +54,61 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
   const activeProjectsDisplay = projects.filter((p) => ['open', 'in_progress'].includes(p.status))
 
   return (
-    <div className='min-h-screen bg-gray-50'>
-      {/* 頂部導航欄 */}
-      <header className='bg-white border-b border-gray-200 sticky top-0 z-40'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex items-center justify-between h-16'>
-            {/* Logo */}
-            <div className='flex items-center space-x-3'>
-              <div className='w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center'>
-                <Sparkles className='w-6 h-6 text-white' />
-              </div>
-              <span className='text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent'>
-                CodeUtopia.ai
-              </span>
-              <span className='ml-3 px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium'>
-                項目主理人
-              </span>
-            </div>
-
-            {/* 導航標籤 */}
-            <nav className='hidden md:flex items-center space-x-1'>
-              {[
-                { id: 'overview', name: '工作台', icon: Layout },
-                { id: 'projects', name: '項目管理', icon: Briefcase },
-                { id: 'talents', name: '人才庫', icon: Users },
-                { id: 'finance', name: '財務結算', icon: DollarSign },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    activeTab === tab.id ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'
-                  }`}>
-                  <tab.icon className='w-4 h-4' />
-                  <span>{tab.name}</span>
-                </button>
-              ))}
-            </nav>
-
-            {/* 右側功能 */}
-            <div className='flex items-center space-x-4'>
-              {/* AI 協助快捷入口 */}
-              <button
-                onClick={() => setShowAIAssistant(!showAIAssistant)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  showAIAssistant
-                    ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}>
-                <Brain className='w-4 h-4' />
-                <span>AI 協助</span>
-              </button>
-
-              {/* 消息通知 */}
-              <button className='relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors'>
-                <Bell className='w-5 h-5' />
-                <span className='absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full' />
-              </button>
-
-              {/* 個人中心 */}
-              <div className='flex items-center space-x-3'>
-                <div className='text-right hidden sm:block'>
-                  <div className='text-sm font-medium text-gray-900'>張偉明</div>
-                  <div className='text-xs text-gray-500'>創新科技有限公司</div>
-                </div>
-                <img
-                  src='https://api.dicebear.com/7.x/avataaars/svg?seed=Zhang'
-                  alt='用戶頭像'
-                  className='w-10 h-10 rounded-full border-2 border-gray-200'
-                />
-              </div>
-            </div>
-          </div>
+    <div className='space-y-6'>
+      {/* 頁面標題 */}
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center space-x-3'>
+          <h1 className='text-2xl font-bold text-[var(--text-primary)]'>工作台</h1>
+          <span className='px-2.5 py-1 bg-purple-500/20 text-purple-500 dark:text-purple-400 border border-purple-500/30 rounded-lg text-sm font-medium'>
+            項目主理人
+          </span>
         </div>
-      </header>
+        <div className='flex items-center space-x-3'>
+          <button
+            onClick={() => setShowAIAssistant(!showAIAssistant)}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer ${
+              showAIAssistant
+                ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/25'
+                : 'bg-[var(--bg-card-hover)] text-[var(--text-secondary)] hover:bg-[var(--bg-input)] border border-[var(--border-color)]'
+            }`}>
+            <Brain className='w-4 h-4' />
+            <span>AI 協助</span>
+          </button>
+        </div>
+      </div>
+
+      {/* 上下文標籤導航 */}
+      <div className='bg-[var(--bg-card)] rounded-xl p-1 inline-flex space-x-1 border border-[var(--border-color)] transition-colors duration-150'>
+        {[
+          { id: 'overview', name: '概覽', icon: Layout },
+          { id: 'projects', name: '項目', icon: Briefcase },
+          { id: 'talents', name: '人才', icon: Users },
+          { id: 'finance', name: '財務', icon: DollarSign },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
+              activeTab === tab.id
+                ? 'bg-purple-600 text-white'
+                : 'text-[var(--text-muted)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]'
+            }`}>
+            <tab.icon className='w-4 h-4' />
+            <span>{tab.name}</span>
+          </button>
+        ))}
+      </div>
 
       {/* 主內容區域 */}
-      <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+      <div>
         {activeTab === 'overview' && (
           <div className='grid grid-cols-12 gap-6'>
             {/* 左側主內容 */}
             <div className='col-span-12 lg:col-span-8 space-y-6'>
               {/* 快捷入口 */}
-              <div className='bg-white rounded-2xl p-6 shadow-sm border border-gray-100'>
+              <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)] transition-colors duration-150'>
                 <div className='flex items-center justify-between mb-4'>
-                  <h2 className='text-lg font-semibold text-gray-900'>快捷操作</h2>
+                  <h2 className='text-lg font-semibold text-[var(--text-primary)]'>快捷操作</h2>
                 </div>
                 <div className='grid grid-cols-4 md:grid-cols-7 gap-3'>
                   {[
@@ -309,12 +134,12 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                           item.action()
                         }
                       }}
-                      className='relative p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors text-center group'>
+                      className='relative p-4 bg-[var(--bg-card-hover)] hover:bg-[var(--bg-input)] rounded-xl transition-all duration-200 text-center group cursor-pointer'>
                       <div
-                        className={`w-10 h-10 ${item.color} rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform`}>
+                        className={`w-10 h-10 ${item.color} rounded-xl flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform shadow-lg`}>
                         <item.icon className='w-5 h-5 text-white' />
                       </div>
-                      <span className='text-xs font-medium text-gray-700'>{item.label}</span>
+                      <span className='text-xs font-medium text-[var(--text-secondary)]'>{item.label}</span>
                       {item.badge && (
                         <span className='absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center'>
                           {item.badge}
@@ -326,10 +151,10 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
               </div>
 
               {/* 數據概覽 */}
-              <div className='bg-white rounded-2xl p-6 shadow-sm border border-gray-100'>
+              <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)] transition-colors duration-150'>
                 <div className='flex items-center justify-between mb-4'>
-                  <h2 className='text-lg font-semibold text-gray-900'>數據概覽</h2>
-                  <select className='py-1.5 px-3 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-700'>
+                  <h2 className='text-lg font-semibold text-[var(--text-primary)]'>數據概覽</h2>
+                  <select className='py-1.5 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-muted)] cursor-pointer'>
                     <option>近30天</option>
                     <option>近90天</option>
                     <option>近1年</option>
@@ -366,26 +191,28 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                       bg: 'bg-orange-100',
                     },
                   ].map((stat, idx) => (
-                    <div key={idx} className='p-4 bg-gray-50 rounded-xl'>
+                    <div
+                      key={idx}
+                      className='p-4 bg-[var(--bg-card-hover)] rounded-xl border border-[var(--border-color)]'>
                       <div className='flex items-center justify-between mb-2'>
-                        <span className='text-sm text-gray-500'>{stat.label}</span>
+                        <span className='text-sm text-[var(--text-muted)]'>{stat.label}</span>
                         <div className={`w-8 h-8 ${stat.bg} rounded-lg flex items-center justify-center`}>
                           <stat.icon className={`w-4 h-4 ${stat.color}`} />
                         </div>
                       </div>
-                      <div className='text-2xl font-bold text-gray-900'>{stat.value}</div>
+                      <div className='text-2xl font-bold text-[var(--text-primary)]'>{stat.value}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* 進行中項目 */}
-              <div className='bg-white rounded-2xl p-6 shadow-sm border border-gray-100'>
+              <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)] transition-colors duration-150'>
                 <div className='flex items-center justify-between mb-4'>
-                  <h2 className='text-lg font-semibold text-gray-900'>進行中項目</h2>
+                  <h2 className='text-lg font-semibold text-[var(--text-primary)]'>進行中項目</h2>
                   <button
                     onClick={() => setActiveTab('projects')}
-                    className='flex items-center space-x-1 text-sm text-purple-600 hover:text-purple-700'>
+                    className='flex items-center space-x-1 text-sm text-purple-500 hover:text-purple-400 cursor-pointer'>
                     <span>查看全部</span>
                     <ChevronRight className='w-4 h-4' />
                   </button>
@@ -395,11 +222,11 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                     <div
                       key={project.id}
                       onClick={() => navigate(`/projects/${project.id}`)}
-                      className='p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer'>
+                      className='p-4 bg-[var(--bg-card-hover)] rounded-xl hover:bg-[var(--bg-input)] transition-colors cursor-pointer'>
                       <div className='flex items-start justify-between mb-3'>
                         <div>
-                          <h3 className='font-medium text-gray-900'>{project.title}</h3>
-                          <div className='flex items-center space-x-4 mt-1 text-sm text-gray-500'>
+                          <h3 className='font-medium text-[var(--text-primary)]'>{project.title}</h3>
+                          <div className='flex items-center space-x-4 mt-1 text-sm text-[var(--text-muted)]'>
                             <span className='flex items-center space-x-1'>
                               <Globe className='w-4 h-4' />
                               <span>Global</span>
@@ -415,17 +242,19 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                           </div>
                         </div>
                         <div className='flex items-center space-x-2'>
-                          <span className='px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs'>AI 協作</span>
+                          <span className='px-2 py-1 bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded text-xs'>
+                            AI 協作
+                          </span>
                         </div>
                       </div>
 
                       {/* 進度條 */}
                       <div className='mb-3'>
                         <div className='flex items-center justify-between text-sm mb-1'>
-                          <span className='text-gray-500'>項目進度</span>
-                          <span className='font-medium text-gray-900'>0%</span>
+                          <span className='text-[var(--text-muted)]'>項目進度</span>
+                          <span className='font-medium text-[var(--text-primary)]'>0%</span>
                         </div>
-                        <div className='w-full h-2 bg-gray-200 rounded-full overflow-hidden'>
+                        <div className='w-full h-2 bg-[var(--bg-input)] rounded-full overflow-hidden'>
                           <div
                             className='h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all'
                             style={{ width: `0%` }}
@@ -443,12 +272,12 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                               ) : milestone.status === 'in_progress' ? (
                                 <div className='w-3 h-3 bg-blue-500 rounded-full animate-pulse' />
                               ) : (
-                                <div className='w-3 h-3 border-2 border-gray-300 rounded-full' />
+                                <div className='w-3 h-3 border-2 border-[var(--border-color)] rounded-full' />
                               )}
-                              <span className='text-xs text-gray-600 truncate'>{milestone.title}</span>
+                              <span className='text-xs text-[var(--text-muted)] truncate'>{milestone.title}</span>
                             </div>
                             {idx < (project.milestones?.length || 0) - 1 && idx < 2 && (
-                              <div className='h-0.5 bg-gray-200 ml-1.5' />
+                              <div className='h-0.5 bg-[var(--border-subtle)] ml-1.5' />
                             )}
                           </div>
                         ))}
@@ -459,10 +288,10 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
               </div>
 
               {/* 待辦事項 */}
-              <div className='bg-white rounded-2xl p-6 shadow-sm border border-gray-100'>
+              <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)] transition-colors duration-150'>
                 <div className='flex items-center justify-between mb-4'>
-                  <h2 className='text-lg font-semibold text-gray-900'>待辦事項</h2>
-                  <span className='px-2 py-1 bg-red-100 text-red-700 rounded text-sm'>
+                  <h2 className='text-lg font-semibold text-[var(--text-primary)]'>待辦事項</h2>
+                  <span className='px-2 py-1 bg-red-500/20 text-red-400 rounded text-sm'>
                     {PENDING_TASKS.length} 項待處理
                   </span>
                 </div>
@@ -470,7 +299,7 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                   {PENDING_TASKS.map((task) => (
                     <div
                       key={task.id}
-                      className='flex items-center space-x-4 p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer'>
+                      className='flex items-center space-x-4 p-3 hover:bg-[var(--bg-card-hover)] rounded-xl transition-colors cursor-pointer'>
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                           task.type === 'application'
@@ -497,15 +326,15 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                       </div>
                       <div className='flex-1'>
                         <div className='flex items-center space-x-2'>
-                          <h4 className='font-medium text-gray-900'>{task.title}</h4>
+                          <h4 className='font-medium text-[var(--text-primary)]'>{task.title}</h4>
                           {task.priority === 'high' && (
-                            <span className='px-1.5 py-0.5 bg-red-100 text-red-700 rounded text-xs'>緊急</span>
+                            <span className='px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-xs'>緊急</span>
                           )}
                         </div>
-                        <p className='text-sm text-gray-500'>{task.description}</p>
+                        <p className='text-sm text-[var(--text-muted)]'>{task.description}</p>
                       </div>
                       <div className='text-right'>
-                        <span className='text-xs text-gray-400'>{task.time}</span>
+                        <span className='text-xs text-[var(--text-muted)]'>{task.time}</span>
                       </div>
                     </div>
                   ))}
@@ -527,12 +356,12 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
               )}
 
               {/* 推薦人才 */}
-              <div className='bg-white rounded-2xl p-6 shadow-sm border border-gray-100'>
+              <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)] transition-colors duration-150'>
                 <div className='flex items-center justify-between mb-4'>
-                  <h2 className='text-lg font-semibold text-gray-900'>推薦人才</h2>
+                  <h2 className='text-lg font-semibold text-[var(--text-primary)]'>推薦人才</h2>
                   <button
                     onClick={() => setActiveTab('talents')}
-                    className='text-sm text-purple-600 hover:text-purple-700'>
+                    className='text-sm text-purple-500 hover:text-purple-400 cursor-pointer'>
                     查看全部
                   </button>
                 </div>
@@ -540,20 +369,22 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                   {RECOMMENDED_TALENTS.map((talent) => (
                     <div
                       key={talent.id}
-                      className='p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer'>
+                      className='p-3 bg-[var(--bg-card-hover)] rounded-xl hover:bg-[var(--bg-input)] transition-colors cursor-pointer'>
                       <div className='flex items-start space-x-3'>
                         <img src={talent.avatar} alt={talent.name} className='w-12 h-12 rounded-full' />
                         <div className='flex-1'>
                           <div className='flex items-center space-x-2'>
-                            <h4 className='font-medium text-gray-900'>{talent.name}</h4>
+                            <h4 className='font-medium text-[var(--text-primary)]'>{talent.name}</h4>
                             {talent.availability === 'available' && (
                               <span className='w-2 h-2 bg-green-500 rounded-full' />
                             )}
                           </div>
-                          <p className='text-sm text-gray-500'>{talent.role}</p>
+                          <p className='text-sm text-[var(--text-muted)]'>{talent.role}</p>
                           <div className='flex flex-wrap gap-1 mt-2'>
                             {talent.skills.slice(0, 3).map((skill) => (
-                              <span key={skill} className='px-2 py-0.5 bg-gray-200 text-gray-600 rounded text-xs'>
+                              <span
+                                key={skill}
+                                className='px-2 py-0.5 bg-[var(--bg-input)] text-[var(--text-muted)] rounded text-xs'>
                                 {skill}
                               </span>
                             ))}
@@ -561,20 +392,22 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                           <div className='flex items-center justify-between mt-2'>
                             <div className='flex items-center space-x-1'>
                               <Star className='w-4 h-4 text-yellow-400 fill-current' />
-                              <span className='text-sm font-medium text-gray-900'>{talent.rating}</span>
-                              <span className='text-xs text-gray-400'>({talent.completedProjects} 項目)</span>
+                              <span className='text-sm font-medium text-[var(--text-primary)]'>{talent.rating}</span>
+                              <span className='text-xs text-[var(--text-muted)]'>
+                                ({talent.completedProjects} 項目)
+                              </span>
                             </div>
-                            <span className='text-sm font-medium text-purple-600'>${talent.hourlyRate}/h</span>
+                            <span className='text-sm font-medium text-purple-500'>${talent.hourlyRate}/h</span>
                           </div>
                         </div>
                       </div>
-                      <div className='flex items-center justify-between mt-3 pt-3 border-t border-gray-200'>
-                        <span className='text-xs text-gray-400'>匹配度 {talent.matchScore}%</span>
+                      <div className='flex items-center justify-between mt-3 pt-3 border-t border-[var(--border-color)]'>
+                        <span className='text-xs text-[var(--text-muted)]'>匹配度 {talent.matchScore}%</span>
                         <div className='flex space-x-2'>
-                          <button className='px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-sm hover:bg-purple-200 transition-colors'>
+                          <button className='px-3 py-1 bg-purple-500/20 text-purple-400 rounded-lg text-sm hover:bg-purple-500/30 transition-colors cursor-pointer'>
                             發送邀請
                           </button>
-                          <button className='px-3 py-1 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-100 transition-colors'>
+                          <button className='px-3 py-1 border border-[var(--border-subtle)] text-[var(--text-secondary)] rounded-lg text-sm hover:bg-[var(--bg-card-hover)] transition-colors cursor-pointer'>
                             查看
                           </button>
                         </div>
@@ -585,13 +418,13 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
               </div>
 
               {/* 區域分佈 */}
-              <div className='bg-white rounded-2xl p-6 shadow-sm border border-gray-100'>
-                <h2 className='text-lg font-semibold text-gray-900 mb-4'>項目區域分佈</h2>
+              <div className='bg-[var(--bg-card)] rounded-2xl p-6 border border-[var(--border-color)] transition-colors duration-150'>
+                <h2 className='text-lg font-semibold text-[var(--text-primary)] mb-4'>項目區域分佈</h2>
                 <div className='grid grid-cols-4 gap-2'>
                   {REGIONS.map((region) => (
-                    <div key={region.id} className='text-center p-2 bg-gray-50 rounded-lg'>
+                    <div key={region.id} className='text-center p-2 bg-[var(--bg-card-hover)] rounded-lg'>
                       <div className='text-lg'>{region.flag}</div>
-                      <div className='text-xs text-gray-600 truncate'>{region.name}</div>
+                      <div className='text-xs text-[var(--text-muted)] truncate'>{region.name}</div>
                     </div>
                   ))}
                 </div>
@@ -637,8 +470,8 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
           <div className='space-y-6'>
             <div className='flex items-center justify-between'>
               <div>
-                <h1 className='text-2xl font-bold text-gray-900'>項目管理</h1>
-                <p className='text-gray-500 mt-1'>管理所有發起的項目，追蹤進度與里程碑</p>
+                <h1 className='text-2xl font-bold text-[var(--text-primary)]'>項目管理</h1>
+                <p className='text-[var(--text-muted)] mt-1'>管理所有發起的項目，追蹤進度與里程碑</p>
               </div>
               <Link
                 to='/projects/new'
@@ -649,30 +482,30 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
             </div>
 
             {/* 項目篩選 */}
-            <div className='bg-white rounded-2xl p-4 shadow-sm border border-gray-100'>
+            <div className='bg-[var(--bg-card)] rounded-2xl p-4 shadow-sm border border-[var(--border-color)] transition-colors duration-150'>
               <div className='flex items-center space-x-4'>
                 <div className='flex-1 relative'>
-                  <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
+                  <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]' />
                   <input
                     type='text'
                     placeholder='搜索項目名稱...'
-                    className='w-full pl-12 pr-4 py-2.5 bg-gray-100 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-purple-500'
+                    className='w-full pl-12 pr-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-purple-500'
                   />
                 </div>
-                <select className='py-2.5 px-4 bg-gray-100 border border-gray-200 rounded-xl text-gray-700'>
+                <select className='py-2.5 px-4 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-[var(--text-secondary)]'>
                   <option>全部狀態</option>
                   <option>進行中</option>
                   <option>待對接</option>
                   <option>已完成</option>
                   <option>已關閉</option>
                 </select>
-                <select className='py-2.5 px-4 bg-gray-100 border border-gray-200 rounded-xl text-gray-700'>
+                <select className='py-2.5 px-4 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-[var(--text-secondary)]'>
                   <option>全部區域</option>
                   {REGIONS.map((r) => (
                     <option key={r.id}>{r.name}</option>
                   ))}
                 </select>
-                <button className='flex items-center space-x-2 px-4 py-2.5 border border-gray-200 rounded-xl text-gray-700 hover:bg-gray-50'>
+                <button className='flex items-center space-x-2 px-4 py-2.5 border border-[var(--border-subtle)] rounded-xl text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'>
                   <Filter className='w-5 h-5' />
                   <span>更多篩選</span>
                 </button>
@@ -680,38 +513,38 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
             </div>
 
             {/* 項目列表 */}
-            <div className='bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden'>
+            <div className='bg-[var(--bg-card)] rounded-2xl shadow-sm border border-[var(--border-color)] overflow-hidden transition-colors duration-150'>
               <div className='overflow-x-auto'>
                 <table className='w-full'>
-                  <thead className='bg-gray-50 border-b border-gray-100'>
+                  <thead className='bg-[var(--bg-card-hover)] border-b border-[var(--border-color)]'>
                     <tr>
-                      <th className='px-6 py-4 text-left text-sm font-medium text-gray-500'>項目名稱</th>
-                      <th className='px-6 py-4 text-left text-sm font-medium text-gray-500'>狀態</th>
-                      <th className='px-6 py-4 text-left text-sm font-medium text-gray-500'>進度</th>
-                      <th className='px-6 py-4 text-left text-sm font-medium text-gray-500'>預算</th>
-                      <th className='px-6 py-4 text-left text-sm font-medium text-gray-500'>人才</th>
-                      <th className='px-6 py-4 text-left text-sm font-medium text-gray-500'>AI 輔助</th>
-                      <th className='px-6 py-4 text-left text-sm font-medium text-gray-500'>最近活動</th>
-                      <th className='px-6 py-4 text-right text-sm font-medium text-gray-500'>操作</th>
+                      <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>項目名稱</th>
+                      <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>狀態</th>
+                      <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>進度</th>
+                      <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>預算</th>
+                      <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>人才</th>
+                      <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>AI 輔助</th>
+                      <th className='px-6 py-4 text-left text-sm font-medium text-[var(--text-muted)]'>最近活動</th>
+                      <th className='px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]'>操作</th>
                     </tr>
                   </thead>
-                  <tbody className='divide-y divide-gray-100'>
+                  <tbody className='divide-y divide-[var(--border-subtle)]'>
                     {myProjects.map((project) => (
-                      <tr key={project.id} className='hover:bg-gray-50 transition-colors'>
+                      <tr key={project.id} className='hover:bg-[var(--bg-card-hover)] transition-colors'>
                         <td className='px-6 py-4'>
                           <div>
-                            <div className='font-medium text-gray-900'>{project.title}</div>
-                            <div className='text-sm text-gray-500'>#{project.id}</div>
+                            <div className='font-medium text-[var(--text-primary)]'>{project.title}</div>
+                            <div className='text-sm text-[var(--text-muted)]'>#{project.id}</div>
                           </div>
                         </td>
                         <td className='px-6 py-4'>
                           <span
                             className={`px-2.5 py-1 rounded-full text-sm font-medium ${
                               project.status === 'in_progress'
-                                ? 'bg-blue-100 text-blue-700'
+                                ? 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400'
                                 : project.status === 'open'
-                                  ? 'bg-green-100 text-green-700'
-                                  : 'bg-gray-100 text-gray-700'
+                                  ? 'bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400'
+                                  : 'bg-[var(--bg-input)] text-[var(--text-muted)]'
                             }`}>
                             {project.status === 'in_progress'
                               ? '進行中'
@@ -722,39 +555,41 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                         </td>
                         <td className='px-6 py-4'>
                           <div className='flex items-center space-x-2'>
-                            <div className='w-24 h-2 bg-gray-200 rounded-full overflow-hidden'>
+                            <div className='w-24 h-2 bg-[var(--bg-input)] rounded-full overflow-hidden'>
                               <div
                                 className='h-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-full'
                                 style={{ width: `0%` }}
                               />
                             </div>
-                            <span className='text-sm text-gray-600'>0%</span>
+                            <span className='text-sm text-[var(--text-muted)]'>0%</span>
                           </div>
                         </td>
                         <td className='px-6 py-4'>
-                          <div className='font-medium text-gray-900'>
+                          <div className='font-medium text-[var(--text-primary)]'>
                             {project.budget.currency} {project.budget.max.toLocaleString()}
                           </div>
-                          <div className='text-sm text-gray-500'>預算範圍</div>
+                          <div className='text-sm text-[var(--text-muted)]'>預算範圍</div>
                         </td>
                         <td className='px-6 py-4'>
                           <div className='flex items-center space-x-1'>
-                            <Users className='w-4 h-4 text-gray-400' />
-                            <span className='text-gray-900'>{project.bids?.length || 0}</span>
+                            <Users className='w-4 h-4 text-[var(--text-muted)]' />
+                            <span className='text-[var(--text-primary)]'>{project.bids?.length || 0}</span>
                           </div>
                         </td>
                         <td className='px-6 py-4'>
                           <div className='flex space-x-1'>
-                            <span className='px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs'>AI</span>
+                            <span className='px-2 py-0.5 bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded text-xs'>
+                              AI
+                            </span>
                           </div>
                         </td>
-                        <td className='px-6 py-4 text-sm text-gray-500'>
+                        <td className='px-6 py-4 text-sm text-[var(--text-muted)]'>
                           {new Date(project.updatedAt).toLocaleDateString()}
                         </td>
                         <td className='px-6 py-4 text-right'>
                           <Link
                             to={`/projects/${project.id}`}
-                            className='inline-flex items-center space-x-1 px-3 py-1.5 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors'>
+                            className='inline-flex items-center space-x-1 px-3 py-1.5 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg transition-colors'>
                             <span>查看</span>
                             <ChevronRight className='w-4 h-4' />
                           </Link>
@@ -773,36 +608,36 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
           <div className='space-y-6'>
             <div className='flex items-center justify-between'>
               <div>
-                <h1 className='text-2xl font-bold text-gray-900'>人才庫</h1>
-                <p className='text-gray-500 mt-1'>搜索和篩選全球優質開發者與設計師</p>
+                <h1 className='text-2xl font-bold text-[var(--text-primary)]'>人才庫</h1>
+                <p className='text-[var(--text-muted)] mt-1'>搜索和篩選全球優質開發者與設計師</p>
               </div>
             </div>
 
             {/* 人才篩選 */}
-            <div className='bg-white rounded-2xl p-4 shadow-sm border border-gray-100'>
+            <div className='bg-[var(--bg-card)] rounded-2xl p-4 shadow-sm border border-[var(--border-color)] transition-colors duration-150'>
               <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
                 <div className='relative'>
-                  <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
+                  <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]' />
                   <input
                     type='text'
                     placeholder='搜索人才...'
-                    className='w-full pl-12 pr-4 py-2.5 bg-gray-100 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-purple-500'
+                    className='w-full pl-12 pr-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-[var(--text-primary)] focus:outline-none focus:border-purple-500'
                   />
                 </div>
-                <select className='py-2.5 px-4 bg-gray-100 border border-gray-200 rounded-xl text-gray-700'>
+                <select className='py-2.5 px-4 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-[var(--text-secondary)]'>
                   <option>全部技能</option>
                   <option>React</option>
                   <option>Node.js</option>
                   <option>AI/ML</option>
                   <option>UI/UX</option>
                 </select>
-                <select className='py-2.5 px-4 bg-gray-100 border border-gray-200 rounded-xl text-gray-700'>
+                <select className='py-2.5 px-4 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-[var(--text-secondary)]'>
                   <option>全部區域</option>
                   {REGIONS.map((r) => (
                     <option key={r.id}>{r.name}</option>
                   ))}
                 </select>
-                <select className='py-2.5 px-4 bg-gray-100 border border-gray-200 rounded-xl text-gray-700'>
+                <select className='py-2.5 px-4 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-[var(--text-secondary)]'>
                   <option>全部價格</option>
                   <option>$0-50/h</option>
                   <option>$50-100/h</option>
@@ -816,43 +651,47 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
               {RECOMMENDED_TALENTS.map((talent) => (
                 <div
                   key={talent.id}
-                  className='bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow'>
+                  className='bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-color)] hover:shadow-md transition-all'>
                   <div className='flex items-start space-x-4'>
                     <img src={talent.avatar} alt={talent.name} className='w-16 h-16 rounded-full' />
                     <div className='flex-1'>
                       <div className='flex items-center space-x-2'>
-                        <h3 className='font-semibold text-gray-900'>{talent.name}</h3>
+                        <h3 className='font-semibold text-[var(--text-primary)]'>{talent.name}</h3>
                         {talent.availability === 'available' && (
-                          <span className='px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-xs'>可接單</span>
+                          <span className='px-1.5 py-0.5 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded text-xs'>
+                            可接單
+                          </span>
                         )}
                       </div>
-                      <p className='text-sm text-gray-500'>{talent.role}</p>
+                      <p className='text-sm text-[var(--text-muted)]'>{talent.role}</p>
                       <div className='flex items-center space-x-2 mt-2'>
                         <div className='flex items-center'>
                           <Star className='w-4 h-4 text-yellow-400 fill-current' />
-                          <span className='text-sm font-medium text-gray-900 ml-1'>{talent.rating}</span>
+                          <span className='text-sm font-medium text-[var(--text-primary)] ml-1'>{talent.rating}</span>
                         </div>
-                        <span className='text-sm text-gray-400'>|</span>
-                        <span className='text-sm text-gray-500'>{talent.completedProjects} 項目</span>
+                        <span className='text-sm text-[var(--text-muted)]'>|</span>
+                        <span className='text-sm text-[var(--text-muted)]'>{talent.completedProjects} 項目</span>
                       </div>
                     </div>
                   </div>
                   <div className='mt-4'>
                     <div className='flex flex-wrap gap-2'>
                       {talent.skills.map((skill) => (
-                        <span key={skill} className='px-2 py-1 bg-gray-100 text-gray-600 rounded text-sm'>
+                        <span
+                          key={skill}
+                          className='px-2 py-1 bg-[var(--bg-input)] text-[var(--text-secondary)] rounded text-sm'>
                           {skill}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className='flex items-center justify-between mt-4 pt-4 border-t border-gray-100'>
-                    <div className='text-lg font-semibold text-gray-900'>${talent.hourlyRate}/h</div>
+                  <div className='flex items-center justify-between mt-4 pt-4 border-t border-[var(--border-color)]'>
+                    <div className='text-lg font-semibold text-[var(--text-primary)]'>${talent.hourlyRate}/h</div>
                     <div className='flex space-x-2'>
-                      <button className='px-4 py-2 bg-purple-100 text-purple-700 rounded-lg text-sm font-medium hover:bg-purple-200 transition-colors'>
+                      <button className='px-4 py-2 bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 rounded-lg text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-500/30 transition-colors'>
                         發送邀請
                       </button>
-                      <button className='px-4 py-2 border border-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-50 transition-colors'>
+                      <button className='px-4 py-2 border border-[var(--border-subtle)] text-[var(--text-secondary)] rounded-lg text-sm hover:bg-[var(--bg-card-hover)] transition-colors'>
                         查看詳情
                       </button>
                     </div>
@@ -867,8 +706,8 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
         {activeTab === 'finance' && (
           <div className='space-y-6'>
             <div>
-              <h1 className='text-2xl font-bold text-gray-900'>財務結算</h1>
-              <p className='text-gray-500 mt-1'>管理項目支出、里程碑付款與發票</p>
+              <h1 className='text-2xl font-bold text-[var(--text-primary)]'>財務結算</h1>
+              <p className='text-[var(--text-muted)] mt-1'>管理項目支出、里程碑付款與發票</p>
             </div>
 
             {/* 財務摘要卡片 */}
@@ -879,10 +718,13 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                 { label: '已結算金額', value: '$232,500', change: '本月', positive: true, color: 'green' },
                 { label: '爭議中金額', value: '$0', change: '無', positive: true, color: 'gray' },
               ].map((stat, idx) => (
-                <div key={idx} className='bg-white rounded-2xl p-6 shadow-sm border border-gray-100'>
-                  <div className='text-sm text-gray-500 mb-1'>{stat.label}</div>
-                  <div className='text-2xl font-bold text-gray-900'>{stat.value}</div>
-                  <div className={`text-sm mt-2 ${stat.positive ? 'text-green-600' : 'text-gray-400'}`}>
+                <div
+                  key={idx}
+                  className='bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border-color)] transition-colors duration-150'>
+                  <div className='text-sm text-[var(--text-muted)] mb-1'>{stat.label}</div>
+                  <div className='text-2xl font-bold text-[var(--text-primary)]'>{stat.value}</div>
+                  <div
+                    className={`text-sm mt-2 ${stat.positive ? 'text-green-600 dark:text-green-400' : 'text-[var(--text-muted)]'}`}>
                     {stat.change}
                   </div>
                 </div>
@@ -890,23 +732,35 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
             </div>
 
             {/* 結算記錄表格 */}
-            <div className='bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden'>
-              <div className='px-6 py-4 border-b border-gray-100'>
-                <h2 className='font-semibold text-gray-900'>結算記錄</h2>
+            <div className='bg-[var(--bg-card)] rounded-2xl shadow-sm border border-[var(--border-color)] overflow-hidden transition-colors duration-150'>
+              <div className='px-6 py-4 border-b border-[var(--border-color)]'>
+                <h2 className='font-semibold text-[var(--text-primary)]'>結算記錄</h2>
               </div>
               <div className='overflow-x-auto'>
                 <table className='w-full'>
-                  <thead className='bg-gray-50'>
+                  <thead className='bg-[var(--bg-card-hover)]'>
                     <tr>
-                      <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>項目</th>
-                      <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>里程碑</th>
-                      <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>金額</th>
-                      <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>狀態</th>
-                      <th className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase'>日期</th>
-                      <th className='px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase'>操作</th>
+                      <th className='px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase'>
+                        項目
+                      </th>
+                      <th className='px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase'>
+                        里程碑
+                      </th>
+                      <th className='px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase'>
+                        金額
+                      </th>
+                      <th className='px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase'>
+                        狀態
+                      </th>
+                      <th className='px-6 py-3 text-left text-xs font-medium text-[var(--text-muted)] uppercase'>
+                        日期
+                      </th>
+                      <th className='px-6 py-3 text-right text-xs font-medium text-[var(--text-muted)] uppercase'>
+                        操作
+                      </th>
                     </tr>
                   </thead>
-                  <tbody className='divide-y divide-gray-100'>
+                  <tbody className='divide-y divide-[var(--border-subtle)]'>
                     {[
                       {
                         project: '智能客服系統開發',
@@ -930,18 +784,20 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
                         date: '2024-01-05',
                       },
                     ].map((row, idx) => (
-                      <tr key={idx} className='hover:bg-gray-50'>
-                        <td className='px-6 py-4 text-sm text-gray-900'>{row.project}</td>
-                        <td className='px-6 py-4 text-sm text-gray-600'>{row.milestone}</td>
-                        <td className='px-6 py-4 text-sm font-medium text-gray-900'>{row.amount}</td>
+                      <tr key={idx} className='hover:bg-[var(--bg-card-hover)]'>
+                        <td className='px-6 py-4 text-sm text-[var(--text-primary)]'>{row.project}</td>
+                        <td className='px-6 py-4 text-sm text-[var(--text-muted)]'>{row.milestone}</td>
+                        <td className='px-6 py-4 text-sm font-medium text-[var(--text-primary)]'>{row.amount}</td>
                         <td className='px-6 py-4'>
-                          <span className='px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium'>
+                          <span className='px-2 py-1 bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded-full text-xs font-medium'>
                             {row.status}
                           </span>
                         </td>
-                        <td className='px-6 py-4 text-sm text-gray-500'>{row.date}</td>
+                        <td className='px-6 py-4 text-sm text-[var(--text-muted)]'>{row.date}</td>
                         <td className='px-6 py-4 text-right'>
-                          <button className='text-purple-600 hover:text-purple-700 text-sm'>下載發票</button>
+                          <button className='text-purple-600 dark:text-purple-400 hover:text-purple-700 text-sm'>
+                            下載發票
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -951,7 +807,7 @@ export default function ProjectInitiatorDashboard({ currentRole }: ProjectInitia
             </div>
           </div>
         )}
-      </main>
+      </div>
     </div>
   )
 }
