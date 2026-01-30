@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Sparkles,
   Mail,
@@ -15,12 +15,11 @@ import {
   Check,
   Eye,
   EyeOff,
-  Smartphone,
-  Globe2,
   Languages,
   MapPin,
 } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { TEST_ACCOUNTS } from '../services/mockData'
 
 // 多语言支持 (13 languages)
 const TRANSLATIONS = {
@@ -175,24 +174,8 @@ const ROLES: {
 ]
 
 // 测试账号（仅4个人类角色）
-const TEST_ACCOUNTS = [
-  {
-    email: 'initiator@codeutopia.ai',
-    password: 'demo123',
-    role: 'project_initiator',
-    roleName: '项目主理人',
-    region: 'CHINA',
-  },
-  { email: 'contractor@codeutopia.ai', password: 'demo123', role: 'contractor', roleName: '接案者', region: 'APAC' },
-  { email: 'webadmin@codeutopia.ai', password: 'demo123', role: 'webadmin', roleName: '全局管理员', region: 'GLOBAL' },
-  {
-    email: 'regional@codeutopia.ai',
-    password: 'demo123',
-    role: 'regional_manager',
-    roleName: '区域主理人',
-    region: 'APAC',
-  },
-]
+// 测试账号（仅4个人类角色）
+// Moved to services/mockData.ts
 
 export default function LoginPage() {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login')
@@ -201,6 +184,9 @@ export default function LoginPage() {
   const [registerStep, setRegisterStep] = useState(1)
   const [language, setLanguage] = useState('zh')
   const [showTestAccounts, setShowTestAccounts] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loginError, setLoginError] = useState('')
   const { login } = useAuth()
   const navigate = useNavigate()
 
@@ -208,23 +194,48 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    if (selectedRole) {
-      login(selectedRole as any)
+    setLoginError('')
+
+    // Validate email and password
+    if (!email.trim()) {
+      setLoginError('請輸入郵箱地址')
+      return
+    }
+    if (!password.trim()) {
+      setLoginError('請輸入密碼')
+      return
+    }
+
+    // Login with validated account
+    const success = login(email, password)
+
+    if (success) {
+      // Get role from email for redirection (in real app, user object would be returned)
+      // For now, we can look up the test account or MOCK_USERS again, or rely on state update
+      // But calculating redirect path needs role.
+      // Let's assume login was successful and we can find the role from TEST_ACCOUNTS for redirection convenience
+      // OR we can wait for 'user' to be updated in context?
+      // 'login' is synchronous in our mock implementation so 'user' state might NOT be updated immediately in this render cycle
+      // but we need the role for navigation.
+
+      const account = TEST_ACCOUNTS.find((a) => a.email.toLowerCase() === email.toLowerCase())
+      const role = account?.role || 'project_initiator'
+
       navigate(
-        `/dashboard/${selectedRole === 'project_initiator' ? 'initiator' : selectedRole === 'regional_manager' ? 'regional' : selectedRole}`,
+        `/dashboard/${role === 'project_initiator' ? 'initiator' : role === 'regional_manager' ? 'regional' : role}`,
       )
     } else {
-      login('client')
-      navigate('/dashboard')
+      setLoginError('郵箱或密碼錯誤')
     }
   }
 
   const handleTestLogin = (account: (typeof TEST_ACCOUNTS)[0]) => {
-    setSelectedRole(account.role as any)
-    login(account.role as any)
-    navigate(
-      `/dashboard/${account.role === 'project_initiator' ? 'initiator' : account.role === 'regional_manager' ? 'regional' : account.role}`,
-    )
+    // Fill form with test account credentials instead of direct login
+    setEmail(account.email)
+    setPassword(account.password)
+    setSelectedRole(account.role as LoginUserRole)
+    setShowTestAccounts(false)
+    setLoginError('')
   }
 
   return (
@@ -452,8 +463,13 @@ export default function LoginPage() {
                 <Mail className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                 <input
                   type='email'
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    setLoginError('')
+                  }}
                   placeholder={t.email}
-                  className='w-full pl-12 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors'
+                  className={`w-full pl-12 pr-4 py-3 bg-gray-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors ${loginError && !email ? 'border-red-500' : 'border-gray-700 focus:border-purple-500'}`}
                 />
               </div>
 
@@ -461,8 +477,13 @@ export default function LoginPage() {
                 <Lock className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400' />
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    setLoginError('')
+                  }}
                   placeholder={t.password}
-                  className='w-full pl-12 pr-12 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors'
+                  className={`w-full pl-12 pr-12 py-3 bg-gray-800/50 border rounded-xl text-white placeholder-gray-400 focus:outline-none transition-colors ${loginError && !password ? 'border-red-500' : 'border-gray-700 focus:border-purple-500'}`}
                 />
                 <button
                   type='button'
@@ -484,6 +505,13 @@ export default function LoginPage() {
                   {t.forgot}
                 </a>
               </div>
+
+              {/* Error Message */}
+              {loginError && (
+                <div className='p-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm text-center'>
+                  {loginError}
+                </div>
+              )}
 
               <button
                 type='submit'
