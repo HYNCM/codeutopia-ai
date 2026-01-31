@@ -1,0 +1,169 @@
+// Prisma schema for CodeUtopia
+// Using SQLite for local development
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// User & Authentication
+// ============================================
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  password          String
+  name              String
+  avatar            String?
+  role              String   @default("contractor") // project_initiator, contractor, webadmin, regional_manager
+  company           String?
+  rating            Float    @default(0)
+  completedProjects Int      @default(0)
+  balance           Float    @default(0)
+  skills            String   @default("[]") // JSON array stored as string
+  verified          Boolean  @default(false)
+  location          String?
+  timezone          String?
+  bio               String?
+  hourlyRate        Float?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  projectsAsClient  Project[] @relation("ProjectClient")
+  bids              Bid[]
+  sentMessages      Message[] @relation("SentMessages")
+  receivedMessages  Message[] @relation("ReceivedMessages")
+  transactions      Transaction[]
+}
+
+// ============================================
+// Projects
+// ============================================
+
+model Project {
+  id            String   @id @default(cuid())
+  title         String
+  description   String
+  category      String   // web_dev, mobile_dev, ui_ux, etc.
+  subcategory   String?
+  status        String   @default("draft") // draft, open, in_progress, review, completed, disputed, cancelled
+  
+  // Budget
+  budgetMin     Float
+  budgetMax     Float
+  currency      String   @default("USD")
+  
+  duration      String?
+  skills        String   @default("[]") // JSON array
+  visibility    String   @default("public") // public, private, invite_only
+  
+  // Financials
+  escrowBalance Float    @default(0)
+  totalPaid     Float    @default(0)
+  
+  // Client relation
+  clientId      String
+  client        User     @relation("ProjectClient", fields: [clientId], references: [id])
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  milestones    Milestone[]
+  bids          Bid[]
+}
+
+// ============================================
+// Milestones
+// ============================================
+
+model Milestone {
+  id                String   @id @default(cuid())
+  projectId         String
+  project           Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  title             String
+  description       String?
+  amount            Float
+  dueDate           DateTime?
+  status            String   @default("pending") // pending, in_progress, submitted, approved, rejected, completed, paid
+  order             Int      @default(0)
+  
+  deliverables      String   @default("[]") // JSON array
+  acceptanceCriteria String  @default("[]") // JSON array
+  
+  submittedAt       DateTime?
+  approvedAt        DateTime?
+  paidAt            DateTime?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// ============================================
+// Bids
+// ============================================
+
+model Bid {
+  id              String   @id @default(cuid())
+  projectId       String
+  project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  developerId     String
+  developer       User     @relation(fields: [developerId], references: [id])
+  
+  proposedPrice   Float
+  deliveryDays    Int
+  proposal        String
+  status          String   @default("pending") // pending, accepted, rejected, withdrawn
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ============================================
+// Messages
+// ============================================
+
+model Message {
+  id             String   @id @default(cuid())
+  senderId       String
+  sender         User     @relation("SentMessages", fields: [senderId], references: [id])
+  
+  receiverId     String
+  receiver       User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  
+  content        String
+  read           Boolean  @default(false)
+  messageType    String   @default("text") // text, system, file, milestone_update
+  
+  createdAt      DateTime @default(now())
+}
+
+// ============================================
+// Transactions
+// ============================================
+
+model Transaction {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  
+  type              String   // deposit, withdrawal, escrow_lock, escrow_release, service_fee, income
+  amount            Float
+  currency          String   @default("USD")
+  description       String
+  status            String   @default("completed") // pending, completed, failed
+  
+  relatedProjectId  String?
+  relatedMilestoneId String?
+  
+  createdAt         DateTime @default(now())
+}
