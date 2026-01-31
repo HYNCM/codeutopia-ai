@@ -1,21 +1,24 @@
-import path from "path"
-import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
-import sourceIdentifierPlugin from 'vite-plugin-source-identifier'
+/// <reference types="vitest" />
+import { defineConfig } from 'vitest/config'
+import react from '@vitejs/plugin-react'
+import path from 'path'
 
-const isProd = process.env.BUILD_MODE === 'prod'
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    sourceIdentifierPlugin({
-      enabled: !isProd,
-      attributePrefix: 'data-matrix',
-      includeProps: true,
-    })
-  ],
+  plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      exclude: ['node_modules/', 'src/test/'],
     },
   },
 })
