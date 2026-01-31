@@ -7,28 +7,40 @@ import {
   MessageSquare,
   CreditCard,
   FileText,
-  BarChart3,
   Sparkles,
   Zap,
+  Settings,
 } from 'lucide-react'
 
-const clientMenuItems = [
+const projectInitiatorMenuItems = [
   { icon: LayoutDashboard, label: '工作台', path: '/dashboard' },
   { icon: Briefcase, label: '項目管理', path: '/projects' },
   { icon: Users, label: '人才庫', path: '/talent' },
   { icon: MessageSquare, label: '消息中心', path: '/messages' },
-  { icon: CreditCard, label: '財務中心', path: '/transactions' },
-  { icon: FileText, label: '合同管理', path: '/contracts' },
-  { icon: BarChart3, label: '數據報告', path: '/reports' },
+  { icon: CreditCard, label: '財務中心', path: '/payments' },
 ]
 
-const developerMenuItems = [
+const contractorMenuItems = [
   { icon: LayoutDashboard, label: '工作台', path: '/dashboard' },
   { icon: Briefcase, label: '項目廣場', path: '/projects' },
   { icon: FileText, label: '我的項目', path: '/my-projects' },
   { icon: MessageSquare, label: '消息中心', path: '/messages' },
-  { icon: CreditCard, label: '收益中心', path: '/earnings' },
-  { icon: BarChart3, label: '數據分析', path: '/analytics' },
+  { icon: CreditCard, label: '財務中心', path: '/transactions' },
+]
+
+const webadminMenuItems = [
+  { icon: LayoutDashboard, label: '工作台', path: '/dashboard' },
+  { icon: Users, label: '用戶管理', path: '/users' },
+  { icon: Briefcase, label: '項目管理', path: '/audit/projects' },
+  { icon: MessageSquare, label: '爭議管理', path: '/disputes' },
+  { icon: Settings, label: '系統設置', path: '/admin' },
+]
+
+const regionalManagerMenuItems = [
+  { icon: LayoutDashboard, label: '工作台', path: '/dashboard' },
+  { icon: Briefcase, label: '區域項目', path: '/regional/projects' },
+  { icon: Users, label: '區域用戶', path: '/regional/users' },
+  { icon: MessageSquare, label: '爭議處理', path: '/regional/disputes' },
 ]
 
 interface SidebarProps {
@@ -37,7 +49,23 @@ interface SidebarProps {
 
 export function Sidebar({ isCollapsed = false }: SidebarProps) {
   const { user } = useAuth()
-  const menuItems = user?.role === 'developer' ? developerMenuItems : clientMenuItems
+
+  const getMenuItems = () => {
+    switch (user?.role) {
+      case 'project_initiator':
+        return projectInitiatorMenuItems
+      case 'contractor':
+        return contractorMenuItems
+      case 'webadmin':
+        return webadminMenuItems
+      case 'regional_manager':
+        return regionalManagerMenuItems
+      default:
+        return projectInitiatorMenuItems
+    }
+  }
+
+  const menuItems = getMenuItems()
 
   return (
     <aside

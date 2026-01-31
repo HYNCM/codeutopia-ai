@@ -16,7 +16,11 @@ import {
   Sparkles,
 } from 'lucide-react'
 
-export function TalentPoolPage() {
+interface TalentPoolPageProps {
+  isEmbedded?: boolean
+}
+
+export function TalentPoolPage({ isEmbedded = false }: TalentPoolPageProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedSkills, setSelectedSkills] = useState<string[]>([])
   const [priceRange, setPriceRange] = useState('all')
@@ -46,11 +50,13 @@ export function TalentPoolPage() {
 
   return (
     <div className='space-y-6'>
-      {/* Header */}
-      <div>
-        <h1 className='text-2xl font-bold text-gray-900'>人才庫</h1>
-        <p className='text-gray-500 mt-1'>探索來自全球的優質開發者和設計師</p>
-      </div>
+      {/* Header - Only show if not embedded */}
+      {!isEmbedded && (
+        <div>
+          <h1 className='text-2xl font-bold text-[var(--text-primary)]'>人才庫</h1>
+          <p className='text-[var(--text-muted)] mt-1'>探索來自全球的優質開發者和設計師</p>
+        </div>
+      )}
 
       {/* AI Recommendation Banner */}
       <div className='bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-xl p-4'>
@@ -71,7 +77,7 @@ export function TalentPoolPage() {
       </div>
 
       {/* Search and Filters */}
-      <div className='bg-white rounded-xl border border-gray-200 p-4'>
+      <div className='bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] p-4'>
         <div className='flex flex-col lg:flex-row gap-4'>
           {/* Search */}
           <div className='flex-1 relative'>
@@ -81,7 +87,7 @@ export function TalentPoolPage() {
               placeholder='搜索開發者姓名或技能...'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className='w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent'
+              className='w-full pl-10 pr-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-muted)]'
             />
           </div>
 
@@ -90,7 +96,7 @@ export function TalentPoolPage() {
             <select
               value={priceRange}
               onChange={(e) => setPriceRange(e.target.value)}
-              className='px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500'>
+              className='px-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500'>
               <option value='all'>時薪不限</option>
               <option value='low'>NT$ 60 以下</option>
               <option value='medium'>NT$ 60-80</option>
@@ -100,13 +106,13 @@ export function TalentPoolPage() {
             <select
               value={ratingFilter}
               onChange={(e) => setRatingFilter(e.target.value)}
-              className='px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500'>
+              className='px-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500'>
               <option value='all'>評分不限</option>
               <option value='high'>4.8 以上</option>
               <option value='top'>4.9 以上</option>
             </select>
 
-            <button className='flex items-center space-x-2 px-4 py-2.5 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors'>
+            <button className='flex items-center space-x-2 px-4 py-2.5 border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] transition-colors'>
               <Filter className='w-4 h-4' />
               <span>更多篩選</span>
             </button>
@@ -114,7 +120,7 @@ export function TalentPoolPage() {
         </div>
 
         {/* Skill Tags */}
-        <div className='mt-4 pt-4 border-t border-gray-100'>
+        <div className='mt-4 pt-4 border-t border-[var(--border-subtle)]'>
           <div className='flex items-center space-x-2 mb-2'>
             <span className='text-sm text-gray-500'>熱門技能：</span>
           </div>
@@ -126,7 +132,7 @@ export function TalentPoolPage() {
                 className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
                   selectedSkills.includes(skill)
                     ? 'bg-purple-600 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-purple-100 hover:text-purple-600'
+                    : 'bg-[var(--bg-input)] text-[var(--text-secondary)] hover:bg-purple-100 hover:text-purple-600 dark:hover:bg-purple-900/30 dark:hover:text-purple-400'
                 }`}>
                 {skill}
               </button>
@@ -137,12 +143,13 @@ export function TalentPoolPage() {
 
       {/* Results Count */}
       <div className='flex items-center justify-between'>
-        <p className='text-sm text-gray-500'>
-          找到 <span className='font-medium text-gray-900'>{filteredDevelopers.length}</span> 位符合條件的開發者
+        <p className='text-sm text-[var(--text-muted)]'>
+          找到 <span className='font-medium text-[var(--text-primary)]'>{filteredDevelopers.length}</span>{' '}
+          位符合條件的開發者
         </p>
         <div className='flex items-center space-x-2'>
-          <span className='text-sm text-gray-500'>排序：</span>
-          <select className='px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500'>
+          <span className='text-sm text-[var(--text-muted)]'>排序：</span>
+          <select className='px-3 py-1.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500'>
             <option>相關度</option>
             <option>評分高到低</option>
             <option>時薪低到高</option>
@@ -159,10 +166,10 @@ export function TalentPoolPage() {
       </div>
 
       {filteredDevelopers.length === 0 && (
-        <div className='text-center py-12 bg-white rounded-xl border border-gray-200'>
-          <Briefcase className='w-12 h-12 text-gray-300 mx-auto mb-4' />
-          <h3 className='text-lg font-medium text-gray-900'>沒有找到匹配的開發者</h3>
-          <p className='text-gray-500 mt-1'>嘗試調整搜索條件或技能標籤</p>
+        <div className='text-center py-12 bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)]'>
+          <Briefcase className='w-12 h-12 text-[var(--text-muted)] mx-auto mb-4' />
+          <h3 className='text-lg font-medium text-[var(--text-primary)]'>沒有找到匹配的開發者</h3>
+          <p className='text-[var(--text-muted)] mt-1'>嘗試調整搜索條件或技能標籤</p>
         </div>
       )}
     </div>
@@ -173,17 +180,17 @@ function DeveloperCard({ developer }: { developer: (typeof mockDevelopers)[0] })
   const [isFavorite, setIsFavorite] = useState(false)
 
   return (
-    <div className='bg-white rounded-xl border border-gray-200 p-6 hover:border-purple-200 hover:shadow-md transition-all'>
+    <div className='bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] p-6 hover:border-purple-200 hover:shadow-lg transition-all duration-300'>
       <div className='flex items-start justify-between mb-4'>
         <div className='flex items-start space-x-4'>
           <img src={developer.avatar} alt={developer.name} className='w-14 h-14 rounded-xl' />
           <div>
             <div className='flex items-center space-x-2'>
-              <h3 className='font-semibold text-gray-900'>{developer.name}</h3>
+              <h3 className='font-semibold text-[var(--text-primary)]'>{developer.name}</h3>
               {developer.verified && <CheckCircle className='w-4 h-4 text-green-500' />}
             </div>
-            <p className='text-sm text-gray-500 mt-0.5'>{developer.bio}</p>
-            <div className='flex items-center space-x-3 mt-2 text-sm text-gray-500'>
+            <p className='text-sm text-[var(--text-muted)] mt-0.5'>{developer.bio}</p>
+            <div className='flex items-center space-x-3 mt-2 text-sm text-[var(--text-muted)]'>
               <span className='flex items-center space-x-1'>
                 <MapPin className='w-3.5 h-3.5' />
                 <span>{developer.location}</span>
@@ -198,7 +205,7 @@ function DeveloperCard({ developer }: { developer: (typeof mockDevelopers)[0] })
         <button
           onClick={() => setIsFavorite(!isFavorite)}
           className={`p-2 rounded-lg transition-colors ${
-            isFavorite ? 'bg-red-50 text-red-500' : 'text-gray-400 hover:bg-gray-100'
+            isFavorite ? 'bg-red-50 text-red-500' : 'text-[var(--text-muted)] hover:bg-[var(--bg-card-hover)]'
           }`}>
           <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
         </button>
@@ -206,24 +213,24 @@ function DeveloperCard({ developer }: { developer: (typeof mockDevelopers)[0] })
 
       {/* Stats */}
       <div className='grid grid-cols-4 gap-4 mb-4'>
-        <div className='text-center p-3 bg-gray-50 rounded-lg'>
+        <div className='text-center p-3 bg-[var(--bg-input)] rounded-lg'>
           <div className='flex items-center justify-center space-x-1'>
             <Star className='w-4 h-4 text-yellow-400 fill-yellow-400' />
-            <span className='font-bold text-gray-900'>{developer.rating}</span>
+            <span className='font-bold text-[var(--text-primary)]'>{developer.rating}</span>
           </div>
-          <p className='text-xs text-gray-500 mt-1'>評分</p>
+          <p className='text-xs text-[var(--text-muted)] mt-1'>評分</p>
         </div>
-        <div className='text-center p-3 bg-gray-50 rounded-lg'>
-          <p className='font-bold text-gray-900'>{developer.completedProjects}</p>
-          <p className='text-xs text-gray-500 mt-1'>完成項目</p>
+        <div className='text-center p-3 bg-[var(--bg-input)] rounded-lg'>
+          <p className='font-bold text-[var(--text-primary)]'>{developer.completedProjects}</p>
+          <p className='text-xs text-[var(--text-muted)] mt-1'>完成項目</p>
         </div>
-        <div className='text-center p-3 bg-gray-50 rounded-lg'>
-          <p className='font-bold text-gray-900'>{developer.skills.length}</p>
-          <p className='text-xs text-gray-500 mt-1'>技能</p>
+        <div className='text-center p-3 bg-[var(--bg-input)] rounded-lg'>
+          <p className='font-bold text-[var(--text-primary)]'>{developer.skills.length}</p>
+          <p className='text-xs text-[var(--text-muted)] mt-1'>技能</p>
         </div>
-        <div className='text-center p-3 bg-gray-50 rounded-lg'>
-          <p className='font-bold text-gray-900'>98%</p>
-          <p className='text-xs text-gray-500 mt-1'>成功率</p>
+        <div className='text-center p-3 bg-[var(--bg-input)] rounded-lg'>
+          <p className='font-bold text-[var(--text-primary)]'>98%</p>
+          <p className='text-xs text-[var(--text-muted)] mt-1'>成功率</p>
         </div>
       </div>
 
@@ -239,7 +246,7 @@ function DeveloperCard({ developer }: { developer: (typeof mockDevelopers)[0] })
       {/* Portfolio Preview */}
       {developer.portfolio && developer.portfolio.length > 0 && (
         <div className='mb-4'>
-          <p className='text-xs text-gray-500 mb-2'>作品集</p>
+          <p className='text-xs text-[var(--text-muted)] mb-2'>作品集</p>
           <div className='flex space-x-2'>
             {developer.portfolio.slice(0, 3).map((item) => (
               <div key={item.id} className='w-20 h-20 rounded-lg overflow-hidden'>
@@ -254,20 +261,20 @@ function DeveloperCard({ developer }: { developer: (typeof mockDevelopers)[0] })
       {developer.certifications && developer.certifications.length > 0 && (
         <div className='flex items-center space-x-2 mb-4'>
           <Award className='w-4 h-4 text-yellow-500' />
-          <span className='text-xs text-gray-600'>{developer.certifications[0]}</span>
+          <span className='text-xs text-[var(--text-muted)]'>{developer.certifications[0]}</span>
         </div>
       )}
 
       {/* Price and Actions */}
-      <div className='flex items-center justify-between pt-4 border-t border-gray-100'>
+      <div className='flex items-center justify-between pt-4 border-t border-[var(--border-subtle)]'>
         <div>
-          <p className='text-lg font-bold text-gray-900'>NT$ {developer.hourlyRate}/小時</p>
-          <p className='text-xs text-gray-500'>平台服務費已包含</p>
+          <p className='text-lg font-bold text-[var(--text-primary)]'>NT$ {developer.hourlyRate}/小時</p>
+          <p className='text-xs text-[var(--text-muted)]'>平台服務費已包含</p>
         </div>
         <div className='flex items-center space-x-2'>
           <Link
             to={`/messages/new?developer=${developer.id}`}
-            className='flex items-center space-x-1 px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50 transition-colors'>
+            className='flex items-center space-x-1 px-4 py-2 border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] transition-colors'>
             <MessageSquare className='w-4 h-4' />
             <span>聯繫</span>
           </Link>

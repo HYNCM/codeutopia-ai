@@ -1,14 +1,21 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { useTheme } from '../../contexts/ThemeContext'
 import { NotificationDropdown } from './NotificationDropdown'
 import { Search, User, LogOut, Settings, ChevronDown, Sparkles, Plus, HelpCircle, Sun, Moon } from 'lucide-react'
 
 export function Header() {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    setUserMenuOpen(false)
+    navigate('/login')
+  }
 
   return (
     <header className='bg-[var(--bg-card)] border-b border-[var(--border-color)] sticky top-0 z-50 transition-colors duration-150'>
@@ -26,11 +33,11 @@ export function Header() {
 
           {/* Center: Search Bar */}
           <div className='hidden md:flex flex-1 max-w-xl mx-8'>
-            <div className='relative w-full'>
-              <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]' />
+            <div className='relative w-full group'>
+              <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] group-focus-within:text-purple-500 transition-colors' />
               <input
                 type='text'
-                placeholder='搜索項目、人才、文檔...'
+                placeholder='搜索項目、人才或文檔...'
                 className='w-full pl-10 pr-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent hover:bg-[var(--bg-card-hover)] transition-all duration-200'
               />
               <kbd className='absolute right-3 top-1/2 transform -translate-y-1/2 hidden sm:inline-flex px-2 py-0.5 text-xs font-medium text-[var(--text-muted)] bg-[var(--bg-card-hover)] border border-[var(--border-subtle)] rounded'>
@@ -40,14 +47,25 @@ export function Header() {
           </div>
 
           {/* Right Side: Actions */}
-          <div className='flex items-center space-x-2'>
-            {/* Quick Action Button */}
-            <Link
-              to='/post-project'
-              className='hidden sm:inline-flex items-center space-x-1.5 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-medium rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg shadow-green-500/20 cursor-pointer'>
-              <Plus className='w-4 h-4' />
-              <span>發布項目</span>
-            </Link>
+          <div className='flex items-center space-x-2 sm:space-x-4'>
+            {/* Quick Action Button - Only for Initiator */}
+            {user?.role === 'project_initiator' && (
+              <Link
+                to='/post-project'
+                className='hidden sm:inline-flex items-center space-x-1.5 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-medium rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg shadow-green-500/20 cursor-pointer'>
+                <Plus className='w-4 h-4' />
+                <span>發布項目</span>
+              </Link>
+            )}
+
+            {user?.role === 'contractor' && (
+              <Link
+                to='/projects'
+                className='hidden sm:inline-flex items-center space-x-1.5 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-sm font-medium rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 shadow-lg shadow-blue-500/20 cursor-pointer'>
+                <Search className='w-4 h-4' />
+                <span>尋找工作</span>
+              </Link>
+            )}
 
             {/* Theme Toggle */}
             <button
@@ -86,7 +104,15 @@ export function Header() {
                       <p className='font-medium text-[var(--text-primary)]'>{user?.name}</p>
                       <p className='text-sm text-[var(--text-muted)]'>{user?.email}</p>
                       <span className='inline-block mt-2 px-2 py-0.5 text-xs font-medium bg-purple-500/20 text-[var(--accent-purple)] border border-purple-500/30 rounded-full'>
-                        {user?.role === 'developer' ? '開發者' : '客戶'}
+                        {user?.role === 'project_initiator'
+                          ? '項目主理人'
+                          : user?.role === 'contractor'
+                            ? '接案者'
+                            : user?.role === 'webadmin'
+                              ? '全局管理員'
+                              : user?.role === 'regional_manager'
+                                ? '區域主理人'
+                                : user?.role}
                       </span>
                     </div>
                     <Link
@@ -105,7 +131,7 @@ export function Header() {
                     </Link>
                     <hr className='my-2 border-[var(--border-color)]' />
                     <button
-                      onClick={() => console.log('Logout')}
+                      onClick={handleLogout}
                       className='flex items-center space-x-2 px-4 py-2.5 text-red-500 hover:bg-red-500/10 w-full transition-colors cursor-pointer'>
                       <LogOut className='w-4 h-4' />
                       <span>退出登錄</span>

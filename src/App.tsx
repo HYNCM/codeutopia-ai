@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ProjectProvider } from './contexts/ProjectContext'
 import { WalletProvider } from './contexts/WalletContext'
 import { AIProvider } from './contexts/AIContext'
@@ -8,8 +8,6 @@ import { MessageProvider } from './contexts/MessageContext'
 import { NotificationProvider } from './contexts/NotificationContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { Header } from './components/Layout/Header'
-import { ClientDashboard } from './pages/ClientDashboard'
-import { DeveloperDashboard } from './pages/DeveloperDashboard'
 import { ProjectsPage } from './pages/Projects'
 import { TalentPoolPage } from './pages/TalentPool'
 import { TransactionsPage } from './pages/Transactions'
@@ -32,6 +30,20 @@ import { AIAssistantPanel } from './components/AIAssistantPanel'
 import { AIChatPanel, AIFloatingButton } from './components/AI'
 import { ProtectedRoute } from './components/Auth/ProtectedRoute'
 
+// Role-based Dashboard Components
+const DASHBOARDS: Record<string, React.ComponentType<{ currentRole?: string }>> = {
+  project_initiator: ProjectInitiatorDashboard,
+  contractor: ContractorDashboard,
+  webadmin: WebadminDashboard,
+  regional_manager: RegionalManagerDashboard,
+}
+
+function DashboardRouter() {
+  const { user } = useAuth()
+  const RoleDashboard = DASHBOARDS[user?.role || ''] || ProjectInitiatorDashboard
+  return <RoleDashboard currentRole={user?.role} />
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -46,68 +58,25 @@ export default function App() {
                       <Route path='/' element={<LandingPage />} />
                       <Route path='/login' element={<LoginPage />} />
 
-                      {/* Role specific dashboards */}
+                      {/* Unified Dashboard Route */}
                       <Route
-                        path='/dashboard/initiator'
+                        path='/dashboard'
                         element={
-                          <ProtectedRoute allowedRoles={['project_initiator']}>
+                          <ProtectedRoute>
                             <Layout>
-                              <ProjectInitiatorDashboard currentRole='project_initiator' />
-                            </Layout>
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path='/dashboard/contractor'
-                        element={
-                          <ProtectedRoute allowedRoles={['contractor']}>
-                            <Layout>
-                              <ContractorDashboard currentRole='contractor' />
-                            </Layout>
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path='/dashboard/webadmin'
-                        element={
-                          <ProtectedRoute allowedRoles={['webadmin']}>
-                            <Layout>
-                              <WebadminDashboard currentRole='webadmin' />
-                            </Layout>
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path='/dashboard/regional'
-                        element={
-                          <ProtectedRoute allowedRoles={['regional_manager']}>
-                            <Layout>
-                              <RegionalManagerDashboard currentRole='regional_manager' />
+                              <DashboardRouter />
                             </Layout>
                           </ProtectedRoute>
                         }
                       />
 
-                      <Route
-                        path='/dashboard'
-                        element={
-                          <ProtectedRoute allowedRoles={['project_initiator']}>
-                            <Layout>
-                              <ClientDashboard />
-                            </Layout>
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path='/developer-dashboard'
-                        element={
-                          <ProtectedRoute allowedRoles={['contractor']}>
-                            <Layout>
-                              <DeveloperDashboard />
-                            </Layout>
-                          </ProtectedRoute>
-                        }
-                      />
+                      {/* Redirect old dashboard routes and role-specific paths to unified route */}
+                      <Route path='/dashboard/initiator' element={<Navigate to='/dashboard' replace />} />
+                      <Route path='/dashboard/contractor' element={<Navigate to='/dashboard' replace />} />
+                      <Route path='/dashboard/webadmin' element={<Navigate to='/dashboard' replace />} />
+                      <Route path='/dashboard/regional' element={<Navigate to='/dashboard' replace />} />
+                      <Route path='/dashboard/admin' element={<Navigate to='/dashboard' replace />} />
+
                       <Route
                         path='/projects'
                         element={
@@ -118,6 +87,7 @@ export default function App() {
                           </ProtectedRoute>
                         }
                       />
+                      {/* ... other routes omitted for brevity in replacement chunk ... */}
                       {/* /projects/new must come BEFORE /projects/:id */}
                       <Route
                         path='/projects/new'

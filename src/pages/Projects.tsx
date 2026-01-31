@@ -20,7 +20,11 @@ import {
   Briefcase,
 } from 'lucide-react'
 
-export function ProjectsPage() {
+interface ProjectsPageProps {
+  isEmbedded?: boolean
+}
+
+export function ProjectsPage({ isEmbedded = false }: ProjectsPageProps) {
   const { projects } = useProjects()
   const { user } = useAuth()
 
@@ -77,18 +81,21 @@ export function ProjectsPage() {
   return (
     <div className='space-y-6'>
       {/* Header */}
-      <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
-        <div>
-          <h1 className='text-2xl font-bold text-gray-900'>項目廣場</h1>
-          <p className='text-gray-500 mt-1'>探索來自全球的優質外包項目機會</p>
+      {/* Header - Only show if not embedded */}
+      {!isEmbedded && (
+        <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
+          <div>
+            <h1 className='text-2xl font-bold text-[var(--text-primary)]'>項目廣場</h1>
+            <p className='text-[var(--text-muted)] mt-1'>探索來自全球的優質外包項目機會</p>
+          </div>
+          <Link
+            to='/projects/new'
+            className='inline-flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-medium hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg shadow-purple-500/20'>
+            <Briefcase className='w-5 h-5' />
+            <span>發布項目</span>
+          </Link>
         </div>
-        <Link
-          to='/projects/new'
-          className='inline-flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl font-medium hover:from-purple-700 hover:to-blue-700 transition-all'>
-          <Briefcase className='w-5 h-5' />
-          <span>發布項目</span>
-        </Link>
-      </div>
+      )}
 
       {/* AI Recommendation Banner */}
       <div className='bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-100 rounded-xl p-4'>
@@ -112,7 +119,7 @@ export function ProjectsPage() {
       </div>
 
       {/* Search and Filters */}
-      <div className='bg-white rounded-xl border border-gray-200 p-4'>
+      <div className='bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] p-4'>
         <div className='flex flex-col lg:flex-row gap-4'>
           {/* Search */}
           <div className='flex-1 relative'>
@@ -122,7 +129,7 @@ export function ProjectsPage() {
               placeholder='搜索項目名稱、描述或技能...'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className='w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent'
+              className='w-full pl-10 pr-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-muted)]'
             />
           </div>
 
@@ -131,7 +138,7 @@ export function ProjectsPage() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className='px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500'>
+              className='px-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500'>
               <option value='all'>全部分類</option>
               {PROJECT_CATEGORIES.map((cat) => (
                 <option key={cat.value} value={cat.value}>
@@ -143,7 +150,7 @@ export function ProjectsPage() {
             <select
               value={budgetRange}
               onChange={(e) => setBudgetRange(e.target.value)}
-              className='px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500'>
+              className='px-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500'>
               <option value='all'>預算不限</option>
               <option value='low'>預算 5萬以下</option>
               <option value='medium'>預算 5-10萬</option>
@@ -153,7 +160,7 @@ export function ProjectsPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className='px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500'>
+              className='px-4 py-2.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-purple-500'>
               <option value='newest'>最新發布</option>
               <option value='budget'>預算從高到低</option>
               <option value='deadline'>交付時間</option>
@@ -163,8 +170,8 @@ export function ProjectsPage() {
               onClick={() => setShowFilters(!showFilters)}
               className={`flex items-center space-x-2 px-4 py-2.5 border rounded-lg text-sm transition-colors ${
                 showFilters
-                  ? 'bg-purple-50 border-purple-200 text-purple-600'
-                  : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                  ? 'bg-purple-50 border-purple-200 text-purple-600 dark:bg-purple-900/20 dark:border-purple-800'
+                  : 'border-[var(--border-subtle)] text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)]'
               }`}>
               <Filter className='w-4 h-4' />
               <span>更多篩選</span>
@@ -179,7 +186,7 @@ export function ProjectsPage() {
               {SKILLS.slice(0, 12).map((skill) => (
                 <button
                   key={skill}
-                  className='px-3 py-1.5 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-purple-100 hover:text-purple-600 transition-colors'>
+                  className='px-3 py-1.5 bg-[var(--bg-input)] text-[var(--text-secondary)] rounded-full text-sm hover:bg-purple-100 hover:text-purple-600 dark:hover:bg-purple-900/30 transition-colors'>
                   {skill}
                 </button>
               ))}
@@ -227,7 +234,7 @@ function ProjectCard({
     currentUser && (currentUser.role === 'contractor' || currentUser.role === 'developer') && !hasBidded && !isOwner
 
   return (
-    <div className='bg-white rounded-xl border border-gray-200 p-6 hover:border-purple-200 hover:shadow-md transition-all'>
+    <div className='bg-[var(--bg-card)] rounded-xl border border-[var(--border-color)] p-6 hover:border-purple-200 hover:shadow-lg transition-all duration-300 group'>
       <div className='flex flex-col lg:flex-row lg:items-start gap-4'>
         {/* Left: Content */}
         <div className='flex-1'>
@@ -246,42 +253,44 @@ function ProjectCard({
               </div>
               <Link
                 to={`/projects/${project.id}`}
-                className='text-lg font-semibold text-gray-900 hover:text-purple-600 transition-colors'>
+                className='text-lg font-semibold text-[var(--text-primary)] hover:text-purple-600 transition-colors'>
                 {project.title}
               </Link>
             </div>
             <div className='text-right'>
-              <p className='text-xl font-bold text-gray-900'>
+              <p className='text-xl font-bold text-[var(--text-primary)]'>
                 NT$ {(project.budget.min / 1000).toFixed(0)}K - NT$
                 {(project.budget.max / 1000).toFixed(0)}K
               </p>
-              <p className='text-sm text-gray-500'>{project.budget.currency}</p>
+              <p className='text-sm text-[var(--text-muted)]'>{project.budget.currency}</p>
             </div>
           </div>
 
-          <p className='text-gray-600 text-sm line-clamp-2 mb-4'>{project.description}</p>
+          <p className='text-[var(--text-secondary)] text-sm line-clamp-2 mb-4'>{project.description}</p>
 
           <div className='flex flex-wrap gap-2 mb-4'>
             {project.skills.map((skill) => (
-              <span key={skill} className='px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs'>
+              <span
+                key={skill}
+                className='px-2.5 py-1 bg-[var(--bg-input)] text-[var(--text-secondary)] rounded-full text-xs'>
                 {skill}
               </span>
             ))}
           </div>
 
-          <div className='flex items-center justify-between pt-4 border-t border-gray-100'>
+          <div className='flex items-center justify-between pt-4 border-t border-[var(--border-subtle)]'>
             <div className='flex items-center space-x-4'>
-              <div className='flex items-center space-x-1 text-sm text-gray-500'>
+              <div className='flex items-center space-x-1 text-sm text-[var(--text-muted)]'>
                 <Clock className='w-4 h-4' />
                 <span>{project.duration}</span>
               </div>
-              <div className='flex items-center space-x-1 text-sm text-gray-500'>
+              <div className='flex items-center space-x-1 text-sm text-[var(--text-muted)]'>
                 <Calendar className='w-4 h-4' />
                 <span>發布於 {new Date(project.createdAt).toLocaleDateString('zh-TW')}</span>
               </div>
             </div>
             <div className='flex items-center space-x-4'>
-              <div className='flex items-center space-x-1 text-sm text-gray-500'>
+              <div className='flex items-center space-x-1 text-sm text-[var(--text-muted)]'>
                 <Users className='w-4 h-4' />
                 <span>{(project.bids || []).length} 個投標</span>
               </div>
@@ -292,11 +301,11 @@ function ProjectCard({
         {/* Right: Sidebar Info */}
         <div className='lg:w-64 flex flex-col gap-3'>
           {/* Client Info */}
-          <div className='flex items-center space-x-3 p-3 bg-gray-50 rounded-lg'>
+          <div className='flex items-center space-x-3 p-3 bg-[var(--bg-input)] rounded-lg border border-[var(--border-subtle)]'>
             <img src={project.clientAvatar} alt={project.clientName} className='w-10 h-10 rounded-full' />
             <div>
-              <p className='text-sm font-medium text-gray-900'>{project.clientName}</p>
-              <div className='flex items-center space-x-1 text-xs text-gray-500'>
+              <p className='text-sm font-medium text-[var(--text-primary)]'>{project.clientName}</p>
+              <div className='flex items-center space-x-1 text-xs text-[var(--text-muted)]'>
                 <Star className='w-3 h-3 text-yellow-400 fill-yellow-400' />
                 <span>4.8</span>
                 <MapPin className='w-3 h-3 ml-1' />
@@ -315,21 +324,23 @@ function ProjectCard({
           </div>
 
           {/* Budget per Milestone */}
-          <div className='p-3 bg-gray-50 rounded-lg'>
-            <p className='text-xs text-gray-500 mb-1'>里程碑預算分配</p>
+          <div className='p-3 bg-[var(--bg-input)] rounded-lg border border-[var(--border-subtle)]'>
+            <p className='text-xs text-[var(--text-muted)] mb-1'>里程碑預算分配</p>
             <div className='space-y-2'>
               {project.milestones.slice(0, 3).map((milestone, idx) => (
                 <div key={milestone.id} className='flex items-center justify-between text-sm'>
-                  <span className='text-gray-600 truncate max-w-[120px]'>
+                  <span className='text-[var(--text-secondary)] truncate max-w-[120px]'>
                     {idx + 1}. {milestone.title}
                   </span>
-                  <span className='font-medium text-gray-900'>NT${(milestone.amount / 1000).toFixed(0)}K</span>
+                  <span className='font-medium text-[var(--text-primary)]'>
+                    NT${(milestone.amount / 1000).toFixed(0)}K
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons: Use theme vars where appropriate or keep gradients */}
           <div className='space-y-2'>
             {canBid ? (
               <button
@@ -338,13 +349,13 @@ function ProjectCard({
                 立即投標
               </button>
             ) : hasBidded ? (
-              <div className='w-full py-2.5 bg-green-50 text-green-700 font-medium rounded-lg text-center border border-green-200'>
+              <div className='w-full py-2.5 bg-green-50 text-green-700 font-medium rounded-lg text-center border border-green-200 dark:bg-green-900/10 dark:text-green-400 dark:border-green-800'>
                 已投標
               </div>
             ) : (
               <Link
                 to={`/projects/${project.id}`}
-                className='block w-full py-2.5 bg-gray-100 text-gray-700 text-center rounded-lg font-medium hover:bg-gray-200 transition-all'>
+                className='block w-full py-2.5 bg-[var(--bg-card-hover)] text-[var(--text-secondary)] text-center rounded-lg font-medium hover:bg-[var(--border-subtle)] transition-all'>
                 查看詳情
               </Link>
             )}
